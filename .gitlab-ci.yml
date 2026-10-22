@@ -21,6 +21,8 @@ workflow:
 
 # Override included rules so both validators always gate eligible MR builds.
 validate_rsis:
+  tags:
+    - wf14-tests
   rules: &merge_request_checks
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_DRAFT == "true"'
       when: never
@@ -59,6 +61,8 @@ yaml_linter:
 
 build_test_debug:
   stage: test
+  tags:
+    - wf14-tests
   needs:
     - job: validate_rsis
       artifacts: false
@@ -94,6 +98,8 @@ build_test_debug:
 
 runner-test:
   image: alpine:latest
+  rules:
+    - when: never
   tags:
     - wf14-nas
   script:
