@@ -65,6 +65,7 @@ build_test_debug:
   stage: test
   tags:
     - wf14-tests
+    - saas-linux-small-amd64
   needs:
     - job: validate_rsis
       artifacts: false
@@ -98,11 +99,11 @@ build_test_debug:
     - dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0
     - DOTNET_gcServer=1 dotnet test --no-build --configuration DebugOpt Content.IntegrationTests/Content.IntegrationTests.csproj --filter "FullyQualifiedName!~ShipyardTest" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed
 
-runner-test:
-  image: alpine:latest
-  rules:
-    - when: never
-  tags:
-    - wf14-nas
-  script:
-    - echo "NAS runner is working"
+# runner-test:
+#   image: alpine:latest
+#   rules:
+#     - when: never
+#   tags:
+#     - wf14-nas
+#   script:
+#     - echo "NAS runner is working"
