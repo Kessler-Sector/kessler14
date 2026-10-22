@@ -30,6 +30,8 @@ validate_rsis:
     - when: never
 
 validate_mapfiles:
+  tags:
+    - wf14-tests
   rules: *merge_request_checks
 
 yaml_linter:
