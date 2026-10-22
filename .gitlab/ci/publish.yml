@@ -6,6 +6,9 @@ publish_cdn:
   resource_group: publish
   # Do not cancel an in-progress multi-request CDN upload automatically.
   interruptible: false
+  tags:
+    - wf14-ci
+    - wf14-deploy
   environment:
     name: production
   variables:

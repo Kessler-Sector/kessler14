@@ -1,6 +1,9 @@
 publish_changelog:
   stage: notify
   image: python:3.10
+  tags:
+    - wf14-ci
+    - wf14-deploy
   needs:
     - job: publish_cdn
       artifacts: false

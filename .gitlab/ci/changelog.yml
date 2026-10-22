@@ -4,6 +4,9 @@ generate_changelog:
   needs: []
   resource_group: generate-changelog
   interruptible: false
+  tags:
+    - wf14-ci
+    - wf14-deploy
   variables:
     GIT_STRATEGY: clone
     GIT_DEPTH: "20"
