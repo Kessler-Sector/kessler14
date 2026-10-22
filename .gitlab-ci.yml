@@ -64,7 +64,6 @@ yaml_linter:
 build_test_debug:
   stage: test
   tags:
-    #- wf14-tests
     - saas-linux-small-amd64
   needs:
     - job: validate_rsis
