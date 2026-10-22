@@ -2,6 +2,8 @@ validate_mapfiles:
   stage: lint
   image: python:3.10
   interruptible: true
+  tags:
+    - wf14-test
   variables:
     GIT_SUBMODULE_STRATEGY: normal
     GIT_SUBMODULE_PATHS: RobustToolbox

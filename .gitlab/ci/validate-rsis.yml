@@ -2,6 +2,8 @@ validate_rsis:
   stage: lint
   image: python:3.10
   interruptible: true
+  tags:
+    - wf14-test
   variables:
     # The validator and schema live in the engine submodule. Validate against
     # the committed engine revision; GitHub's dependency-PR action has no role here.
