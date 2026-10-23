@@ -45,11 +45,11 @@ If you make any contributions, note that any changes made to files belonging to 
 
 1. Clone this repo:
 ```shell
-git clone https://github.com/project-wayfarer/wayfarer-14.git
+git clone https://gitlab.com/projectwayfarer/wayfarer14.git
 ```
 2. Go to the project folder and run `RUN_THIS.py` to initialize the submodules and load the engine:
 ```shell
-cd wayfarer-14
+cd wayfarer14
 python RUN_THIS.py
 ```
 3. Compile the solution:
@@ -66,7 +66,7 @@ Most assets are licensed under CC-BY-SA 3.0 unless stated otherwise. Assets have
 
 Code taken from Emberfall was specifically relicensed under MIT terms with [permission from MilonPL](https://github.com/new-frontiers-14/frontier-station-14/pull/3607)
 
-[2fca06eaba205ae6fe3aceb8ae2a0594f0effee0](https://github.com/project-wayfarer/wayfarer-14/commit/2fca06eaba205ae6fe3aceb8ae2a0594f0effee0) was pushed on July 1, 2024 at 16:04 UTC
+[2fca06eaba205ae6fe3aceb8ae2a0594f0effee0](https://gitlab.com/projectwayfarer/wayfarer14/-/commit/2fca06eaba205ae6fe3aceb8ae2a0594f0effee0) was pushed on July 1, 2024 at 16:04 UTC
 
 Most assets are licensed under [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) unless stated otherwise. Assets have their license and copyright specified in the metadata file. For example, see the [metadata for a crowbar](Resources/Textures/Objects/Tools/crowbar.rsi/meta.json).
 
