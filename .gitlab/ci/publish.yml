@@ -8,7 +8,8 @@ publish_cdn:
   interruptible: false
   tags:
     - wf14-ci
-    - wf14-deploy
+    - wf14-publish
+    - saas-linux-medium-arm64 
   environment:
     name: production
   variables:
