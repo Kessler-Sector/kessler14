@@ -7,8 +7,6 @@ publish_cdn:
   # Do not cancel an in-progress multi-request CDN upload automatically.
   interruptible: false
   tags:
-    - wf14-ci
-    - wf14-publish
     - saas-linux-medium-arm64 
   environment:
     name: production
