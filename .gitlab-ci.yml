@@ -4,6 +4,7 @@ include:
   - local: .gitlab/ci/validate-mapfiles.yml
   - local: .gitlab/ci/publish-changelog.yml
   - local: .gitlab/ci/changelog.yml
+  - local: .gitlab/ci/label-size.yml
 
 stages:
   - lint
