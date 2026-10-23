@@ -20,4 +20,8 @@ validate_mapfiles:
   before_script:
     - python -m pip install yamale -r RobustToolbox/Schemas/mapfile_requirements.txt
   script:
-    - python Tools/validate_mapfiles.py
+    - python Tools/ci_junit.py --name validate_mapfiles --output mapfile-report.xml -- python Tools/validate_mapfiles.py
+  artifacts:
+    when: always
+    reports:
+      junit: mapfile-report.xml

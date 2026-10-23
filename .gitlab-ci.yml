@@ -2,6 +2,8 @@ include:
   - local: .gitlab/ci/publish.yml
   - local: .gitlab/ci/validate-rsis.yml
   - local: .gitlab/ci/validate-mapfiles.yml
+  - local: .gitlab/ci/validate-changelog.yml
+  - local: .gitlab/ci/close-master-mr.yml
   - local: .gitlab/ci/publish-changelog.yml
   - local: .gitlab/ci/changelog.yml
 
@@ -95,8 +97,36 @@ build_test_debug:
   script:
     - dotnet restore
     - dotnet build --configuration DebugOpt --no-restore /m
-    - dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0
-    - DOTNET_gcServer=1 dotnet test --no-build --configuration DebugOpt Content.IntegrationTests/Content.IntegrationTests.csproj --filter "FullyQualifiedName!~ShipyardTest" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed
+    - dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj --logger "trx;LogFileName=content-tests.trx" --results-directory TestResults -- NUnit.ConsoleOut=0
+    - DOTNET_gcServer=1 dotnet test --no-build --configuration DebugOpt Content.IntegrationTests/Content.IntegrationTests.csproj --filter "FullyQualifiedName!~ShipyardTest" --logger "trx;LogFileName=integration-tests.trx" --results-directory TestResults -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed
+  after_script:
+    # Runs even when tests fail, so failures still show up in the MR report.
+    - dotnet tool install --tool-path .trx2junit trx2junit --version 2.0.0 || true
+    - .trx2junit/trx2junit TestResults/*.trx || true
+  artifacts:
+    when: always
+    reports:
+      junit: TestResults/*.xml
+
+shipyard_tests:
+  extends: build_test_debug
+  # Unlike build_test_debug, this does not wait on the validators.
+  needs: []
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_DRAFT == "true"'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+      changes:
+        - "Resources/Maps/_NF/Shuttles/**/*.yml"
+        - "Resources/Maps/_WF/Shuttles/**/*.yml"
+        - "Resources/Prototypes/_NF/Shipyard/**/*.yml"
+        - "Resources/Prototypes/_WF/Shipyard/**/*.yml"
+        - "Content.IntegrationTests/Tests/_NF/ShipyardTests.cs"
+    - when: never
+  script:
+    - dotnet restore
+    - dotnet build --configuration DebugOpt --no-restore /m
+    - DOTNET_gcServer=1 dotnet test --no-build --configuration DebugOpt Content.IntegrationTests/Content.IntegrationTests.csproj --filter "FullyQualifiedName~ShipyardTest" --logger "trx;LogFileName=shipyard-tests.trx" --results-directory TestResults -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed
 
 # runner-test:
 #   image: alpine:latest

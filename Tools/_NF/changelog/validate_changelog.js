@@ -24,14 +24,7 @@ async function main() {
     }
     */
 
-    // Read GitHub event payload
-    const eventPath = process.env.GITHUB_EVENT_PATH;
-    if (!eventPath) {
-        console.error("GITHUB_EVENT_PATH not set.");
-        process.exit(1);
-    }
-    const event = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
-    const body = event.pull_request && event.pull_request.body ? event.pull_request.body : '';
+    const body = await getDescription();
 
     // Remove comments from the body
     commentlessBody = body.replace(CommentRegex, '');
@@ -76,6 +69,37 @@ async function main() {
     results.entries.forEach((entry) => {
         console.log(`${entry.type}: ${entry.message}`);
     });
+}
+
+// Get the PR/MR description from GitLab CI, falling back to a GitHub event payload
+async function getDescription() {
+    if (process.env.CI_MERGE_REQUEST_IID) {
+        let description = process.env.CI_MERGE_REQUEST_DESCRIPTION || '';
+
+        // GitLab truncates the predefined variable, so fetch the full text from the API.
+        if (process.env.CI_MERGE_REQUEST_DESCRIPTION_IS_TRUNCATED === 'true') {
+            const url = `${process.env.CI_API_V4_URL}/projects/${process.env.CI_MERGE_REQUEST_PROJECT_ID}/merge_requests/${process.env.CI_MERGE_REQUEST_IID}`;
+            const headers = process.env.CHANGELOG_GITLAB_TOKEN
+                ? { 'PRIVATE-TOKEN': process.env.CHANGELOG_GITLAB_TOKEN }
+                : { 'JOB-TOKEN': process.env.CI_JOB_TOKEN };
+            const response = await fetch(url, { headers });
+            if (!response.ok) {
+                console.error(`Failed to fetch full merge request description: HTTP ${response.status}`);
+                process.exit(1);
+            }
+            description = (await response.json()).description || '';
+        }
+
+        return description;
+    }
+
+    const eventPath = process.env.GITHUB_EVENT_PATH;
+    if (!eventPath) {
+        console.error("Neither CI_MERGE_REQUEST_IID nor GITHUB_EVENT_PATH is set.");
+        process.exit(1);
+    }
+    const event = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
+    return event.pull_request && event.pull_request.body ? event.pull_request.body : '';
 }
 
 // Get all changes from the PR body
