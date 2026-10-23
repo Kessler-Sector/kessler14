@@ -19,4 +19,8 @@ validate_rsis:
   before_script:
     - python -m pip install pillow jsonschema
   script:
-    - python RobustToolbox/Schemas/validate_rsis.py Resources/
+    - python Tools/ci_junit.py --name validate_rsis --output rsi-report.xml -- python RobustToolbox/Schemas/validate_rsis.py Resources/
+  artifacts:
+    when: always
+    reports:
+      junit: rsi-report.xml
