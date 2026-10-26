@@ -7228,3 +7228,13 @@ Entries:
   id: 7319
   time: '2026-10-26T01:53:15.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/18
+- author: cyanfoot
+  changes:
+    - type: Add
+      message: >-
+        adds a 'Synthetic' Trait, for non-IPC characters who want to be
+        inorganic. Synthetics have coolant for blood, can speak on binary, and a
+        robotic typing indicator.
+  id: 7320
+  time: '2026-10-26T01:54:59.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/23
