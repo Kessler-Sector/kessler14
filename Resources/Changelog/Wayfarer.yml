@@ -7201,3 +7201,12 @@ Entries:
   id: 7316
   time: '2026-10-22T20:40:11.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/15
+- author: TheSlapper
+  changes:
+    - type: Fix
+      message: >-
+        Fixed a bug in which players could not buy a new ship after having their
+        ship stolen.
+  id: 7317
+  time: '2026-10-26T01:48:48.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/14
