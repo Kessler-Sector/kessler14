@@ -1,0 +1,36 @@
+#####    EARS    #####
+- type: marking
+  id: EarsSixEars
+  bodyPart: HeadTop
+  markingCategory: HeadTop
+  speciesRestriction: [Avali]
+  colorLinks:
+    m_ears_six_ears_2_ADJ_primary: m_ears_six_ears_2_FRONT_primary
+    m_ears_six_ears_2_ADJ_tertiary: m_ears_six_ears_2_FRONT_tertiary
+  sprites:
+  - sprite: Floof/Mobs/Customization/skyratears.rsi
+    state: m_ears_six_ears_2_ADJ_tertiary
+  - sprite: Floof/Mobs/Customization/skyratears.rsi
+    state: m_ears_six_ears_2_FRONT_primary
+  - sprite: Floof/Mobs/Customization/skyratears.rsi
+    state: m_ears_six_ears_2_FRONT_tertiary
+  - sprite: Floof/Mobs/Customization/skyratears.rsi
+    state: m_ears_six_ears_2_ADJ_primary
+
+- type: marking
+  id: EarsAltEars
+  bodyPart: HeadSide
+  markingCategory: HeadSide
+  speciesRestriction: [Avali]
+  colorLinks:
+    m_ears_six_ears_2_ADJ_primary: m_ears_six_ears_2_FRONT_primary
+    m_ears_six_ears_2_ADJ_tertiary: m_ears_six_ears_2_FRONT_tertiary
+  sprites:
+  - sprite: Floof/Mobs/Customization/skyratears.rsi
+    state: m_ears_six_ears_2_ADJ_tertiary
+  - sprite: Floof/Mobs/Customization/skyratears.rsi
+    state: m_ears_six_ears_2_FRONT_primary
+  - sprite: Floof/Mobs/Customization/skyratears.rsi
+    state: m_ears_six_ears_2_FRONT_tertiary
+  - sprite: Floof/Mobs/Customization/skyratears.rsi
+    state: m_ears_six_ears_2_ADJ_primary
