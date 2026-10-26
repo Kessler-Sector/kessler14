@@ -7210,3 +7210,12 @@ Entries:
   id: 7317
   time: '2026-10-26T01:48:48.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/14
+- author: CloudOfNeutronFlux
+  changes:
+    - type: Add
+      message: >-
+        Added SWS Toucan: A medium-sized robotics-medical shuttle for healing
+        synthetics and repairing organics!
+  id: 7318
+  time: '2026-10-26T01:50:37.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/16
