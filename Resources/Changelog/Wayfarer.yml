@@ -7219,3 +7219,12 @@ Entries:
   id: 7318
   time: '2026-10-26T01:50:37.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/16
+- author: Feathernights
+  changes:
+    - type: Add
+      message: >-
+        Added 12 new Battlejuice songs, 9 of which can be found on the Battle
+        Record and Corrupt Record.
+  id: 7319
+  time: '2026-10-26T01:53:15.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/18
