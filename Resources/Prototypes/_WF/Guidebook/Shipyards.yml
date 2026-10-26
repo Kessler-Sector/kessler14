@@ -264,3 +264,8 @@
   id: ShipyardFinch
   name: guide-entry-shipyard-finch
   text: "/ServerInfo/_WF/Guidebook/Shipyard/MedShipyard/Finch.xml"
+
+- type: guideEntry
+  id: ShipyardToucan
+  name: guide-entry-shipyard-toucan
+  text: "/ServerInfo/_WF/Guidebook/Shipyard/MedShipyard/Toucan.xml"
