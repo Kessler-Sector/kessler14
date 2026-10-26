@@ -1043,6 +1043,8 @@
     - DeltaRecord
     - SpaceRecord
     - WFRecord # Wayfarer
+    - WFBattleRecord # Wayfarer
+    - WFCorruptedRecord # Wayfarer
     chance: 0.95
     rarePrototypes:
     - GoldenRecord

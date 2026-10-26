@@ -84,6 +84,7 @@
     contents:
     - id: NanotrasenRecord
     - id: WFRecord # Wayfarer
+    - id: WFCorruptedRecord # Wayfarer
   - type: EmptyOnMachineDeconstruct
     containers:
       - storagebase

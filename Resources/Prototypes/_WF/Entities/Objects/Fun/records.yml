@@ -14,3 +14,44 @@
     - WFRamalowAnxiety
     - WFRiddimanDeepSpace
     - WFSethClownMusic
+
+# Battlejuice - Battle record
+
+- type: entity
+  parent: BaseRecord
+  id: WFBattleRecord
+  name: battle record
+  description: |-
+    A record crackling with an ominous, lucent flame. Inscribed on it says: "Back in the future, when Hell came to Earth, Battlejuice was born."
+  components:
+  - type: Sprite
+    sprite: _WF/Objects/Fun/records.rsi
+    layers:
+    - state: battle
+    - state: battle-glow
+      shader: unshaded
+  - type: JukeboxContainer
+    tracks:
+    - WFNecropolis
+    - WFTheEdgeofDeath
+    - WFMadeofSteel
+
+- type: entity
+  parent: BaseRecord
+  id: WFCorruptedRecord
+  name: corrupted record
+  description: |-
+    A tainted, powerful record. Inscribed on it says: "Back in the future, when Hell came to Earth, Battlejuice was born."
+  components:
+  - type: Sprite
+    sprite: _WF/Objects/Fun/records.rsi
+    layers:
+    - state: corrupted
+  - type: JukeboxContainer
+    tracks:
+    - WFCorrupted
+    - WFEclipse
+    - WFLowLifeontheHighway
+    - WFChildrenoftheNight
+    - WFRush
+    - WFBoneyard

@@ -39,3 +39,71 @@
   artist: Seth Makes Sounds
   path:
     path: /Audio/_WF/Jukebox/seth_clown_music.ogg
+
+# Battlejuice - Battle record
+
+- type: jukebox
+  id: WFNecropolis
+  name: Necropolis
+  artist: Battlejuice & Power Rob
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/necropolis.ogg
+
+- type: jukebox
+  id: WFTheEdgeofDeath
+  name: The Edge of Death
+  artist: Battlejuice & Power Rob (ft. Nick Loper)
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/the-edge-of-death.ogg
+
+- type: jukebox
+  id: WFMadeofSteel
+  name: Made of Steel
+  artist: Battlejuice & LeBrock
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/made-of-steel.ogg
+
+# Battlejuice - Corrupted record
+
+- type: jukebox
+  id: WFCorrupted
+  name: Corrupted
+  artist: Battlejuice
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/corrupted.ogg
+
+- type: jukebox
+  id: WFEclipse
+  name: Eclipse
+  artist: Battlejuice
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/eclipse.ogg
+
+- type: jukebox
+  id: WFLowLifeontheHighway
+  name: Low Life on the Highway
+  artist: Battlejuice
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/low-life-on-the-highway.ogg
+
+- type: jukebox
+  id: WFChildrenoftheNight
+  name: Children of the Night
+  artist: Battlejuice
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/children-of-the-night.ogg
+
+- type: jukebox
+  id: WFRush
+  name: Rush
+  artist: Battlejuice
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/rush.ogg
+
+- type: jukebox
+  id: WFBoneyard
+  name: Boneyard
+  artist: Battlejuice
+  path:
+    path: /Audio/_WF/Jukebox/Battlejuice/boneyard.ogg
+
