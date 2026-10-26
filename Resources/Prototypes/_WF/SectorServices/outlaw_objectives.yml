@@ -8,8 +8,8 @@
     stackSpesos: Credit
     rewardSound: /Audio/Effects/teleport_arrival.ogg
     gibPayoutRange: 30
-    activationIntervalMin: 1h
-    activationIntervalMax: 2h
+    activationIntervalMin: 30m
+    activationIntervalMax: 90m
     checkInterval: 5m
     shipSaleConsoles:
     - BlackMarket

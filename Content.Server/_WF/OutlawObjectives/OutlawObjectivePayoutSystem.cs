@@ -590,10 +590,8 @@ public sealed class OutlawObjectivePayoutSystem : EntitySystem
 
     private void OnDeedRemoved(Entity<ShuttleDeedComponent> ent, ref ComponentShutdown args)
     {
-        if (_activeShipTheft == 0
-            || !TryComp<ForgedDeedComponent>(ent, out var forged)
+        if (!TryComp<ForgedDeedComponent>(ent, out var forged)
             || TerminatingOrDeleted(ent)
-            || TerminatingOrDeleted(forged.Forger)
             || ent.Comp.ShuttleUid is not { } ship
             // If the ship is already gone, the deed was cleaned off a card, not sold.
             || Deleted(ship)
@@ -601,7 +599,21 @@ public sealed class OutlawObjectivePayoutSystem : EntitySystem
             || !_container.TryGetContainingContainer(ent.Owner, out var container)
             || !TryComp<ActivatableUIComponent>(container.Owner, out var ui)
             || ui.Key is not ShipyardConsoleUiKey console
-            || !settings.ShipSaleConsoles.Contains(console)
+            || !settings.ShipSaleConsoles.Contains(console))
+        {
+            return;
+        }
+
+        // The owner's card still names the sold ship. A shipyard console clears that when the card goes in but leaves its window greyed out.
+        var deeds = EntityQueryEnumerator<ShuttleDeedComponent>();
+        while (deeds.MoveNext(out var uid, out var deed))
+        {
+            if (deed.ShuttleUid == ship && uid != ship && uid != ent.Owner)
+                RemCompDeferred<ShuttleDeedComponent>(uid);
+        }
+
+        if (_activeShipTheft == 0
+            || TerminatingOrDeleted(forged.Forger)
             || !TryComp<OutlawObjectiveComponent>(forged.Target, out var comp))
         {
             return;
