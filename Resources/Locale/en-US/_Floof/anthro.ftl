@@ -1053,7 +1053,17 @@ marking-SnoutLCanidStripe-snout_lcanidstripe_primary = [ Anthro ] Husky Snout L 
 marking-SnoutLCanidStripe-snout_lcanidstripe_secondary = [ Anthro ] Husky Snout L (Secondary)
 marking-SnoutLCanidStripe = [ Anthro ] Husky Snout L
 
+marking-EarsSixEars-m_ears_six_ears_2_FRONT_primary = Six Ears (Primary)
+marking-EarsSixEars-m_ears_six_ears_2_FRONT_tertiary = Six Ears (Secondary)
+marking-EarsSixEars-m_ears_six_ears_2_ADJ_primary = Six Ears (Primary)
+marking-EarsSixEars-m_ears_six_ears_2_ADJ_tertiary = Six Ears (Secondary)
+marking-EarsSixEars = Six Ears
 
+marking-EarsAltEars-m_ears_six_ears_2_FRONT_primary = Alt Ears (Primary)
+marking-EarsAltEars-m_ears_six_ears_2_FRONT_tertiary = Alt Ears (Secondary)
+marking-EarsAltEars-m_ears_six_ears_2_ADJ_primary = Alt Ears (Primary)
+marking-EarsAltEars-m_ears_six_ears_2_ADJ_tertiary = Alt Ears (Secondary)
+marking-EarsAltEars = Alt Ears
 
 
 
