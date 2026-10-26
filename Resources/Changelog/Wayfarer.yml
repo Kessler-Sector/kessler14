@@ -7238,3 +7238,14 @@ Entries:
   id: 7320
   time: '2026-10-26T01:54:59.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/23
+- author: cyanfoot
+  changes:
+    - type: Add
+      message: Ported Naga Tails from Hardlight
+    - type: Add
+      message: Ported some Alternate Avali Ears from Hardlight
+    - type: Add
+      message: Ported many new wing markings from Hardlight
+  id: 7321
+  time: '2026-10-26T02:02:43.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/26
