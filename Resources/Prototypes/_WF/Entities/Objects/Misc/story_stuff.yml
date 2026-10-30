@@ -1,0 +1,9 @@
+- type: entity
+  name: dark haze [unflashable]
+  id: ShadowKudzuUnflashable
+  parent: ShadowKudzu
+  components:
+    - type: DamagedByFlashing
+      flashDamage:
+        types:
+          Heat: 0.1
