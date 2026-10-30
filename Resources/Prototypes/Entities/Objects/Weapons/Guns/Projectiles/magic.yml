@@ -20,9 +20,9 @@
       shader: unshaded
   - type: Explosive
     explosionType: Default
-    maxIntensity: 40
-    intensitySlope: 6
-    totalIntensity: 200
+    maxIntensity: 10 #Wayfarer
+    intensitySlope: 3 #Wayfarer
+    totalIntensity: 120 #Wayfarer
     maxTileBreak: 0
   - type: IgnitionSource
     temperature: 400
