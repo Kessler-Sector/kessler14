@@ -7249,3 +7249,10 @@ Entries:
   id: 7321
   time: '2026-10-26T02:02:43.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/26
+- author: cyanfoot
+  changes:
+    - type: Tweak
+      message: Minor tweaks to support story arc
+  id: 7322
+  time: '2026-10-30T01:59:44.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/31
