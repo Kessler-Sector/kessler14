@@ -7311,3 +7311,10 @@ Entries:
   id: 7329
   time: '2026-11-02T03:30:17.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/38
+- author: TheSlapper
+  changes:
+    - type: Add
+      message: Ship AI role.
+  id: 7330
+  time: '2026-11-02T12:23:25.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/25
