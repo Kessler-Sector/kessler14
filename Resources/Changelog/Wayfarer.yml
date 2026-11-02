@@ -7263,3 +7263,12 @@ Entries:
   id: 7323
   time: '2026-11-02T01:33:59.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/11
+- author: cyanfoot
+  changes:
+    - type: Add
+      message: added the Robotic Voice trait
+    - type: Fix
+      message: fixed the Cyborg voice trait not showing the emote wheel
+  id: 7324
+  time: '2026-11-02T01:39:32.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/24
