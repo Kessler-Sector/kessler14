@@ -126,11 +126,16 @@
     whitelist:
       tags:
       - Pill
+      - PillCanister # Wayfarer
       - Bottle
       - CentrifugeCompatible # Vial > CentrifugeCompatible
       - Syringe
       components:
       - Hypospray
+    # Wayfarer: removes Storage blacklist for Medical Pouch
+    blacklist:
+      components: []
+    # End Wayfarer
 
 - type: entity
   name: corpsman's medical pouch
