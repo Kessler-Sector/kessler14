@@ -7295,3 +7295,10 @@ Entries:
   id: 7327
   time: '2026-11-02T01:59:42.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/30
+- author: Feathernights
+  changes:
+    - type: Tweak
+      message: Changed Medical/Corpsman Pouches to allow Pill Canisters to be inserted.
+  id: 7328
+  time: '2026-11-02T02:01:30.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/35
