@@ -47,8 +47,10 @@
       path: /Audio/_Goobstation/Items/handling/card_drop.ogg
       params:
         volume: -5
+  - type: PresetIdCard
+    job: Wayfarer
+  - type: CleanupImmune
   # Wayfarer End
-  - type: CleanupImmune # Wayfarer
 
 #IDs with layers
 
@@ -70,7 +72,7 @@
   name: technical assistant ID card
   components:
   - type: PresetIdCard
-    job: TechnicalAssistant
+    job: Wayfarer # Wayfarer TechnicalAssistant>Wayfarer
   - type: Sprite
     layers:
     - state: default
@@ -82,7 +84,7 @@
   name: medical intern ID card
   components:
   - type: PresetIdCard
-    job: MedicalIntern
+    job: Wayfarer # Wayferer MedicalIntern>Wayfarer
   - type: Sprite
     layers:
     - state: default
@@ -94,7 +96,7 @@
   name: research assistant ID card
   components:
   - type: PresetIdCard
-    job: ResearchAssistant
+    job: Wayfarer # Wayfarer ResearchAssistant>Wayfarer
   - type: Sprite
     layers:
     - state: default
@@ -118,7 +120,7 @@
   name: service worker ID card
   components:
   - type: PresetIdCard
-    job: ServiceWorker
+    job: Wayfarer # Wayfarer ServiceWorker>Wayfarer
   - type: Sprite
     layers:
     - state: default
@@ -136,7 +138,7 @@
   - type: Item
     heldPrefix: gold
   - type: PresetIdCard
-    job: Captain
+    job: Wayfarer #Wayfarer Captain>Wayfarer
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -180,7 +182,7 @@
     - state: default
     - state: idstationengineer
   - type: PresetIdCard
-    job: StationEngineer
+    job: Wayfarer #Wayfarer StationEngineer>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -192,7 +194,7 @@
     - state: default
     - state: idmedicaldoctor
   - type: PresetIdCard
-    job: MedicalDoctor
+    job: Wayfarer #Wayfarer MedicalDoctor>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -216,7 +218,7 @@
     - state: default
     - state: idchemist
   - type: PresetIdCard
-    job: Chemist
+    job: Wayfarer #Wayfarer Chemist>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -228,7 +230,7 @@
     - state: default
     - state: idcargotechnician
   - type: PresetIdCard
-    job: CargoTechnician
+    job: Wayfarer #Wayfarer CargoTechnician>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -240,7 +242,7 @@
     - state: default
     - state: idshaftminer
   - type: PresetIdCard
-    job: SalvageSpecialist
+    job: Wayfarer #Wayfarer SalvageSpecialist>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -254,7 +256,7 @@
     - type: Item
       heldPrefix: silver
     - type: PresetIdCard
-      job: Quartermaster
+      job: Wayfarer #Wayfarer Quartermaster>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -266,7 +268,7 @@
     - state: default
     - state: idscientist
   - type: PresetIdCard
-    job: Scientist
+    job: Wayfarer #Wayfarer Scientist>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -278,7 +280,7 @@
     - state: default
     - state: idclown
   - type: PresetIdCard
-    job: Clown
+    job: Wayfarer #Wayfarer Clown>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -290,7 +292,7 @@
     - state: default
     - state: idmime
   - type: PresetIdCard
-    job: Mime
+    job: Wayfarer #Wayfarer Mime>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -302,7 +304,7 @@
         - state: default
         - state: idchaplain
     - type: PresetIdCard
-      job: Chaplain
+      job: Wayfarer #Wayfarer Chaplain>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -327,7 +329,7 @@
     - state: default
     - state: idbartender
   - type: PresetIdCard
-    job: Bartender
+    job: Wayfarer # Wayfarer Bartender>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -339,11 +341,16 @@
         - state: default
         - state: idbartender
     - type: PresetIdCard
-      job: Bartender
+      job: StationStaff #Bartender>StationStaff
       name: Pun Pun
     - type: Tag #  Ignore Chameleon tags
       tags:
       - DoorBumpOpener
+  # wayfarer start
+    - type: IdCard
+      jobTitle: job-title-bartender
+      jobIcon: JobIconBartender
+# wayfarer end
 
 - type: entity
   parent: IDCardStandard
@@ -355,7 +362,7 @@
     - state: default
     - state: idcook
   - type: PresetIdCard
-    job: Chef
+    job: Wayfarer #Wayfarer Chef>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -367,7 +374,7 @@
         - state: default
         - state: idbotanist
     - type: PresetIdCard
-      job: Botanist
+      job: Wayfarer #Wayfarer Botanist>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -379,7 +386,7 @@
         - state: default
         - state: idcurator
     - type: PresetIdCard
-      job: Librarian
+      job: Wayfarer #Wayfarer Librarian>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -391,7 +398,7 @@
         - state: default
         - state: idlawyer
     - type: PresetIdCard
-      job: Lawyer
+      job: Wayfarer #Wayfarer Lawyer>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -419,7 +426,7 @@
   - type: Item
     heldPrefix: silver
   - type: PresetIdCard
-    job: ChiefEngineer
+    job: Wayfarer #Wayfarer ChiefEngineer>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -433,7 +440,7 @@
   - type: Item
     heldPrefix: silver
   - type: PresetIdCard
-    job: ChiefMedicalOfficer
+    job: Wayfarer #Wayfarer ChiefMedicalOfficer>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -447,7 +454,7 @@
   - type: Item
     heldPrefix: silver
   - type: PresetIdCard
-    job: ResearchDirector
+    job: Wayfarer #Wayfarer ResearchDirector>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -605,7 +612,7 @@
         - state: default
         - state: idmusician
     - type: PresetIdCard
-      job: Musician
+      job: Wayfarer #Wayfarer Musician>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -683,7 +690,7 @@
     - state: orange
     - state: idatmospherictechnician
   - type: PresetIdCard
-    job: AtmosphericTechnician
+    job: Wayfarer #Wayfarer AtmosphericTechnician>Wayfarer
 
 - type: entity
   parent: [ IDCardStandard ] # Wayfarer: Removed Contraband
@@ -725,7 +732,7 @@
     - state: default
     - state: idpsychologist
   - type: PresetIdCard
-    job: Psychologist
+    job: Wayfarer #Wayfarer Psychologist>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -737,7 +744,7 @@
     - state: default
     - state: idreporter
   - type: PresetIdCard
-    job: Reporter
+    job: Wayfarer #Wayfarer Reporter>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -749,7 +756,7 @@
     - state: default
     - state: idboxer
   - type: PresetIdCard
-    job: Boxer
+    job: Wayfarer #Wayfarer Boxer>Wayfarer
 
 - type: entity
   parent: IDCardStandard
@@ -761,7 +768,7 @@
     - state: default
     - state: idzookeeper
   - type: PresetIdCard
-    job: Zookeeper
+    job: Wayfarer #Wayfarer Zookeeper>Wayfarer
 
 - type: entity
   parent: IDCardStandard
