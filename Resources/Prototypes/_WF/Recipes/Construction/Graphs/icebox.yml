@@ -50,9 +50,11 @@
         doAfter: 1
   - node: icebox
     entity: IceboxEmpty
-    actions:
-    - !type:EmptySolution
-      solution: tank
+    # Kessler: node actions re-run on every ComponentStartup, so this emptied full tanks whenever a save was loaded.
+    # At construction time it ran before map-init created the tank, so removing it changes nothing there.
+    # actions: # Kessler
+    # - !type:EmptySolution # Kessler
+    #   solution: tank # Kessler
     edges:
     - to: plumbing
       completed:
