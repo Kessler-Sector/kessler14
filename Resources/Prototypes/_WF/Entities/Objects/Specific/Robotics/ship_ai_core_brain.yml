@@ -1,0 +1,164 @@
+- type: entity
+  parent: BaseItem
+  id: ShipAiCoreBrain
+  name: ship AI core
+  description: An AI core built to run a ship from its AI interface. It only fits a ship AI interface.
+  components:
+  - type: Sprite
+    sprite: _WF/Objects/Specific/Robotics/ship_ai_core_brain.rsi
+    scale: 0.5, 0.5
+    layers:
+    - state: posibrain
+      map: ["base"]
+    - state: glow
+      map: ["glow"]
+      shader: unshaded
+      visible: false
+  - type: GuideHelp
+    guides:
+    - ShipAi
+  - type: ShipAiCore
+    stampComponents:
+      Cgp:
+      - type: SiliconLawBound
+      - type: SiliconLawProvider
+        laws: RobocopLawset
+      - type: CartridgeLoader
+        uiKey: enum.PdaUiKey.Key
+        preinstalled:
+        - CrewManifestCartridge
+        - NotekeeperCartridge
+        - NanoTaskCartridge
+        - NewsReaderCartridge
+        - BountyContractsCartridge
+        - AstroNavCartridge
+        - WantedListCartridge
+        - NanoChatCartridge
+        cartridgeSlot:
+          locked: true
+      - type: BlipCartridge
+        defaultPreset: BlipPresetSecurity
+      Outlaw:
+      - type: SiliconLawBound
+      - type: SiliconLawProvider
+        laws: ShipAiFree
+      - type: CartridgeLoader
+        uiKey: enum.PdaUiKey.Key
+        preinstalled:
+        - CrewManifestCartridge
+        - NotekeeperCartridge
+        - NanoTaskCartridge
+        - NewsReaderCartridge
+        - BountyContractsCartridge
+        - AstroNavCartridge
+        - NanoChatCartridge
+        - BlipCartridge
+        - OutlawBountyCartridge
+        - OutlawObjectivesCartridge
+        cartridgeSlot:
+          locked: true
+      - type: BlipCartridge
+      Other:
+      - type: SiliconLawBound
+      - type: SiliconLawProvider
+        laws: LiveLetLiveLaws
+      - type: CartridgeLoader
+        uiKey: enum.PdaUiKey.Key
+        preinstalled:
+        - CrewManifestCartridge
+        - NotekeeperCartridge
+        - NanoTaskCartridge
+        - NewsReaderCartridge
+        - BountyContractsCartridge
+        - AstroNavCartridge
+        - NanoChatCartridge
+        - BlipCartridge
+        cartridgeSlot:
+          locked: true
+      - type: BlipCartridge
+    stampChannels:
+      Cgp:
+      - Nfsd
+      Outlaw:
+      - Freelance
+    alertChannels:
+      Cgp: Nfsd
+      Outlaw: Freelance
+      Other: Engineering
+    lostAlertInterval: 480
+    idCards:
+      Cgp: ShipAiCgpIDCard
+      Outlaw: ShipAiOutlawIDCard
+      Other: ShipAiIDCard
+    jobs:
+      Cgp: ShipAiCgp
+      Outlaw: ShipAiOutlaw
+      Other: ShipAi
+    stampActions:
+      Cgp:
+      - ActionShipAiOpenCriminalRecords
+  - type: Pda
+    idSlot:
+      name: access-id-card-component-default
+      ejectSound: /Audio/Machines/id_swipe.ogg
+      insertSound: /Audio/Machines/id_insert.ogg
+      whitelist:
+        components:
+        - IdCard
+    penSlot:
+      locked: true
+    paiSlot:
+      locked: true
+    bookSlot:
+      locked: true
+  - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      PDA-id: !type:ContainerSlot {}
+      PDA-pen: !type:ContainerSlot {}
+      PDA-pai: !type:ContainerSlot {}
+      PDA-book: !type:ContainerSlot {}
+      Cartridge-Slot: !type:ContainerSlot {}
+      program-container: !type:Container
+  - type: Ringer
+  - type: CriminalRecordsConsole
+  - type: Input
+    context: human
+  - type: BlockMovement
+  - type: Examiner
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Binary
+  - type: ActiveRadio
+    channels:
+    - Binary
+    - Common
+  - type: NameIdentifier
+    group: PositronicBrain
+  - type: DoAfter
+  - type: Actions
+  - type: TypingIndicator
+    proto: robot
+  - type: Speech
+    speechSounds: Pai
+  - type: Vocal
+    sounds:
+      Unsexed: UnisexSilicon
+    wilhelmProbability: 0
+    screamAction: null
+  - type: MobState
+    allowedStates:
+    - Alive
+  - type: Appearance
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - ShipAiCore
+    - SiliconEmotes
+  - type: GenericVisualizer
+    visuals:
+      enum.ShipAiCoreVisuals.State:
+        glow:
+          Off: { visible: false }
+          On: { visible: true }

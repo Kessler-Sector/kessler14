@@ -7,6 +7,7 @@ using Content.Shared.Radio;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Content.Shared.Inventory; // Wayfarer
 
 namespace Content.Server.GameTicking; // Intentionally colliding namespaces to extend the class
 
@@ -75,8 +76,17 @@ public sealed partial class GameTicker
             // Ordered before the radio message so the new player can see it, thus communicating that it exists
             if (_newPlayerLoadoutPrototype is not null)
             {
+                // Wayfarer
+                /*
                 _stationSpawning.EquipStartingGear(mob, _newPlayerLoadoutPrototype, false);
                 _stationSpawning.TryAutoEquipMisc(mob, _newPlayerLoadoutPrototype);
+                */
+                if (HasComp<InventoryComponent>(mob))
+                {
+                    _stationSpawning.EquipStartingGear(mob, _newPlayerLoadoutPrototype, false);
+                    _stationSpawning.TryAutoEquipMisc(mob, _newPlayerLoadoutPrototype);
+                }
+                // Wayfarer End
             }
 
             _radio.SendRadioMessage(_greetingEntity, Loc.GetString("latejoin-arrival-new-player-announcement",

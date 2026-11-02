@@ -40,4 +40,7 @@ public sealed class WFCCVars
     /// </summary>
     public static readonly CVarDef<float> SSDJobReopenMinutes =
         CVarDef.Create("wf.ssd_job_reopen_minutes", 120f, CVar.SERVER);
+
+    public static readonly CVarDef<bool> ShipAiShipyard =
+        CVarDef.Create("wf.ship_ai_shipyard", true, CVar.SERVER);
 }

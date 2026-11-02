@@ -12,6 +12,7 @@ using Content.Server.Administration.Logs; // Frontier
 using Content.Shared.Database; // Frontier
 using Content.Shared._NF.StationRecords; // Frontier
 using Content.Shared._WF.StationRecords.Components; // Wayfarer
+using Content.Shared._WF.Silicons.ShipAi; // Wayfarer
 
 namespace Content.Server.StationRecords.Systems;
 
@@ -74,6 +75,14 @@ public sealed class GeneralStationRecordConsoleSystem : EntitySystem
         var stationUid = _station.GetOwningStation(ent);
         if (stationUid is EntityUid station)
         {
+            // Wayfarer
+            if (ShipAiSystem.IsJob(_proto, msg.JobProto))
+            {
+                UpdateUserInterface(ent);
+                return;
+            }
+            // Wayfarer End
+
             // Frontier: check access - hack because we don't have an AccessReaderComponent, it's the station
             if (TryComp(stationUid, out StationJobsComponent? stationJobs) &&
                 (stationJobs.Groups.Count > 0 || stationJobs.Tags.Count > 0))
@@ -151,6 +160,7 @@ public sealed class GeneralStationRecordConsoleSystem : EntitySystem
         if (owningStation != null)
         {
             jobList = _stationJobsSystem.GetJobs(owningStation.Value);
+            jobList = jobList.Where(job => !ShipAiSystem.IsJob(_proto, job.Key)).ToDictionary(); // Wayfarer
             if (TryComp<ExtraShuttleInformationComponent>(owningStation, out var extraVessel))
                 advertisement = extraVessel.Advertisement;
         }

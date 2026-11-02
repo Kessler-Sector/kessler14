@@ -20,6 +20,8 @@
       components:
       - type: StationNameSetup
         mapNameTemplate: 'Dusk Station'
+      - type: ShipAiShipyardPoint
+        point: Dusk
       #          nameGenerator:
       #            !type:NanotrasenNameGenerator
       #            prefixCreator: '14'

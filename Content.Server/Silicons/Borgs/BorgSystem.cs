@@ -39,6 +39,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Server.Access.Systems; // Frontier
+using Content.Shared._CorvaxNext.Silicons.Borgs.Components; // Wayfarer
+using Content.Shared.StationAi; // Wayfarer
 
 namespace Content.Server.Silicons.Borgs;
 
@@ -149,6 +151,21 @@ public sealed partial class BorgSystem : SharedBorgSystem
             args.Handled = true;
             UpdateUI(uid, component);
         }
+
+        // Corvax-Next-AiRemoteControl-Start
+        if (component.BrainEntity == null && HasComp<AiRemoteBrainComponent>(used) &&
+    _whitelistSystem.IsWhitelistPassOrNull(component.BrainWhitelist, used))
+        {
+            EnsureComp<AiRemoteControllerComponent>(uid);
+            _container.Insert(used, component.BrainContainer);
+            _adminLog.Add(LogType.Action, LogImpact.Medium,
+                $"{ToPrettyString(args.User):player} installed ai remote brain {ToPrettyString(used)} into borg {ToPrettyString(uid)}");
+            args.Handled = true;
+            BorgActivate(uid, component);
+
+            UpdateUI(uid, component);
+        }
+        // Corvax-Next-AiRemoteControl-End
     }
 
     /// <summary>
@@ -183,6 +200,20 @@ public sealed partial class BorgSystem : SharedBorgSystem
         {
             _mind.TransferTo(mindId, args.Entity, mind: mind);
         }
+
+        // Corvax-Next-AiRemoteControl-Start
+        // Wayfarer
+        /*
+        if (HasComp<AiRemoteBrainComponent>(args.Entity))
+        */
+        if (HasComp<AiRemoteBrainComponent>(args.Entity) && args.Container == component.BrainContainer)
+        // Wayfarer End
+        {
+            BorgDeactivate(uid, component);
+            RemComp<AiRemoteControllerComponent>(uid);
+            RemComp<StationAiVisionComponent>(uid);
+        }
+        // Corvax-Next-AiRemoteControl-End
     }
 
     private void OnMindAdded(EntityUid uid, BorgChassisComponent component, MindAddedMessage args)

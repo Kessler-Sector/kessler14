@@ -1,0 +1,1111 @@
+- type: stationAiCustomization
+  abstract: true
+  id: ShipAiFaceBase
+  previewKey: Occupied
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: preview
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceAnnoyed
+  name: ship-ai-face-annoyed
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_annoyed
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceBaffled
+  name: ship-ai-face-baffled
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_baffled
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceBlank
+  name: ship-ai-face-blank
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_blank
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceWidesmile
+  name: ship-ai-face-widesmile
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_widesmile
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSunglasses
+  name: ship-ai-face-sunglasses
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_sunglasses
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceCheeky
+  name: ship-ai-face-cheeky
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_cheeky
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceConfused
+  name: ship-ai-face-confused
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_confused
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceContent
+  name: ship-ai-face-content
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_content
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceCrecent
+  name: ship-ai-face-crecent
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_crecent
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceExclamation
+  name: ship-ai-face-exclamation
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_exclamation
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceEye
+  name: ship-ai-face-eye
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_eye
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceEyesemoji
+  name: ship-ai-face-eyesemoji
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_eyesemoji
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceHappy
+  name: ship-ai-face-happy
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_happy
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceHeart
+  name: ship-ai-face-heart
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_heart
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceLine
+  name: ship-ai-face-line
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_line
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceMad
+  name: ship-ai-face-mad
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_mad
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceMusic
+  name: ship-ai-face-music
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_music
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceNeutral
+  name: ship-ai-face-neutral
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_neutral
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFacePensive
+  name: ship-ai-face-pensive
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_pensive
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceQuestion
+  name: ship-ai-face-question
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_question
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSad
+  name: ship-ai-face-sad
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_sad
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSilly
+  name: ship-ai-face-silly
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_silly
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSmug
+  name: ship-ai-face-smug
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_smug
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSpooky
+  name: ship-ai-face-spooky
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_spooky
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSquare
+  name: ship-ai-face-square
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_square
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSurprised
+  name: ship-ai-face-surprised
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_surprised
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceTired
+  name: ship-ai-face-tired
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_tired
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceTriangle
+  name: ship-ai-face-triangle
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_triangle
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceUnimpressed
+  name: ship-ai-face-unimpressed
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_unimpressed
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceUnsure
+  name: ship-ai-face-unsure
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_unsure
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceVeryhappy
+  name: ship-ai-face-veryhappy
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_veryhappy
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceWink
+  name: ship-ai-face-wink
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_wink
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceZzz
+  name: ship-ai-face-zzz
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_zzz
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceText
+  name: ship-ai-face-text
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_text
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceLoading
+  name: ship-ai-face-loading
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_loading
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceCursor
+  name: ship-ai-face-cursor
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_cursor
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceNervous
+  name: ship-ai-face-nervous
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_nervous
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceFidget
+  name: ship-ai-face-fidget
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_fidget
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceDevious
+  name: ship-ai-face-devious
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_devious
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomizationGroup
+  id: ShipAiScreen
+  name: ship-ai-screen-group
+  category: CoreIconography
+  protoIds:
+  - ShipAiScreenBlue
+  - ShipAiScreenWhite
+  - ShipAiScreenGrey
+  - ShipAiScreenGreen
+  - ShipAiScreenRed
+  - ShipAiScreenPurple
+  - ShipAiScreenPink
+  - ShipAiScreenOrange
+  - ShipAiScreenYellow
+  - ShipAiScreenCyan
+
+- type: stationAiCustomization
+  id: ShipAiScreenBlue
+  name: ship-ai-screen-blue
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_blue
+
+- type: stationAiCustomization
+  id: ShipAiScreenWhite
+  name: ship-ai-screen-white
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_white
+
+- type: stationAiCustomization
+  id: ShipAiScreenGrey
+  name: ship-ai-screen-grey
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_grey
+
+- type: stationAiCustomization
+  id: ShipAiScreenGreen
+  name: ship-ai-screen-green
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_green
+
+- type: stationAiCustomization
+  id: ShipAiScreenRed
+  name: ship-ai-screen-red
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_red
+
+- type: stationAiCustomization
+  id: ShipAiScreenPurple
+  name: ship-ai-screen-purple
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_purple
+
+- type: stationAiCustomization
+  id: ShipAiScreenPink
+  name: ship-ai-screen-pink
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_pink
+
+- type: stationAiCustomization
+  id: ShipAiScreenOrange
+  name: ship-ai-screen-orange
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_orange
+
+- type: stationAiCustomization
+  id: ShipAiScreenYellow
+  name: ship-ai-screen-yellow
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_yellow
+
+- type: stationAiCustomization
+  id: ShipAiScreenCyan
+  name: ship-ai-screen-cyan
+  previewKey: Screen
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: empty
+  layerData:
+    Screen:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_cyan
+
+- type: stationAiCustomization
+  id: ShipAiHologramFace
+  name: ship-ai-hologram-face
+  previewKey: Hologram
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: screen_blue
+  layerData:
+    Hologram:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_neutral
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSkull
+  name: ship-ai-face-skull
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_skull
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceSick
+  name: ship-ai-face-sick
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_sick
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomizationGroup
+  id: ShipAiCasing
+  name: ship-ai-casing-group
+  category: CoreIconography
+  protoIds:
+  - ShipAiCasingDefault
+  - ShipAiCasingGreen
+  - ShipAiCasingBlue
+  - ShipAiCasingPurple
+  - ShipAiCasingPink
+  - ShipAiCasingOrange
+  - ShipAiCasingYellow
+  - ShipAiCasingCyan
+  - ShipAiCasingWhite
+  - ShipAiCasingBlack
+  - ShipAiCasingScience
+  - ShipAiCasingMedical
+  - ShipAiCasingNtold
+  - ShipAiCasingBee
+  - ShipAiCasingShock
+  - ShipAiCasingSyndicate
+  - ShipAiCasingPumpkin
+  - ShipAiCasingGold
+  - ShipAiCasingEngineering
+  - ShipAiCasingSoviet
+  - ShipAiCasingNt
+  - ShipAiCasingIndustrial
+  - ShipAiCasingLgun
+  - ShipAiCasingDwaine
+  - ShipAiCasingAiles
+  - ShipAiCasingSalvage
+  - ShipAiCasingGardengear
+  - ShipAiCasingTelegun
+  - ShipAiCasingKingsway
+  - ShipAiCasingClown
+  - ShipAiCasingMime
+  - ShipAiCasingTactical
+  - ShipAiCasingRegal
+  - ShipAiCasingMauxite
+  - ShipAiCasingFlock
+  - ShipAiCasingCrt
+  - ShipAiCasingRustic
+  - ShipAiCasingCardboard
+
+- type: stationAiCustomization
+  id: ShipAiCasingDefault
+  name: ship-ai-casing-default
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_default
+
+- type: stationAiCustomization
+  id: ShipAiCasingScience
+  name: ship-ai-casing-science
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_science
+
+- type: stationAiCustomization
+  id: ShipAiCasingMedical
+  name: ship-ai-casing-medical
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_medical
+
+- type: stationAiCustomization
+  id: ShipAiCasingNtold
+  name: ship-ai-casing-ntold
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_ntold
+
+- type: stationAiCustomization
+  id: ShipAiCasingBee
+  name: ship-ai-casing-bee
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_bee
+
+- type: stationAiCustomization
+  id: ShipAiCasingShock
+  name: ship-ai-casing-shock
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_shock
+
+- type: stationAiCustomization
+  id: ShipAiCasingSyndicate
+  name: ship-ai-casing-syndicate
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_syndicate
+
+- type: stationAiCustomization
+  id: ShipAiCasingPumpkin
+  name: ship-ai-casing-pumpkin
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_pumpkin
+
+- type: stationAiCustomization
+  id: ShipAiCasingGold
+  name: ship-ai-casing-gold
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_gold
+
+- type: stationAiCustomization
+  id: ShipAiCasingEngineering
+  name: ship-ai-casing-engineering
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_engineering
+
+- type: stationAiCustomization
+  id: ShipAiCasingSoviet
+  name: ship-ai-casing-soviet
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_soviet
+
+- type: stationAiCustomization
+  id: ShipAiCasingNt
+  name: ship-ai-casing-nt
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_nt
+
+- type: stationAiCustomization
+  id: ShipAiCasingIndustrial
+  name: ship-ai-casing-industrial
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_industrial
+
+- type: stationAiCustomization
+  id: ShipAiCasingLgun
+  name: ship-ai-casing-lgun
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_lgun
+
+- type: stationAiCustomization
+  id: ShipAiCasingDwaine
+  name: ship-ai-casing-dwaine
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_dwaine
+
+- type: stationAiCustomization
+  id: ShipAiCasingAiles
+  name: ship-ai-casing-ailes
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_ailes
+
+- type: stationAiCustomization
+  id: ShipAiCasingSalvage
+  name: ship-ai-casing-salvage
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_salvage
+
+- type: stationAiCustomization
+  id: ShipAiCasingGardengear
+  name: ship-ai-casing-gardengear
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_gardengear
+
+- type: stationAiCustomization
+  id: ShipAiCasingTelegun
+  name: ship-ai-casing-telegun
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_telegun
+
+- type: stationAiCustomization
+  id: ShipAiCasingKingsway
+  name: ship-ai-casing-kingsway
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_kingsway
+
+- type: stationAiCustomization
+  id: ShipAiCasingClown
+  name: ship-ai-casing-clown
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_clown
+
+- type: stationAiCustomization
+  id: ShipAiCasingMime
+  name: ship-ai-casing-mime
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_mime
+
+- type: stationAiCustomization
+  id: ShipAiCasingTactical
+  name: ship-ai-casing-tactical
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_tactical
+
+- type: stationAiCustomization
+  id: ShipAiCasingRegal
+  name: ship-ai-casing-regal
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_regal
+
+- type: stationAiCustomization
+  id: ShipAiCasingMauxite
+  name: ship-ai-casing-mauxite
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_mauxite
+
+- type: stationAiCustomization
+  id: ShipAiCasingFlock
+  name: ship-ai-casing-flock
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_flock
+
+- type: stationAiCustomization
+  id: ShipAiCasingCrt
+  name: ship-ai-casing-crt
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_crt
+
+- type: stationAiCustomization
+  id: ShipAiCasingRustic
+  name: ship-ai-casing-rustic
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_rustic
+
+- type: stationAiCustomization
+  id: ShipAiCasingCardboard
+  name: ship-ai-casing-cardboard
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_cardboard
+
+- type: stationAiCustomizationGroup
+  id: ShipAiAccessory
+  name: ship-ai-accessory-group
+  category: CoreIconography
+  protoIds:
+  - ShipAiAccessoryNone
+  - ShipAiAccessoryMoustache
+
+- type: stationAiCustomization
+  id: ShipAiAccessoryNone
+  name: ship-ai-accessory-none
+  previewKey: Accessory
+  layerData:
+    Accessory:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: icon_blank
+
+- type: stationAiCustomization
+  id: ShipAiAccessoryMoustache
+  name: ship-ai-accessory-moustache
+  previewKey: Accessory
+  previewBackground:
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    state: preview
+  layerData:
+    Accessory:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: moustache
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceTetris
+  name: ship-ai-face-tetris
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_tetris
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceTamagotchi
+  name: ship-ai-face-tamagotchi
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_tamagotchi
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceFlip
+  name: ship-ai-face-flip
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_flip
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  parent: ShipAiFaceBase
+  id: ShipAiFaceColourbars
+  name: ship-ai-face-colourbars
+  layerData:
+    Occupied:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_colourbars
+    Dead:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: dead
+
+- type: stationAiCustomization
+  id: ShipAiCasingGreen
+  name: ship-ai-casing-green
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_green
+
+- type: stationAiCustomization
+  id: ShipAiCasingBlue
+  name: ship-ai-casing-blue
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_blue
+
+- type: stationAiCustomization
+  id: ShipAiCasingPurple
+  name: ship-ai-casing-purple
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_purple
+
+- type: stationAiCustomization
+  id: ShipAiCasingPink
+  name: ship-ai-casing-pink
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_pink
+
+- type: stationAiCustomization
+  id: ShipAiCasingOrange
+  name: ship-ai-casing-orange
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_orange
+
+- type: stationAiCustomization
+  id: ShipAiCasingYellow
+  name: ship-ai-casing-yellow
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_yellow
+
+- type: stationAiCustomization
+  id: ShipAiCasingCyan
+  name: ship-ai-casing-cyan
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_cyan
+
+- type: stationAiCustomization
+  id: ShipAiCasingWhite
+  name: ship-ai-casing-white
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_white
+
+- type: stationAiCustomization
+  id: ShipAiCasingBlack
+  name: ship-ai-casing-black
+  previewKey: Casing
+  layerData:
+    Casing:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: casing_black

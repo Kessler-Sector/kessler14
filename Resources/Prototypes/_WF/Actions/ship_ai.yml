@@ -1,0 +1,276 @@
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiToggleEngines
+  name: Toggle engines
+  description: Turns every thruster and gyroscope on the ship on or off.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 5
+    icon:
+      sprite: Structures/Shuttles/thruster.rsi
+      state: base
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: Engines
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiToggleGenerators
+  name: Toggle generators
+  description: Starts or stops every generator on the ship. Generators without fuel stay off.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 5
+    icon:
+      sprite: Structures/Power/Generation/portable_generator.rsi
+      state: portgen1
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: Generators
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiToggleBolts
+  name: Toggle door bolts
+  description: Bolts every powered door on the ship, or unbolts them all if they are already bolted.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 5
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: bolt_door
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: Bolts
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiToggleLights
+  name: Toggle lights
+  description: Turns every light on the ship on or off.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 5
+    icon:
+      sprite: Objects/Power/light_tube.rsi
+      state: normal
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: Lights
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiOpenPower
+  name: Power monitor
+  description: Opens the ship's power monitoring console.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    icon:
+      sprite: Structures/Machines/computers.rsi
+      state: power_monitor
+  - type: InstantAction
+    event: !type:ShipAiOpenConsoleEvent
+      key: enum.PowerMonitoringConsoleUiKey.Key
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiOpenAirAlerts
+  name: Air alerts
+  description: Opens the ship's atmospheric alerts console.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    icon:
+      sprite: Structures/Machines/computers.rsi
+      state: alert-0
+  - type: InstantAction
+    event: !type:ShipAiOpenConsoleEvent
+      key: enum.AtmosAlertsComputerUiKey.Key
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiOpenPipes
+  name: Pipe monitor
+  description: Opens the ship's atmospheric network monitor.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    icon:
+      sprite: Structures/Machines/computers.rsi
+      state: tank
+  - type: InstantAction
+    event: !type:ShipAiOpenConsoleEvent
+      key: enum.AtmosMonitoringConsoleUiKey.Key
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiOpenRadar
+  name: Mass scanner
+  description: Opens the ship's mass scanner.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    icon:
+      sprite: Objects/Tools/handheld_mass_scanner.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:ShipAiOpenConsoleEvent
+      key: enum.RadarConsoleUiKey.Key
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiOpenPda
+  name: PDA
+  description: Opens your built-in PDA.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    icon:
+      sprite: Objects/Devices/pda.rsi
+      state: pda
+  - type: InstantAction
+    event: !type:ToggleIntrinsicUIEvent
+      key: enum.PdaUiKey.Key
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiOpenCriminalRecords
+  name: Criminal records
+  description: Opens the CGP criminal records.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: station_records
+  - type: InstantAction
+    event: !type:ToggleIntrinsicUIEvent
+      key: enum.CriminalRecordsConsoleKey.Key
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiCustomize
+  name: Customize
+  description: Changes the screen colour, face and hologram of the core.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    icon:
+      sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: icon_neutral
+  - type: InstantAction
+    event: !type:ShipAiOpenConsoleEvent
+      key: enum.StationAiCustomizationUiKey.Key
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiClearElectrified
+  name: Remove all electrification
+  description: Turns off the shock on every electrified door on the ship.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 5
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: door_overcharge_off
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: ClearElectrified
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiToggleApcs
+  name: Toggle all APCs
+  description: Switches the main breaker of every APC on the ship off, or back on if any is off.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 5
+    icon:
+      sprite: Structures/Power/apc.rsi
+      state: base
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: Apcs
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiToggleShutters
+  name: Toggle shutters
+  description: Closes every shutter on the ship, or opens them all if they are already closed.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 5
+    icon:
+      sprite: Structures/Doors/Shutters/shutters.rsi
+      state: closed
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: Shutters
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiToggleBlastDoors
+  name: Toggle blast doors
+  description: Closes every blast door on the ship, or opens them all if they are already closed.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 5
+    icon:
+      sprite: Structures/Doors/Shutters/blastdoor.rsi
+      state: closed
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: BlastDoors
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiToggleJobIcons
+  name: Toggle job icons
+  description: Shows or hides the job icons of the crew.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: crew_monitor
+  - type: InstantAction
+    event: !type:ShipAiToggleEvent
+      target: JobIcons
+
+- type: entity
+  parent: BaseAction
+  id: ActionShipAiCameraScan
+  name: Health Analyzer
+  description: Pick a crew member on the ship to see their vitals.
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 1
+    checkCanInteract: false
+    icon:
+      sprite: Objects/Specific/Medical/healthanalyzer.rsi
+      state: icon
+  - type: TargetAction
+  - type: EntityTargetAction
+    canTargetSelf: false
+    whitelist:
+      components:
+      - MobState
+    event: !type:ShipAiCameraScanEvent

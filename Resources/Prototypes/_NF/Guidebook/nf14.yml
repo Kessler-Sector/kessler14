@@ -18,6 +18,7 @@
   - CommunityGoals
   - Consent # wayfarer
   - Contraband # wayfarer
+  - ShipAi # Wayfarer
 
 - type: guideEntry
   id: Bank

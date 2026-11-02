@@ -1,0 +1,43 @@
+<Document>
+# Ship AI
+
+  A ship AI is a player who runs one ship from an AI core. The core sits in a ship AI interface on that ship.
+
+<Box>
+<GuideEntityEmbed Entity="ComputerShipAi"/>
+<GuideEntityEmbed Entity="ShipAiCoreBrain"/>
+</Box>
+
+## Getting a ship AI
+
+  The only way to get an AI core is to join as a Ship AI and buy a ship at a shipyard. You choose the ship, then place your core on it.
+
+  CGP and Outlaw ships have their own Ship AI roles with the same whitelists and playtime as their faction. A CGP or Outlaw AI follows the GO-RP of its faction.
+
+## The interface
+
+  The interface is the machine that holds the core. Every bought ship AI comes with one. You can make more:
+
+  - Print a ship AI interface board at a circuit imprinter, or buy a flatpack from the flatpack vendor.
+  - To build one by hand, make a frame from steel, then add steel, cable, the board, a handheld radio, a power cell and a pane of glass, and close it with a screwdriver.
+
+  A new interface is empty. It only works when anchored on a ship with a deed. An AI core goes into its core slot, and a core cannot go into an interface on a ship of another faction.
+
+  The interface does not need power. Weld it to repair damage. If it is destroyed the core drops out. The AI then sends an alert on its radio channel every few minutes until the core is put back into an interface.
+
+## What the AI can do
+
+  The AI sees its own ship and can open doors and use machines on it. Its action bar has buttons to:
+
+  - toggle engines, generators, lights, APCs, door bolts, shutters and blast doors across the whole ship
+  - remove door electrification
+  - open the power monitor, air alerts, pipe monitor and mass scanner
+  - change door access on its own ship
+  - use its built-in PDA, holopads and laws
+
+  With an AI interface chip in a cyborg, the AI can take control of that cyborg while the cyborg is on its ship or on a ship docked to it.
+
+## Damage alerts
+
+  When the interface drops to 10% integrity and when it is destroyed, the AI sends an alert on its faction channel. Civilian AIs use Engineering, CGP AIs use the CGP channel, and Outlaw AIs use Freelance. The AI can turn these alerts off, with a verb on its own interface.
+</Document>

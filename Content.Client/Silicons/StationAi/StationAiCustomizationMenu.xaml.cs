@@ -7,6 +7,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using System.Linq;
 using System.Numerics;
+using Content.Shared._WF.Silicons.ShipAi; // Wayfarer
+using Content.Shared.Preferences.Loadouts; // Wayfarer
 
 namespace Content.Client.Silicons.StationAi;
 
@@ -23,12 +25,15 @@ public sealed partial class StationAiCustomizationMenu : FancyWindow
 
     private const float IconScale = 1.75f;
 
+    public bool ShipCore; // Wayfarer
+
     public StationAiCustomizationMenu(EntityUid owner)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
         var stationAiSystem = _entManager.System<SharedStationAiSystem>();
+        ShipCore = _entManager.HasComponent<ShipAiInterfaceComponent>(owner); // Wayfarer
 
         // Load customziation data
         _entManager.TryGetComponent<StationAiCoreComponent>(owner, out var stationAiCore);
@@ -39,8 +44,23 @@ public sealed partial class StationAiCustomizationMenu : FancyWindow
         var groupPrototypes = _protoManager.EnumeratePrototypes<StationAiCustomizationGroupPrototype>();
         groupPrototypes = groupPrototypes.OrderBy(x => x.ID); // To ensure consistency in presentation
 
+        // Wayfarer
+        if (ShipCore)
+        {
+            groupPrototypes = _protoManager.Index(ShipAiSystem.Loadout).Groups
+                .Where(g => _protoManager.HasIndex<StationAiCustomizationGroupPrototype>(g.Id))
+                .Select(g => _protoManager.Index<StationAiCustomizationGroupPrototype>(g.Id));
+        }
+        // Wayfarer End
+
         foreach (var groupPrototype in groupPrototypes)
         {
+            // Wayfarer
+            if (!groupPrototype.ProtoIds.Any(id => ShipAiSystem.ShowsChoice(ShipCore, groupPrototype.ID, id)) ||
+                ShipCore && groupPrototype.ID == ShipAiSystem.CasingGroup)
+                continue;
+            // Wayfarer End
+
             StationAiCustomizationPrototype? selectedPrototype = null;
 
             if (stationAiCustomization?.ProtoIds.TryGetValue(groupPrototype, out var selectedProtoId) == true)
@@ -48,7 +68,13 @@ public sealed partial class StationAiCustomizationMenu : FancyWindow
 
             _buttonGroups[groupPrototype] = new ButtonGroup();
             _groupContainers[groupPrototype] = new StationAiCustomizationGroupContainer(groupPrototype, selectedPrototype, _buttonGroups[groupPrototype], this, _protoManager);
+            // Wayfarer
+            /*
             CustomizationGroupsContainer.AddTab(_groupContainers[groupPrototype], Loc.GetString(groupPrototype.Name));
+            */
+            var tabName = ShipCore ? _protoManager.Index<LoadoutGroupPrototype>(groupPrototype.ID).Name : groupPrototype.Name;
+            CustomizationGroupsContainer.AddTab(_groupContainers[groupPrototype], Loc.GetString(tabName));
+            // Wayfarer End
         }
 
         Title = Loc.GetString("station-ai-customization-menu");
@@ -76,6 +102,11 @@ public sealed partial class StationAiCustomizationMenu : FancyWindow
             // Create UI entries for all customization in the group
             foreach (var protoId in groupPrototype.ProtoIds)
             {
+                // Wayfarer
+                if (!ShipAiSystem.ShowsChoice(menu.ShipCore, groupPrototype.ID, protoId))
+                    continue;
+                // Wayfarer End
+
                 if (!protoManager.TryIndex(protoId, out var prototype))
                     continue;
 

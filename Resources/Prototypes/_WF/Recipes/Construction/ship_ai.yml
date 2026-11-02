@@ -1,0 +1,9 @@
+- type: construction
+  id: ShipAiCore
+  graph: ShipAiCore
+  startNode: start
+  targetNode: core
+  category: construction-category-machines
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false

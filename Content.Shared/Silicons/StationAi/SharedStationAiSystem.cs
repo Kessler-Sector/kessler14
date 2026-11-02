@@ -29,6 +29,7 @@ using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared._CorvaxNext.Silicons.Borgs; // Wayfarer
 
 namespace Content.Shared.Silicons.StationAi;
 
@@ -235,6 +236,18 @@ public abstract partial class SharedStationAiSystem : EntitySystem
         // Try to insert our thing into them
         if (_slots.CanEject(ent.Owner, args.User, ent.Comp.Slot))
         {
+            // Corvax-Next-AiRemoteControl-Start
+            if (ent.Comp.Slot.Item != null
+                && TryComp<StationAiHeldComponent>(ent.Comp.Slot.Item, out var stationAiHeldComp))
+                if (stationAiHeldComp.CurrentConnectedEntity != null)
+                    // Wayfarer
+                    /*
+                    _remoteSystem.ReturnMindIntoAi(stationAiHeldComp.CurrentConnectedEntity.Value);
+                    */
+                    RaiseLocalEvent(stationAiHeldComp.CurrentConnectedEntity.Value, new ReturnMindIntoAiEvent { Performer = stationAiHeldComp.CurrentConnectedEntity.Value });
+                    // Wayfarer End
+            // Corvax-Next-AiRemoteControl-End
+
             if (!_slots.TryInsert(args.Args.Target.Value, targetHolder.Slot, ent.Comp.Slot.Item!.Value, args.User, excludeUserAudio: true))
             {
                 return;
@@ -247,6 +260,13 @@ public abstract partial class SharedStationAiSystem : EntitySystem
         // Otherwise try to take from them
         if (_slots.CanEject(args.Args.Target.Value, args.User, targetHolder.Slot))
         {
+            // Wayfarer
+            if (targetHolder.Slot.Item != null
+                && TryComp<StationAiHeldComponent>(targetHolder.Slot.Item, out var targetHeldComp)
+                && targetHeldComp.CurrentConnectedEntity != null)
+                RaiseLocalEvent(targetHeldComp.CurrentConnectedEntity.Value, new ReturnMindIntoAiEvent { Performer = targetHeldComp.CurrentConnectedEntity.Value });
+            // Wayfarer End
+
             if (!_slots.TryInsert(ent.Owner, ent.Comp.Slot, targetHolder.Slot.Item!.Value, args.User, excludeUserAudio: true))
             {
                 return;
@@ -292,6 +312,20 @@ public abstract partial class SharedStationAiSystem : EntitySystem
             var ev = new ChatNotificationEvent(_downloadChatNotificationPrototype, args.Used, args.User);
             RaiseLocalEvent(held, ref ev);
         }
+
+        // Corvax-Next-AiRemoteControl-Start
+        if (TryComp<StationAiHeldComponent>(held, out var heldComp))
+            if (heldComp.CurrentConnectedEntity != null)
+            {
+                // Wayfarer
+                /*
+                AnnounceIntellicardUsage(heldComp.CurrentConnectedEntity.Value, intelliComp.WarningSound);
+                */
+                var connectedEv = new ChatNotificationEvent(_downloadChatNotificationPrototype, args.Used, args.User);
+                RaiseLocalEvent(heldComp.CurrentConnectedEntity.Value, ref connectedEv);
+                // Wayfarer End
+            }
+        // Corvax-Next-AiRemoteControl-End
 
         var doAfterArgs = new DoAfterArgs(EntityManager, args.User, cardHasAi ? intelliComp.UploadTime : intelliComp.DownloadTime, new IntellicardDoAfterEvent(), args.Target, ent.Owner)
         {
@@ -486,6 +520,11 @@ public abstract partial class SharedStationAiSystem : EntitySystem
 
     private void OnAiRemove(Entity<StationAiCoreComponent> ent, ref EntRemovedFromContainerMessage args)
     {
+        // Wayfarer
+        if (args.Container.ID != StationAiCoreComponent.Container)
+            return;
+        // Wayfarer End
+
         if (_timing.ApplyingState)
             return;
 

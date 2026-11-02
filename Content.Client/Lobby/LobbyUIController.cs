@@ -24,6 +24,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Client._WF.Silicons.ShipAi; // Wayfarer
 
 namespace Content.Client.Lobby;
 
@@ -42,6 +43,7 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
     [UISystemDependency] private readonly ClientInventorySystem _inventory = default!;
     [UISystemDependency] private readonly StationSpawningSystem _spawn = default!;
     [UISystemDependency] private readonly GuidebookSystem _guide = default!;
+    [UISystemDependency] private readonly ShipAiPreviewSystem _shipAiPreview = default!; // Wayfarer
 
     private CharacterSetupGui? _characterSetup;
     private HumanoidProfileEditor? _profileEditor;
@@ -486,6 +488,7 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
         {
             // Special type like borg or AI, do not spawn a human just spawn the entity.
             dummyEnt = EntityManager.SpawnEntity(previewEntity, MapCoordinates.Nullspace);
+            _shipAiPreview.Apply(dummyEnt, humanoid!); // Wayfarer
             return dummyEnt;
         }
         else if (humanoid is not null)

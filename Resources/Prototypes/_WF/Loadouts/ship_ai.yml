@@ -1,0 +1,472 @@
+- type: loadoutGroup
+  id: ShipAiScreen
+  name: wf-loadout-ai-screen-label
+  minLimit: 0
+  loadouts:
+  - ShipAiScreenBlue
+  - ShipAiScreenWhite
+  - ShipAiScreenGrey
+  - ShipAiScreenGreen
+  - ShipAiScreenRed
+  - ShipAiScreenPurple
+  - ShipAiScreenPink
+  - ShipAiScreenOrange
+  - ShipAiScreenYellow
+  - ShipAiScreenCyan
+
+- type: loadoutGroup
+  id: StationAiCoreIconography
+  name: wf-loadout-ai-face-label
+  minLimit: 0
+  loadouts:
+  - ShipAiFaceAnnoyed
+  - ShipAiFaceBaffled
+  - ShipAiFaceBlank
+  - ShipAiFaceWidesmile
+  - ShipAiFaceSunglasses
+  - ShipAiFaceCheeky
+  - ShipAiFaceConfused
+  - ShipAiFaceContent
+  - ShipAiFaceCrecent
+  - ShipAiFaceExclamation
+  - ShipAiFaceEye
+  - ShipAiFaceEyesemoji
+  - ShipAiFaceHappy
+  - ShipAiFaceHeart
+  - ShipAiFaceLine
+  - ShipAiFaceMad
+  - ShipAiFaceMusic
+  - ShipAiFaceNeutral
+  - ShipAiFacePensive
+  - ShipAiFaceQuestion
+  - ShipAiFaceSad
+  - ShipAiFaceSilly
+  - ShipAiFaceSmug
+  - ShipAiFaceSpooky
+  - ShipAiFaceSquare
+  - ShipAiFaceSurprised
+  - ShipAiFaceTired
+  - ShipAiFaceTriangle
+  - ShipAiFaceUnimpressed
+  - ShipAiFaceUnsure
+  - ShipAiFaceVeryhappy
+  - ShipAiFaceWink
+  - ShipAiFaceZzz
+  - ShipAiFaceText
+  - ShipAiFaceLoading
+  - ShipAiFaceCursor
+  - ShipAiFaceNervous
+  - ShipAiFaceFidget
+  - ShipAiFaceDevious
+  - ShipAiFaceSkull
+  - ShipAiFaceSick
+  - ShipAiFaceTetris
+  - ShipAiFaceTamagotchi
+  - ShipAiFaceFlip
+  - ShipAiFaceColourbars
+
+- type: loadoutGroup
+  id: StationAiHolograms
+  name: wf-loadout-ai-hologram-label
+  fallbacks:
+  - ShipAiHologramFace
+  loadouts:
+  - StationAiHologramFemale
+  - StationAiHologramMale
+  - StationAiHologramFace
+  - StationAiHologramCat
+  - StationAiHologramDog
+  - StationAiHologramAlgalone
+  - StationAiHologramFractalsnowflake
+  - StationAiHologramHensonsnode
+  - StationAiHologramLongrun
+  - StationAiHologramNtpaint
+  - StationAiHologramPuredata
+  - StationAiHologramRorschach
+  - StationAiHologramSeraphim
+  - StationAiHologramTripleaffirmative
+  - ShipAiHologramFace
+
+- type: loadoutGroup
+  id: ShipAiCasing
+  name: ship-ai-casing-group
+  fallbacks:
+  - ShipAiCasingDefault
+  loadouts:
+  - ShipAiCasingDefault
+  - ShipAiCasingGreen
+  - ShipAiCasingBlue
+  - ShipAiCasingPurple
+  - ShipAiCasingPink
+  - ShipAiCasingOrange
+  - ShipAiCasingYellow
+  - ShipAiCasingCyan
+  - ShipAiCasingWhite
+  - ShipAiCasingBlack
+  - ShipAiCasingScience
+  - ShipAiCasingMedical
+  - ShipAiCasingNtold
+  - ShipAiCasingBee
+  - ShipAiCasingShock
+  - ShipAiCasingSyndicate
+  - ShipAiCasingPumpkin
+  - ShipAiCasingGold
+  - ShipAiCasingEngineering
+  - ShipAiCasingSoviet
+  - ShipAiCasingNt
+  - ShipAiCasingIndustrial
+  - ShipAiCasingLgun
+  - ShipAiCasingDwaine
+  - ShipAiCasingAiles
+  - ShipAiCasingSalvage
+  - ShipAiCasingGardengear
+  - ShipAiCasingTelegun
+  - ShipAiCasingKingsway
+  - ShipAiCasingClown
+  - ShipAiCasingMime
+  - ShipAiCasingTactical
+  - ShipAiCasingRegal
+  - ShipAiCasingMauxite
+  - ShipAiCasingFlock
+  - ShipAiCasingCrt
+  - ShipAiCasingRustic
+  - ShipAiCasingCardboard
+
+- type: loadoutGroup
+  id: ShipAiAccessory
+  name: ship-ai-accessory-group
+  fallbacks:
+  - ShipAiAccessoryNone
+  loadouts:
+  - ShipAiAccessoryNone
+  - ShipAiAccessoryMoustache
+
+- type: loadout
+  id: ShipAiScreenBlue
+
+- type: loadout
+  id: ShipAiScreenWhite
+
+- type: loadout
+  id: ShipAiScreenGrey
+
+- type: loadout
+  id: ShipAiScreenGreen
+
+- type: loadout
+  id: ShipAiScreenRed
+
+- type: loadout
+  id: ShipAiScreenPurple
+
+- type: loadout
+  id: ShipAiScreenPink
+
+- type: loadout
+  id: ShipAiScreenOrange
+
+- type: loadout
+  id: ShipAiScreenYellow
+
+- type: loadout
+  id: ShipAiScreenCyan
+
+- type: loadout
+  id: ShipAiFaceAnnoyed
+
+- type: loadout
+  id: ShipAiFaceBaffled
+
+- type: loadout
+  id: ShipAiFaceBlank
+
+- type: loadout
+  id: ShipAiFaceWidesmile
+
+- type: loadout
+  id: ShipAiFaceSunglasses
+
+- type: loadout
+  id: ShipAiFaceCheeky
+
+- type: loadout
+  id: ShipAiFaceConfused
+
+- type: loadout
+  id: ShipAiFaceContent
+
+- type: loadout
+  id: ShipAiFaceCrecent
+
+- type: loadout
+  id: ShipAiFaceExclamation
+
+- type: loadout
+  id: ShipAiFaceEye
+
+- type: loadout
+  id: ShipAiFaceEyesemoji
+
+- type: loadout
+  id: ShipAiFaceHappy
+
+- type: loadout
+  id: ShipAiFaceHeart
+
+- type: loadout
+  id: ShipAiFaceLine
+
+- type: loadout
+  id: ShipAiFaceMad
+
+- type: loadout
+  id: ShipAiFaceMusic
+
+- type: loadout
+  id: ShipAiFaceNeutral
+
+- type: loadout
+  id: ShipAiFacePensive
+
+- type: loadout
+  id: ShipAiFaceQuestion
+
+- type: loadout
+  id: ShipAiFaceSad
+
+- type: loadout
+  id: ShipAiFaceSilly
+
+- type: loadout
+  id: ShipAiFaceSmug
+
+- type: loadout
+  id: ShipAiFaceSpooky
+
+- type: loadout
+  id: ShipAiFaceSquare
+
+- type: loadout
+  id: ShipAiFaceSurprised
+
+- type: loadout
+  id: ShipAiFaceTired
+
+- type: loadout
+  id: ShipAiFaceTriangle
+
+- type: loadout
+  id: ShipAiFaceUnimpressed
+
+- type: loadout
+  id: ShipAiFaceUnsure
+
+- type: loadout
+  id: ShipAiFaceVeryhappy
+
+- type: loadout
+  id: ShipAiFaceWink
+
+- type: loadout
+  id: ShipAiFaceZzz
+
+- type: loadout
+  id: ShipAiFaceText
+
+- type: loadout
+  id: ShipAiFaceLoading
+
+- type: loadout
+  id: ShipAiFaceCursor
+
+- type: loadout
+  id: ShipAiFaceNervous
+
+- type: loadout
+  id: ShipAiFaceFidget
+
+- type: loadout
+  id: ShipAiFaceDevious
+
+- type: loadout
+  id: ShipAiFaceSkull
+
+- type: loadout
+  id: ShipAiFaceSick
+
+- type: loadout
+  id: ShipAiFaceTetris
+
+- type: loadout
+  id: ShipAiFaceTamagotchi
+
+- type: loadout
+  id: ShipAiFaceFlip
+
+- type: loadout
+  id: ShipAiFaceColourbars
+
+- type: loadout
+  id: StationAiHologramFemale
+
+- type: loadout
+  id: StationAiHologramMale
+
+- type: loadout
+  id: StationAiHologramFace
+
+- type: loadout
+  id: StationAiHologramCat
+
+- type: loadout
+  id: StationAiHologramDog
+
+- type: loadout
+  id: StationAiHologramAlgalone
+
+- type: loadout
+  id: StationAiHologramFractalsnowflake
+
+- type: loadout
+  id: StationAiHologramHensonsnode
+
+- type: loadout
+  id: StationAiHologramLongrun
+
+- type: loadout
+  id: StationAiHologramNtpaint
+
+- type: loadout
+  id: StationAiHologramPuredata
+
+- type: loadout
+  id: StationAiHologramRorschach
+
+- type: loadout
+  id: StationAiHologramSeraphim
+
+- type: loadout
+  id: StationAiHologramTripleaffirmative
+
+- type: loadout
+  id: ShipAiHologramFace
+
+- type: loadout
+  id: ShipAiCasingDefault
+
+- type: loadout
+  id: ShipAiCasingGreen
+
+- type: loadout
+  id: ShipAiCasingBlue
+
+- type: loadout
+  id: ShipAiCasingPurple
+
+- type: loadout
+  id: ShipAiCasingPink
+
+- type: loadout
+  id: ShipAiCasingOrange
+
+- type: loadout
+  id: ShipAiCasingYellow
+
+- type: loadout
+  id: ShipAiCasingCyan
+
+- type: loadout
+  id: ShipAiCasingWhite
+
+- type: loadout
+  id: ShipAiCasingBlack
+
+- type: loadout
+  id: ShipAiCasingScience
+
+- type: loadout
+  id: ShipAiCasingMedical
+
+- type: loadout
+  id: ShipAiCasingNtold
+
+- type: loadout
+  id: ShipAiCasingBee
+
+- type: loadout
+  id: ShipAiCasingShock
+
+- type: loadout
+  id: ShipAiCasingSyndicate
+
+- type: loadout
+  id: ShipAiCasingPumpkin
+
+- type: loadout
+  id: ShipAiCasingGold
+
+- type: loadout
+  id: ShipAiCasingEngineering
+
+- type: loadout
+  id: ShipAiCasingSoviet
+
+- type: loadout
+  id: ShipAiCasingNt
+
+- type: loadout
+  id: ShipAiCasingIndustrial
+
+- type: loadout
+  id: ShipAiCasingLgun
+
+- type: loadout
+  id: ShipAiCasingDwaine
+
+- type: loadout
+  id: ShipAiCasingAiles
+
+- type: loadout
+  id: ShipAiCasingSalvage
+
+- type: loadout
+  id: ShipAiCasingGardengear
+
+- type: loadout
+  id: ShipAiCasingTelegun
+
+- type: loadout
+  id: ShipAiCasingKingsway
+
+- type: loadout
+  id: ShipAiCasingClown
+
+- type: loadout
+  id: ShipAiCasingMime
+
+- type: loadout
+  id: ShipAiCasingTactical
+
+- type: loadout
+  id: ShipAiCasingRegal
+
+- type: loadout
+  id: ShipAiCasingMauxite
+
+- type: loadout
+  id: ShipAiCasingFlock
+
+- type: loadout
+  id: ShipAiCasingCrt
+
+- type: loadout
+  id: ShipAiCasingRustic
+
+- type: loadout
+  id: ShipAiCasingCardboard
+
+- type: loadout
+  id: ShipAiAccessoryNone
+
+- type: loadout
+  id: ShipAiAccessoryMoustache

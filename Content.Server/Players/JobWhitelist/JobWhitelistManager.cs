@@ -85,7 +85,12 @@ public sealed class JobWhitelistManager : IPostInjectInit
         if (session.ContentData()?.Whitelisted ?? false)
             return true;
 
+        // Wayfarer
+        /*
         return IsWhitelisted(session.UserId, job);
+        */
+        return IsWhitelisted(session.UserId, jobPrototype.WhitelistJob ?? job);
+        // Wayfarer End
     }
 
     public bool IsWhitelisted(NetUserId player, ProtoId<JobPrototype> job)

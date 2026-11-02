@@ -1,0 +1,9 @@
+- files: [computerboot_pc_start.ogg, glitch1.ogg, glitch2.ogg, glitch3.ogg, glitch4.ogg, glitch5.ogg, shieldgen_shutoff.ogg]
+  license: CC-BY-NC-SA-3.0
+  copyright: Taken from Goonstation.
+  source: https://github.com/goonstation/goonstation/tree/b8b82c76a8718678cfab1743eea73d1deb7e35cd/sound/machines
+
+- files: [announcement_chime.ogg]
+  license: CC-BY-NC-SA-3.0
+  copyright: Taken from Goonstation.
+  source: https://github.com/goonstation/goonstation/tree/b8b82c76a8718678cfab1743eea73d1deb7e35cd/sound/misc

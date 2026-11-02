@@ -37,6 +37,10 @@
       components:
         - type: StationNameSetup
           mapNameTemplate: 'CGP Outpost'
+        # Wayfarer
+        - type: ShipAiShipyardPoint
+          point: Nfsd
+        # Wayfarer End
         - type: ExtraStationInformation
           iconPath: /Textures/_NF/Interface/StationIcons/nfsd-banner.png
           stationSubtext: 'frontier-lobby-nfsd-subtext'

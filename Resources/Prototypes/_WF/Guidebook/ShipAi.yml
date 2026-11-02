@@ -1,0 +1,4 @@
+- type: guideEntry
+  id: ShipAi
+  name: guide-entry-ship-ai
+  text: "/ServerInfo/_WF/Guidebook/ShipAi.xml"

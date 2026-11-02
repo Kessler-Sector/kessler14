@@ -424,6 +424,17 @@
   - WFAmmo
 
 - type: roleLoadout
+  id: JobShipAi
+  nameDataset: NamesAI
+  canCustomizeName: true
+  groups:
+  - ShipAiScreen
+  - StationAiCoreIconography
+  - StationAiHolograms
+  - ShipAiCasing
+  - ShipAiAccessory
+
+- type: roleLoadout
   id: JobCentralCommandOfficial
   groups:
   - CentcomOfficialHead

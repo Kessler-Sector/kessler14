@@ -15,6 +15,9 @@
 #  - SecurityGuard
   - Wayfarer
   - Borg
+  - ShipAi # Wayfarer
+  - ShipAiCgp # Wayfarer
+  - ShipAiOutlaw # Wayfarer
 
 - type: department
   id: Antag
