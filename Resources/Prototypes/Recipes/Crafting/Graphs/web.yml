@@ -48,6 +48,14 @@
         amount: 2
         doAfter: 4
 
+    # Wayfarer
+    - to: cocoon
+      steps:
+      - material: WebSilk
+        amount: 8
+        doAfter: 6
+    # End Wayfarer
+
   # Deconstruction
   - node: tile
     entity: FloorTileItemWeb
@@ -69,3 +77,8 @@
 
   - node: boots
     entity: ClothingShoesBootsWinterWeb
+
+  # Wayfarer
+  - node: cocoon
+    entity: WebCocoon
+  # End Wayfarer
