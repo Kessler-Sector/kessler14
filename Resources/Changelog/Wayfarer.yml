@@ -7272,3 +7272,10 @@ Entries:
   id: 7324
   time: '2026-11-02T01:39:32.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/24
+- author: goodfaun
+  changes:
+    - type: Fix
+      message: manifest and ID
+  id: 7325
+  time: '2026-11-02T01:44:10.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/28
