@@ -214,19 +214,19 @@
   components:
   - type: Pda
     id: ParamedicIDCard
-    penSlot:
-      startingItem: PublicAffairsPen
-      priority: -1
-      whitelist:
-        tags:
-        - Write
-    bookSlot:
-      startingItem: HyperlinkBookNfsdSop
-      priority: -2
-      whitelist:
-        tags:
-        - BookSpaceLaw
-        - BookNfsdSop
+#    penSlot:
+#      startingItem: PublicAffairsPen
+#      priority: -1
+#      whitelist:
+#        tags:
+#        - Write
+#    bookSlot:
+#      startingItem: HyperlinkBookNfsdSop
+#      priority: -2
+#      whitelist:
+#        tags:
+#        - BookSpaceLaw
+#        - BookNfsdSop
   - type: Appearance
     appearanceDataInit:
       enum.PdaVisuals.PdaType:
