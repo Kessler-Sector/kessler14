@@ -7286,3 +7286,12 @@ Entries:
   id: 7326
   time: '2026-11-02T01:51:18.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/29
+- author: versengt
+  changes:
+    - type: Tweak
+      message: Increased Material Silo magnet range
+    - type: Tweak
+      message: Paper and Cardboard can now go into the construction bag
+  id: 7327
+  time: '2026-11-02T01:59:42.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/30
