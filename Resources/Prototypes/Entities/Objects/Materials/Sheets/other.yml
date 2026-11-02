@@ -61,6 +61,12 @@
         reagents:
         - ReagentId: Cellulose
           Quantity: 3
+  # Wayfarer Start
+  - type: Tag
+    tags:
+    - Sheet
+    - ConstructionMaterial
+  # End Wayfarer
 
 
 - type: entity

@@ -64,6 +64,12 @@
     prototype: CarpetCard
     doAfter: 0.5
     removeOnInteract: true
+  # Wayfarer Start
+  - type: Tag
+    tags:
+    - Sheet
+    - ConstructionMaterial
+  # End Wayfarer
 
 - type: entity
   parent: MaterialCardboard

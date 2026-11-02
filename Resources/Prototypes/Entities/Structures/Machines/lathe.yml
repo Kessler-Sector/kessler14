@@ -812,6 +812,7 @@
       - Wooden
       - Boll
       - RawMaterial # Frontier
+      - Sheet # Wayfarer
   - type: Lathe
     idleState: base_machine
     runningState: base_machine_processing

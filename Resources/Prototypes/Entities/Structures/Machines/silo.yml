@@ -63,4 +63,4 @@
   - type: StaticPrice
     price: 300 # Frontier: 1500<300
   - type: MaterialStorageMagnetPickup # Frontier
-    range: 0.3 # Frontier
+    range: 1 # Frontier # Wayfarer: 0.3>1
