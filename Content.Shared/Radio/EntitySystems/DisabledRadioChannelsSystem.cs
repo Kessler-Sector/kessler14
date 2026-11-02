@@ -4,6 +4,7 @@ using Content.Shared.Radio.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared._WF.Silicons.ShipAi;
 
 namespace Content.Shared.Radio.EntitySystems;
 
@@ -28,7 +29,7 @@ public sealed class DisabledRadioChannelsSystem : EntitySystem
             return;
 
         // Only show verbs if there are channels available
-        if (keyHolder.Channels.Count == 0)
+        if (keyHolder.Channels.Count == 0 || HasComp<ShipAiInterfaceComponent>(uid))
             return;
 
         // Create a verb for each available channel

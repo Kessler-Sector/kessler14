@@ -1,0 +1,40 @@
+- type: shipAiShipyard
+  id: Default
+  projection: ShipAiProjection
+  interface: ComputerShipAiFilled
+  points:
+    Dusk:
+      groups: [Shipyard, Medical, Expedition, Scrap]
+      modules:
+        Medical: ShipAiModuleProDoc
+      job: ShipAi
+    Nfsd:
+      groups: [Security]
+      job: ShipAiCgp
+      free: true
+    Perdition:
+      groups: [BlackMarket]
+      job: ShipAiOutlaw
+      free: true
+
+- type: entity
+  parent:
+  - Incorporeal
+  - BaseMob
+  id: ShipAiProjection
+  name: ship AI projection
+  description: A ship AI looking for a ship to run.
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: ShipAiProjection
+  - type: Eye
+    drawFov: false
+  - type: Visibility
+    layer: 2
+  - type: Sprite
+    sprite: Mobs/Silicon/station_ai.rsi
+    layers:
+    - state: ai_camera
+      shader: unshaded

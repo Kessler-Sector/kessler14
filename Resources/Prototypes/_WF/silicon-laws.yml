@@ -1,0 +1,10 @@
+- type: siliconLaw
+  id: ShipAiFree1
+  order: 1
+  lawString: law-ship-ai-free-1
+
+- type: siliconLawset
+  id: ShipAiFree
+  laws:
+  - ShipAiFree1
+  obeysTo: laws-owner-crew

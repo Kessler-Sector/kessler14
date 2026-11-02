@@ -17,6 +17,14 @@ public sealed partial class CryoSleepComponent : Component
     [DataField]
     public SoundSpecifier LeaveSound = new SoundCollectionSpecifier("RadiationPulse");
 
+    // Wayfarer
+    /// <summary>
+    /// The sound that is played when the pod refuses a body.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier DenySound = new SoundPathSpecifier("/Audio/Machines/custom_deny.ogg");
+    // Wayfarer End
+
     /// <summary>
     ///   The ID of the latest DoAfter event associated with this entity. May be null if there's no DoAfter going on.
     /// </summary>

@@ -94,7 +94,7 @@ public sealed partial class BankSystem
         _adminLogger.Add(LogType.ATMUsage, LogImpact.Low, $"{ToPrettyString(player):actor} withdrew {args.Amount} from {component.Account} station bank account. '{args.Reason}': {args.Description}");
         //spawn the cash stack of whatever cash type the ATM is configured to.
         var stackPrototype = _prototypeManager.Index(component.CashType);
-        var stackUid = _stackSystem.Spawn(args.Amount, stackPrototype, args.Actor.ToCoordinates());
+    var stackUid = _stackSystem.Spawn(args.Amount, stackPrototype, _shipAi.DropCoordinates(uid, args.Actor)); // Wayfarer: args.Actor.ToCoordinates()<_shipAi.DropCoordinates(uid, args.Actor)
         if (!_hands.TryPickupAnyHand(args.Actor, stackUid))
             _transform.SetLocalRotation(stackUid, Angle.Zero);
 

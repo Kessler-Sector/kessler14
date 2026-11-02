@@ -406,6 +406,13 @@ namespace Content.Server.GameTicking
             if (!_userDb.IsLoadComplete(player))
                 return;
 
+            // Wayfarer
+            var joinAttempt = new PlayerJoinAttemptEvent(player, station, jobId);
+            RaiseLocalEvent(joinAttempt);
+            if (joinAttempt.Cancelled)
+                return;
+            // Wayfarer End
+
             SpawnPlayer(player, station, jobId, silent: silent);
         }
 

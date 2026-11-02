@@ -57,6 +57,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using Content.Shared._CorvaxNext.Silicons.Borgs.Components; // Wayfarer
 
 namespace Content.Server._NF.CryoSleep;
 
@@ -262,6 +263,15 @@ public sealed partial class CryoSleepSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cryopod-refuse-organic", ("cryopod", cryopod), ("name", name)), cryopod, PopupType.SmallCaution);
             return false;
         }
+
+        // Wayfarer
+        if (CompOrNull<AiRemoteControllerComponent>(toInsert)?.AiHolder != null)
+        {
+            _popup.PopupEntity(Loc.GetString("cryopod-refuse-ai-driven", ("cryopod", cryopod)), cryopod, PopupType.SmallCaution);
+            _audio.PlayPvs(cryopod.Comp.DenySound, cryopod);
+            return false;
+        }
+        // Wayfarer End
 
         // Refuse to accept dead or crit bodies, as well as non-mobs
         if (!TryComp<MobStateComponent>(toInsert, out var mob) || !_mobSystem.IsAlive(toInsert.Value, mob))

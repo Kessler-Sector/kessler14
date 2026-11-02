@@ -22,6 +22,8 @@ using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
 using Content.Server._NF.Station.Systems; // Frontier
+using Content.Shared._WF.Silicons.ShipAi; // Wayfarer
+using Content.Server._WF.Silicons.ShipAi; // Wayfarer
 
 namespace Content.Server.Holopad;
 
@@ -40,6 +42,7 @@ public sealed class HolopadSystem : SharedHolopadSystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PvsOverrideSystem _pvs = default!;
     [Dependency] private readonly StationRenameHolopadsSystem _renameHolopads = default!; // Frontier
+    [Dependency] private readonly ShipAiInterfaceSystem _shipAi = default!; // Wayfarer
 
     private float _updateTimer = 1.0f;
     private const float UpdateTime = 1.0f;
@@ -104,6 +107,33 @@ public sealed class HolopadSystem : SharedHolopadSystem
         if (!TryComp<TelephoneComponent>(receiver, out var receiverTelephone))
             return;
 
+        // Wayfarer
+        if (HasComp<ShipAiComponent>(args.Actor) &&
+            _stationAiSystem.TryGetCore(args.Actor, out var aiCore) &&
+            TryComp<HolopadComponent>(aiCore, out var aiCoreHolopad) &&
+            TryComp<TelephoneComponent>(aiCore, out var aiCoreTelephone))
+        {
+            LinkHolopadToUser((aiCore, aiCoreHolopad), args.Actor);
+            _telephoneSystem.CallTelephone((aiCore, aiCoreTelephone), (receiver, receiverTelephone), args.Actor);
+            _userInterfaceSystem.CloseUi(source.Owner, HolopadUiKey.InteractionWindow, args.Actor);
+            _userInterfaceSystem.OpenUi(aiCore.Owner, HolopadUiKey.AiActionWindow, args.Actor);
+            return;
+        }
+
+        if (_shipAi.TryGetShipCore(Transform(receiver).GridUid, out var shipCore, out var shipAi) &&
+            shipCore.Owner != receiver &&
+            !_telephoneSystem.IsTelephoneEngaged(shipCore) &&
+            _telephoneSystem.IsSourceAbleToReachReceiver((source, sourceTelephone), (receiver, receiverTelephone)) &&
+            _telephoneSystem.IsSourceAbleToReachReceiver(shipCore, (source, sourceTelephone)))
+        {
+            LinkHolopadToUser(source, args.Actor);
+            var receivers = new HashSet<Entity<TelephoneComponent>> { (receiver, receiverTelephone), shipCore };
+            _telephoneSystem.BroadcastCallToTelephones((source, sourceTelephone), receivers, args.Actor, new TelephoneCallOptions { IgnoreRange = true });
+            _userInterfaceSystem.TryOpenUi(shipCore.Owner, HolopadUiKey.AiRequestWindow, shipAi);
+            return;
+        }
+        // Wayfarer End
+
         LinkHolopadToUser(source, args.Actor);
         _telephoneSystem.CallTelephone((source, sourceTelephone), (receiver, receiverTelephone), args.Actor);
     }
@@ -134,6 +164,21 @@ public sealed class HolopadSystem : SharedHolopadSystem
                     _popupSystem.PopupEntity(Loc.GetString("holopad-ai-is-unable-to-reach-holopad"), receiver, args.Actor);
                     return;
                 }
+
+                // Wayfarer
+                if (HasComp<ShipAiComponent>(args.Actor) &&
+                    TryComp<TelephoneComponent>(stationAiCore, out var shipAiTelephone) &&
+                    TryComp<HolopadComponent>(stationAiCore, out var shipAiHolopad) &&
+                    TryComp<TelephoneComponent>(source, out var callerTelephone))
+                {
+                    var core = new Entity<TelephoneComponent>(stationAiCore, shipAiTelephone);
+                    _telephoneSystem.TerminateTelephoneCalls(core);
+                    LinkHolopadToUser((stationAiCore, shipAiHolopad), args.Actor);
+                    _telephoneSystem.CallTelephone(core, (source.Value, callerTelephone), args.Actor, new TelephoneCallOptions { ForceConnect = true });
+                    _userInterfaceSystem.OpenUi(stationAiCore.Owner, HolopadUiKey.AiActionWindow, args.Actor);
+                    return;
+                }
+                // Wayfarer End
 
                 ActivateProjector(source.Value, args.Actor);
             }
@@ -738,6 +783,11 @@ public sealed class HolopadSystem : SharedHolopadSystem
             if (sourceTelephoneEntity == receiverTelephoneEntity ||
                 !_telephoneSystem.IsSourceAbleToReachReceiver(sourceTelephoneEntity, receiverTelephoneEntity))
                 continue;
+
+            // Wayfarer
+            if (!_shipAi.CanBroadcastTo(source, receiver))
+                continue;
+            // Wayfarer End
 
             // If any holopads in range are on broadcast cooldown, exit
             if (IsHolopadBroadcastOnCoolDown((receiver, receiverHolopad)))

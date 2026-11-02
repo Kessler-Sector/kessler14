@@ -1,0 +1,68 @@
+- type: job
+  id: ShipAi
+  name: job-name-ship-ai
+  description: job-description-ship-ai
+  playTimeTracker: JobShipAi
+  canBeAntag: false
+  icon: JobIconStationAi
+  supervisors: job-supervisors-freebooters-union
+  jobEntity: ShipAiCoreBrain
+  jobPreviewEntity: ComputerShipAi
+  applyTraits: false
+  hideConsoleVisibility: true
+  setPreference: true
+  access:
+  - Mercenary
+  accessGroups:
+  - GeneralAccess
+
+- type: job
+  id: ShipAiCgp
+  name: job-name-ship-ai
+  description: job-description-ship-ai
+  playTimeTracker: JobShipAiCgp
+  whitelisted: true
+  whitelistJob: Cadet
+  canBeAntag: false
+  icon: JobIconStationAi
+  supervisors: job-supervisors-cadet
+  jobEntity: ShipAiCoreBrain
+  jobPreviewEntity: ComputerShipAi
+  applyTraits: false
+  hideConsoleVisibility: true
+  setPreference: false
+  accessGroups:
+  - CadetNfsdAccess
+
+- type: job
+  id: ShipAiOutlaw
+  name: job-name-ship-ai
+  description: job-description-ship-ai
+  playTimeTracker: JobShipAiOutlaw
+  whitelisted: true
+  whitelistJob: NFPirate
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: Security # CGP
+    time: 28800 # 8 hours
+  canBeAntag: false
+  icon: JobIconStationAi
+  supervisors: job-supervisors-nf-pirate
+  jobEntity: ShipAiCoreBrain
+  jobPreviewEntity: ComputerShipAi
+  applyTraits: false
+  hideConsoleVisibility: true
+  setPreference: false
+  access:
+  - Pirate
+  accessGroups:
+  - GeneralAccess
+
+- type: playTimeTracker
+  id: JobShipAi
+
+- type: playTimeTracker
+  id: JobShipAiCgp
+
+- type: playTimeTracker
+  id: JobShipAiOutlaw

@@ -34,6 +34,8 @@
       components:
         - type: StationNameSetup
           mapNameTemplate: 'Perdition'
+        - type: ShipAiShipyardPoint
+          point: Perdition
         - type: ExtraStationInformation
           iconPath: /Textures/_NF/Interface/Pirate/piratelogo.png
           stationSubtext: 'frontier-lobby-pirate-subtext'

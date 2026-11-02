@@ -1,0 +1,190 @@
+- type: constructionGraph
+  id: ShipAiCore
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: frame
+      completed:
+      - !type:SetAnchor
+        value: false
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 2
+
+  - node: frame
+    entity: ShipAiCoreFrame
+    actions:
+    - !type:AppearanceChange
+    edges:
+    - to: plated
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - material: Steel
+        amount: 3
+        doAfter: 2
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity {}
+      steps:
+      - tool: Screwing
+        doAfter: 2
+
+  - node: plated
+    entity: ShipAiCoreFrame
+    actions:
+    - !type:AppearanceChange
+    edges:
+    - to: wired
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - material: Cable
+        amount: 3
+    - to: frame
+      conditions:
+      - !type:EntityAnchored {}
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 3
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+  - node: wired
+    entity: ShipAiCoreFrame
+    actions:
+    - !type:AppearanceChange
+    edges:
+    - to: boarded
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - tag: ShipAiInterfaceBoard
+        store: board
+        name: ship-ai-construction-board
+        icon:
+          sprite: Objects/Misc/module.rsi
+          state: cpu_science
+    - to: plated
+      conditions:
+      - !type:EntityAnchored {}
+      completed:
+      - !type:SpawnPrototype
+        prototype: CableApcStack1
+        amount: 3
+      steps:
+      - tool: Cutting
+
+  - node: boarded
+    entity: ShipAiCoreFrame
+    actions:
+    - !type:AppearanceChange
+    edges:
+    - to: radioed
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - tag: Radio
+        store: ship_ai_radio
+        name: ship-ai-construction-radio
+        icon:
+          sprite: Objects/Devices/communication.rsi
+          state: walkietalkie
+    - to: wired
+      conditions:
+      - !type:EntityAnchored {}
+      completed:
+      - !type:EmptyContainer
+        container: board
+      steps:
+      - tool: Prying
+        doAfter: 1
+
+  - node: radioed
+    entity: ShipAiCoreFrame
+    actions:
+    - !type:AppearanceChange
+    edges:
+    - to: celled
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - component: PowerCell
+        store: ship_ai_cell
+        name: ship-ai-construction-cell
+        icon:
+          sprite: Objects/Power/power_cells.rsi
+          state: medium
+    - to: boarded
+      conditions:
+      - !type:EntityAnchored {}
+      completed:
+      - !type:EmptyContainer
+        container: ship_ai_radio
+      steps:
+      - tool: Screwing
+
+  - node: celled
+    entity: ShipAiCoreFrame
+    actions:
+    - !type:AppearanceChange
+    edges:
+    - to: glassed
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - material: Glass
+        amount: 1
+    - to: radioed
+      conditions:
+      - !type:EntityAnchored {}
+      completed:
+      - !type:EmptyContainer
+        container: ship_ai_cell
+      steps:
+      - tool: Prying
+
+  - node: glassed
+    entity: ShipAiCoreFrame
+    actions:
+    - !type:AppearanceChange
+    edges:
+    - to: core
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - tool: Screwing
+    - to: celled
+      conditions:
+      - !type:EntityAnchored {}
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetGlass1
+        amount: 1
+      steps:
+      - tool: Prying
+        doAfter: 1
+
+  - node: core
+    entity: ComputerShipAi
+    edges:
+    - to: glassed
+      conditions:
+      - !type:WirePanel {}
+      - !type:ContainerEmpty
+        container: station_ai_mind_slot
+      completed:
+      - !type:EmptyContainer
+        container: key_slots
+      - !type:EmptyContainer
+        container: ship_ai_module
+      steps:
+      - tool: Prying
+        doAfter: 2

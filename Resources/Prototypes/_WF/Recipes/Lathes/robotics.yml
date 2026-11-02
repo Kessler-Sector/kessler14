@@ -4,6 +4,11 @@
   result: BorgModuleUtility
 
 - type: latheRecipe
+  parent: BaseGoldBorgModuleRecipe
+  id: ShipAiModuleProDoc
+  result: ShipAiModuleProDoc
+
+- type: latheRecipe
   parent: BaseToolRecipe
   id: CraftClothingEyesHudDiagnostic
   result: ClothingEyesHudDiagnostic

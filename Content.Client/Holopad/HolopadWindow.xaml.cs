@@ -11,6 +11,7 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using System.Linq;
+using Content.Shared._WF.Silicons.ShipAi; // Wayfarer
 
 namespace Content.Client.Holopad;
 
@@ -154,6 +155,7 @@ public sealed partial class HolopadWindow : FancyWindow
 
             case HolopadUiKey.InteractionWindowForAi:
                 ActivateProjectorContainer.Visible = true;
+                HolopadContactListContainer.Visible = _entManager.HasComponent<ShipAiComponent>(_playerManager.LocalSession?.AttachedEntity); // Wayfarer
                 StartBroadcastContainer.Visible = true;
                 break;
 

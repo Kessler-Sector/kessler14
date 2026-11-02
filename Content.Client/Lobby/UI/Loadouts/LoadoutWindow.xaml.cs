@@ -103,6 +103,9 @@ public sealed partial class LoadoutWindow : FancyWindow
                 if (groupProto.Hidden)
                     continue;
 
+                if (TryAddAiTab(protoManager, groupProto, group, loadout)) // Wayfarer
+                    continue; // Wayfarer
+
                 var container = new LoadoutGroupContainer(profile, loadout, protoManager.Index(group), session, collection);
                 LoadoutGroupsContainer.AddTab(container, Loc.GetString(groupProto.Name));
                 _groups.Add(container);

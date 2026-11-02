@@ -11,6 +11,53 @@
   - StationAiIconDorf
   - StationAiIconHeartline
   - StationAiIconSmiley
+  # Wayfarer
+  - ShipAiFaceAnnoyed
+  - ShipAiFaceBaffled
+  - ShipAiFaceBlank
+  - ShipAiFaceWidesmile
+  - ShipAiFaceSunglasses
+  - ShipAiFaceCheeky
+  - ShipAiFaceConfused
+  - ShipAiFaceContent
+  - ShipAiFaceCrecent
+  - ShipAiFaceExclamation
+  - ShipAiFaceEye
+  - ShipAiFaceEyesemoji
+  - ShipAiFaceHappy
+  - ShipAiFaceHeart
+  - ShipAiFaceLine
+  - ShipAiFaceMad
+  - ShipAiFaceMusic
+  - ShipAiFaceNeutral
+  - ShipAiFacePensive
+  - ShipAiFaceQuestion
+  - ShipAiFaceSad
+  - ShipAiFaceSilly
+  - ShipAiFaceSmug
+  - ShipAiFaceSpooky
+  - ShipAiFaceSquare
+  - ShipAiFaceSurprised
+  - ShipAiFaceTired
+  - ShipAiFaceTriangle
+  - ShipAiFaceUnimpressed
+  - ShipAiFaceUnsure
+  - ShipAiFaceVeryhappy
+  - ShipAiFaceWink
+  - ShipAiFaceZzz
+  - ShipAiFaceText
+  - ShipAiFaceLoading
+  - ShipAiFaceCursor
+  - ShipAiFaceNervous
+  - ShipAiFaceFidget
+  - ShipAiFaceDevious
+  - ShipAiFaceSkull
+  - ShipAiFaceSick
+  - ShipAiFaceTetris
+  - ShipAiFaceTamagotchi
+  - ShipAiFaceFlip
+  - ShipAiFaceColourbars
+  # Wayfarer End
 
 - type: stationAiCustomizationGroup
   id: StationAiHolograms
@@ -31,6 +78,7 @@
   - StationAiHologramRorschach
   - StationAiHologramSeraphim
   - StationAiHologramTripleaffirmative #end Omu
+  - ShipAiHologramFace # Wayfarer
 
 # Iconography
 - type: stationAiCustomization

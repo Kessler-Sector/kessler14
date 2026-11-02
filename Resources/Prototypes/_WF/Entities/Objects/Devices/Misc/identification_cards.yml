@@ -13,6 +13,42 @@
       sprite: _NF/Objects/Misc/id_cards.rsi # Frontier
 
 - type: entity
+  parent: IDCardStandard
+  id: ShipAiIDCard
+  name: ship AI ID card
+  components:
+  - type: PresetIdCard
+    job: ShipAi
+  - type: IdCard
+    jobTitle: job-name-ship-ai
+  - type: SuitSensor
+    activationContainer: PDA-id
+    controlsLocked: true
+    randomMode: false
+    mode: SensorOff
+  - type: Sprite
+    layers:
+    - state: default
+    - state: idshipai
+      sprite: _WF/Objects/Misc/id_cards.rsi
+
+- type: entity
+  parent: ShipAiIDCard
+  id: ShipAiCgpIDCard
+  name: CGP ship AI ID card
+  components:
+  - type: PresetIdCard
+    job: ShipAiCgp
+
+- type: entity
+  parent: ShipAiIDCard
+  id: ShipAiOutlawIDCard
+  name: Outlaw ship AI ID card
+  components:
+  - type: PresetIdCard
+    job: ShipAiOutlaw
+
+- type: entity
   parent: PassengerIDCard
   id: FlexibleJobIDCard
   name: flexible job ID card

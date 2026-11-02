@@ -1,0 +1,633 @@
+- type: entity
+  parent: BaseComputer
+  id: ComputerShipAi
+  name: ship AI interface
+  description: Holds an AI core and lets it run the ship it is built on.
+  components:
+  - type: Sprite
+    snapCardinals: true
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    layers:
+    - state: casing_default
+      map: ["casing"]
+    - state: lights_default
+      map: ["lights"]
+      shader: unshaded
+    - state: nobrain
+      map: ["nobrain"]
+      shader: unshaded
+      visible: false
+    - state: screen_blue
+      map: ["screen"]
+      shader: unshaded
+      visible: false
+    - state: face_neutral
+      map: ["enum.StationAiVisualState.Key"]
+      shader: unshaded
+      visible: false
+    - state: moustache
+      map: ["accessory"]
+      shader: unshaded
+      visible: false
+    - state: static
+      map: ["static"]
+      shader: unshaded
+      visible: false
+    - state: cover_default
+      map: ["cover"]
+      visible: false
+  - type: DamageVisuals
+    thresholds: [25, 50, 75]
+    damageOverlayGroups:
+      Brute:
+        sprite: _WF/Structures/Machines/ship_ai_core.rsi
+  - type: GenericVisualizer
+    visuals:
+      enum.ShipAiVisuals.Casing:
+        casing:
+          ShipAiCasingGreen: { state: casing_green }
+          ShipAiCasingBlue: { state: casing_blue }
+          ShipAiCasingPurple: { state: casing_purple }
+          ShipAiCasingPink: { state: casing_pink }
+          ShipAiCasingOrange: { state: casing_orange }
+          ShipAiCasingYellow: { state: casing_yellow }
+          ShipAiCasingCyan: { state: casing_cyan }
+          ShipAiCasingWhite: { state: casing_white }
+          ShipAiCasingBlack: { state: casing_black }
+          ShipAiCasingDefault: { state: casing_default }
+          ShipAiCasingScience: { state: casing_science }
+          ShipAiCasingMedical: { state: casing_medical }
+          ShipAiCasingNtold: { state: casing_ntold }
+          ShipAiCasingBee: { state: casing_bee }
+          ShipAiCasingShock: { state: casing_shock }
+          ShipAiCasingSyndicate: { state: casing_syndicate }
+          ShipAiCasingPumpkin: { state: casing_pumpkin }
+          ShipAiCasingGold: { state: casing_gold }
+          ShipAiCasingEngineering: { state: casing_engineering }
+          ShipAiCasingSoviet: { state: casing_soviet }
+          ShipAiCasingNt: { state: casing_nt }
+          ShipAiCasingIndustrial: { state: casing_industrial }
+          ShipAiCasingLgun: { state: casing_lgun }
+          ShipAiCasingDwaine: { state: casing_dwaine }
+          ShipAiCasingAiles: { state: casing_ailes }
+          ShipAiCasingSalvage: { state: casing_salvage }
+          ShipAiCasingGardengear: { state: casing_gardengear }
+          ShipAiCasingTelegun: { state: casing_telegun }
+          ShipAiCasingKingsway: { state: casing_kingsway }
+          ShipAiCasingClown: { state: casing_clown }
+          ShipAiCasingMime: { state: casing_mime }
+          ShipAiCasingTactical: { state: casing_tactical }
+          ShipAiCasingRegal: { state: casing_regal }
+          ShipAiCasingMauxite: { state: casing_mauxite }
+          ShipAiCasingFlock: { state: casing_flock }
+          ShipAiCasingCrt: { state: casing_crt }
+          ShipAiCasingRustic: { state: casing_rustic }
+          ShipAiCasingCardboard: { state: casing_cardboard }
+        lights:
+          ShipAiCasingGreen: { state: lights_default, visible: true }
+          ShipAiCasingBlue: { state: lights_default, visible: true }
+          ShipAiCasingPurple: { state: lights_default, visible: true }
+          ShipAiCasingPink: { state: lights_default, visible: true }
+          ShipAiCasingOrange: { state: lights_default, visible: true }
+          ShipAiCasingYellow: { state: lights_default, visible: true }
+          ShipAiCasingCyan: { state: lights_default, visible: true }
+          ShipAiCasingWhite: { state: lights_default, visible: true }
+          ShipAiCasingBlack: { state: lights_default, visible: true }
+          ShipAiCasingDefault: { state: lights_default, visible: true }
+          ShipAiCasingScience: { state: lights_science, visible: true }
+          ShipAiCasingMedical: { state: lights_medical, visible: true }
+          ShipAiCasingNtold: { state: lights_ntold, visible: true }
+          ShipAiCasingBee: { state: lights_bee, visible: true }
+          ShipAiCasingShock: { state: lights_shock, visible: true }
+          ShipAiCasingSyndicate: { state: lights_syndicate, visible: true }
+          ShipAiCasingPumpkin: { visible: false }
+          ShipAiCasingGold: { state: lights_gold, visible: true }
+          ShipAiCasingEngineering: { state: lights_engineering, visible: true }
+          ShipAiCasingSoviet: { state: lights_soviet, visible: true }
+          ShipAiCasingNt: { state: lights_nt, visible: true }
+          ShipAiCasingIndustrial: { state: lights_industrial, visible: true }
+          ShipAiCasingLgun: { state: lights_lgun, visible: true }
+          ShipAiCasingDwaine: { state: lights_dwaine, visible: true }
+          ShipAiCasingAiles: { state: lights_ailes, visible: true }
+          ShipAiCasingSalvage: { state: lights_salvage, visible: true }
+          ShipAiCasingGardengear: { state: lights_gardengear, visible: true }
+          ShipAiCasingTelegun: { state: lights_telegun, visible: true }
+          ShipAiCasingKingsway: { state: lights_kingsway, visible: true }
+          ShipAiCasingClown: { state: lights_clown, visible: true }
+          ShipAiCasingMime: { state: lights_mime, visible: true }
+          ShipAiCasingTactical: { visible: false }
+          ShipAiCasingRegal: { visible: false }
+          ShipAiCasingMauxite: { state: lights_mauxite, visible: true }
+          ShipAiCasingFlock: { state: lights_flock, visible: true }
+          ShipAiCasingCrt: { state: lights_crt, visible: true }
+          ShipAiCasingRustic: { state: lights_rustic, visible: true }
+          ShipAiCasingCardboard: { state: lights_cardboard, visible: true }
+        cover:
+          ShipAiCasingGreen: { state: cover_default }
+          ShipAiCasingBlue: { state: cover_default }
+          ShipAiCasingPurple: { state: cover_default }
+          ShipAiCasingPink: { state: cover_default }
+          ShipAiCasingOrange: { state: cover_default }
+          ShipAiCasingYellow: { state: cover_default }
+          ShipAiCasingCyan: { state: cover_default }
+          ShipAiCasingWhite: { state: cover_default }
+          ShipAiCasingBlack: { state: cover_default }
+          ShipAiCasingDefault: { state: cover_default }
+          ShipAiCasingScience: { state: cover_default }
+          ShipAiCasingMedical: { state: cover_default }
+          ShipAiCasingNtold: { state: cover_default }
+          ShipAiCasingBee: { state: cover_default }
+          ShipAiCasingShock: { state: cover_default }
+          ShipAiCasingSyndicate: { state: cover_default }
+          ShipAiCasingPumpkin: { state: cover_default }
+          ShipAiCasingGold: { state: cover_full }
+          ShipAiCasingEngineering: { state: cover_full }
+          ShipAiCasingSoviet: { state: cover_full }
+          ShipAiCasingNt: { state: cover_uneven }
+          ShipAiCasingIndustrial: { state: cover_uneven }
+          ShipAiCasingLgun: { state: cover_uneven }
+          ShipAiCasingDwaine: { state: cover_split }
+          ShipAiCasingAiles: { state: cover_split }
+          ShipAiCasingSalvage: { state: cover_split }
+          ShipAiCasingGardengear: { state: cover_split }
+          ShipAiCasingTelegun: { state: cover_split }
+          ShipAiCasingKingsway: { state: cover_bulky }
+          ShipAiCasingClown: { state: cover_bulky }
+          ShipAiCasingMime: { state: cover_bulky }
+          ShipAiCasingTactical: { state: cover_bulky }
+          ShipAiCasingRegal: { state: cover_bulky }
+          ShipAiCasingMauxite: { state: cover_bulky }
+          ShipAiCasingFlock: { state: cover_flock }
+          ShipAiCasingCrt: { state: cover_crt }
+          ShipAiCasingRustic: { state: cover_rustic }
+          ShipAiCasingCardboard: { state: cover_cardboard }
+      enum.WiresVisuals.MaintenancePanelState:
+        cover:
+          True: { visible: true }
+          False: { visible: false }
+      enum.ShipAiVisuals.Accessory:
+        accessory:
+          ShipAiAccessoryNone: { visible: false }
+          ShipAiAccessoryMoustache: { visible: true }
+      enum.ShipAiVisuals.Static:
+        static:
+          True: { visible: true }
+          False: { visible: false }
+      enum.ShipAiVisuals.NoBrain:
+        nobrain:
+          True: { visible: true }
+          False: { visible: false }
+      enum.ShipAiVisuals.Screen:
+        screen:
+          None: { visible: false }
+          ShipAiScreenBlue: { state: screen_blue, visible: true }
+          ShipAiScreenWhite: { state: screen_white, visible: true }
+          ShipAiScreenGrey: { state: screen_grey, visible: true }
+          ShipAiScreenGreen: { state: screen_green, visible: true }
+          ShipAiScreenRed: { state: screen_red, visible: true }
+          ShipAiScreenPurple: { state: screen_purple, visible: true }
+          ShipAiScreenPink: { state: screen_pink, visible: true }
+          ShipAiScreenOrange: { state: screen_orange, visible: true }
+          ShipAiScreenYellow: { state: screen_yellow, visible: true }
+          ShipAiScreenCyan: { state: screen_cyan, visible: true }
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: Computer
+    board: ShipAiInterfaceCircuitboard
+  - type: Construction
+    graph: ShipAiCore
+    node: core
+    containers:
+    - board
+    - ship_ai_radio
+    - ship_ai_cell
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+      station_ai_mind_slot: !type:ContainerSlot {}
+      key_slots: !type:Container
+      ship_ai_module: !type:ContainerSlot {}
+      ship_ai_radio: !type:Container
+      ship_ai_cell: !type:Container
+  - type: ItemSlots
+    slots:
+      ship_ai_module:
+        name: ship-ai-module-slot
+        whitelist:
+          components:
+          - ShipAiModule
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:EmptyContainersBehaviour
+        containers:
+        - station_ai_mind_slot
+        - key_slots
+        - ship_ai_module
+        - board
+        - ship_ai_radio
+        - ship_ai_cell
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+      - !type:ChangeConstructionNodeBehavior
+        node: wired
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: ContainerFill
+    containers:
+      ship_ai_radio:
+      - RadioHandheld
+      ship_ai_cell:
+      - PowerCellMedium
+  - type: Repairable
+    fuelCost: 10
+    doAfterDelay: 5
+  - type: GuideHelp
+    guides:
+    - ShipAi
+  - type: RadarConsole
+    maxRange: 256
+  - type: PowerMonitoringConsole
+  - type: PowerMonitoringCableNetworks
+  - type: AtmosAlertsComputer
+  - type: AtmosMonitoringConsole
+    navMapTileColor: "#1a1a1a"
+    navMapWallColor: "#404040"
+  - type: StationAiHolder
+    slot:
+      name: station-ai-mind-slot
+      disableEject: true
+      whitelist:
+        tags:
+        - ShipAiCore
+  - type: ContainerComp
+    proto: ShipAiHeld
+    container: station_ai_mind_slot
+  - type: StationAiCore
+    remoteEntityProto: ShipAiEye
+  - type: StationAiWhitelist
+  - type: ShipyardSellCondition
+    reason: ship-ai-sale-blocked
+  - type: EncryptionKeyHolder
+    keySlots: 14
+    keysExtractionMethod: Cutting
+  - type: StatusIcon
+  - type: ShipAiInterface
+    baseChannels:
+    - Binary
+    - Common
+    - Traffic
+    - Greeting
+    - Medical
+    - Supply
+    - Engineering
+    - Science
+    factions:
+      Security: Cgp
+      BlackMarket: Outlaw
+      Syndicate: Outlaw
+    bootTime: 3
+    staticDamage: 75
+    scanInterval: 1
+    attackAlertCooldown: 10
+    damageAlerts: true
+    alertIntegrity:
+    - 0.1
+    attackSound:
+      path: /Audio/_WF/Machines/ShipAi/announcement_chime.ogg
+    bootSound:
+      path: /Audio/_WF/Machines/ShipAi/computerboot_pc_start.ogg
+    shutdownSound:
+      path: /Audio/_WF/Machines/ShipAi/shieldgen_shutoff.ogg
+    ejectDelay: 5
+    remoteGrace: 3
+    remoteRange: 32
+    accessLevels:
+    - Captain
+    - Engineering
+    - External
+    - Frontier
+    - Janitor
+    - Mail
+    - Maintenance
+    - Medical
+    - Service
+    factionAccessLevels:
+      Cgp:
+      - Security
+      - Brig
+      Outlaw:
+      - Pirate
+  - type: Telephone
+    compatibleRanges:
+    - Grid
+    - Map
+    - Unlimited
+    listeningRange: 0
+    speakerVolume: Speak
+    unlistedNumber: true
+    transmissionRange: Map
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Borg
+  - type: Holopad
+  - type: UserInterface
+    interfaces:
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+      enum.ShipAiAccessUiKey.Key:
+        type: ShipAiAccessBoundUserInterface
+      enum.StationAiCustomizationUiKey.Key:
+        type: StationAiCustomizationBoundUserInterface
+      enum.HolopadUiKey.AiRequestWindow:
+        type: HolopadBoundUserInterface
+      enum.HolopadUiKey.AiActionWindow:
+        type: HolopadBoundUserInterface
+      enum.PowerMonitoringConsoleUiKey.Key:
+        type: PowerMonitoringConsoleBoundUserInterface
+      enum.AtmosAlertsComputerUiKey.Key:
+        type: AtmosAlertsComputerBoundUserInterface
+      enum.AtmosMonitoringConsoleUiKey.Key:
+        type: AtmosMonitoringConsoleBoundUserInterface
+      enum.HealthAnalyzerUiKey.Key:
+        type: HealthAnalyzerBoundUserInterface
+      enum.RadarConsoleUiKey.Key:
+        type: RadarConsoleBoundUserInterface
+
+- type: entity
+  parent: ComputerShipAi
+  id: ComputerShipAiFilled
+  suffix: Core
+  components:
+  - type: StationAiHolder
+    slot:
+      name: station-ai-mind-slot
+      disableEject: true
+      startingItem: ShipAiCoreBrain
+      whitelist:
+        tags:
+        - ShipAiCore
+
+- type: entity
+  parent: BaseStructureComputer
+  id: ShipAiCoreFrame
+  name: ship AI core frame
+  description: A ship AI core under construction.
+  components:
+  - type: Repairable
+    fuelCost: 10
+    doAfterDelay: 5
+  - type: GuideHelp
+    guides:
+    - ShipAi
+  - type: Construction
+    graph: ShipAiCore
+    node: frame
+    containers:
+    - board
+    - ship_ai_radio
+    - ship_ai_cell
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+      ship_ai_radio: !type:Container
+      ship_ai_cell: !type:Container
+  - type: Sprite
+    sprite: _WF/Structures/Machines/ship_ai_core.rsi
+    snapCardinals: true
+    layers:
+    - state: frame
+    - state: frame_back
+      map: ["back"]
+      visible: false
+    - state: frame_interface
+      map: ["interface"]
+      visible: false
+    - state: frame_radio
+      map: ["radio"]
+      visible: false
+    - state: frame_cell
+      map: ["cell"]
+      visible: false
+    - state: casing_default
+      map: ["casing"]
+      visible: false
+    - state: frame_top
+      map: ["top"]
+      visible: false
+    - state: frame_wires
+      map: ["wires"]
+      visible: false
+    - state: frame_glass
+      map: ["glass"]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ConstructionVisuals.Key:
+        back:
+          frame: { visible: false }
+          plated: { visible: true }
+          wired: { visible: true }
+          boarded: { visible: true }
+          radioed: { visible: true }
+          celled: { visible: true }
+          glassed: { visible: true }
+        interface:
+          frame: { visible: false }
+          plated: { visible: false }
+          wired: { visible: false }
+          boarded: { visible: true }
+          radioed: { visible: true }
+          celled: { visible: true }
+          glassed: { visible: true }
+        radio:
+          frame: { visible: false }
+          plated: { visible: false }
+          wired: { visible: false }
+          boarded: { visible: false }
+          radioed: { visible: true }
+          celled: { visible: true }
+          glassed: { visible: true }
+        cell:
+          frame: { visible: false }
+          plated: { visible: false }
+          wired: { visible: false }
+          boarded: { visible: false }
+          radioed: { visible: false }
+          celled: { visible: true }
+          glassed: { visible: true }
+        casing:
+          frame: { visible: false }
+          plated: { visible: true }
+          wired: { visible: true }
+          boarded: { visible: true }
+          radioed: { visible: true }
+          celled: { visible: true }
+          glassed: { visible: true }
+        top:
+          frame: { visible: false }
+          plated: { visible: true }
+          wired: { visible: true }
+          boarded: { visible: true }
+          radioed: { visible: true }
+          celled: { visible: true }
+          glassed: { visible: true }
+        wires:
+          frame: { visible: false }
+          plated: { visible: false }
+          wired: { visible: true }
+          boarded: { visible: true }
+          radioed: { visible: true }
+          celled: { visible: true }
+          glassed: { visible: true }
+        glass:
+          frame: { visible: false }
+          plated: { visible: false }
+          wired: { visible: false }
+          boarded: { visible: false }
+          radioed: { visible: false }
+          celled: { visible: false }
+          glassed: { visible: true }
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  id: ShipAiHeld
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ShipAi
+    devices:
+      components:
+      - ApcPowerReceiver
+      - ActivatableUI
+      - GasMixer
+      - AutoShootGun
+    devicesBlacklist:
+      components:
+      - Openable
+  - type: StationAiHeld
+  - type: BankAccount
+  - type: StationAiCustomization
+    protoIds:
+      ShipAiScreen: ShipAiScreenBlue
+      StationAiHolograms: ShipAiHologramFace
+  - type: HolographicAvatar
+    layerData:
+    - sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: screen_blue
+    - sprite: _WF/Structures/Machines/ship_ai_core.rsi
+      state: face_neutral
+  - type: IgnoreUIRange
+  - type: ComplexInteraction
+  - type: Access
+    tags:
+    - Pirate
+    - Pilot
+    - Paramedic
+    groups:
+    - AllAccess
+  - type: Alerts
+  - type: ActionGrant
+    actions:
+    - ActionJumpToCore
+    - ActionShipAiToggleEngines
+    - ActionShipAiToggleGenerators
+    - ActionShipAiToggleBolts
+    - ActionShipAiToggleLights
+    - ActionShipAiCustomize
+    - ActionShipAiClearElectrified
+    - ActionShipAiToggleApcs
+    - ActionShipAiToggleShutters
+    - ActionShipAiToggleBlastDoors
+    - ActionShipAiToggleJobIcons
+    - ActionShipAiOpenPower
+    - ActionShipAiOpenAirAlerts
+    - ActionShipAiOpenPipes
+    - ActionShipAiOpenRadar
+    - ActionOpenRemoteDevicesMenu
+    - ActionAIViewLaws
+  - type: UserInterface
+    interfaces:
+      enum.RemoteDeviceUiKey.Key:
+        type: RemoteDevicesBoundUserInterface
+      enum.SiliconLawsUiKey.Key:
+        type: SiliconLawBoundUserInterface
+      enum.PdaUiKey.Key:
+        type: PdaBoundUserInterface
+      enum.RingerUiKey.Key:
+        type: RingerBoundUserInterface
+      enum.CriminalRecordsConsoleKey.Key:
+        type: CriminalRecordsConsoleBoundUserInterface
+  - type: IntrinsicUI
+    uis:
+      enum.PdaUiKey.Key:
+        toggleAction: ActionShipAiOpenPda
+  - type: ShowJobIcons
+  - type: ShowElectrocutionHUD
+  - type: SSDIndicator
+
+- type: entity
+  parent:
+  - Incorporeal
+  - BaseMob
+  id: ShipAiEye
+  name: AI eye
+  description: The AI's viewer.
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: ShipAiEye
+    mercyRange: 2
+  - type: Eye
+    pvsScale: 1.5
+  - type: Visibility
+    layer: 2
+  - type: Sprite
+    sprite: Mobs/Silicon/station_ai.rsi
+    layers:
+    - state: ai_camera
+      shader: unshaded
+      map: ["base"]
+
+- type: soundCollection
+  id: ShipAiGlitch
+  files:
+  - /Audio/_WF/Machines/ShipAi/glitch1.ogg
+  - /Audio/_WF/Machines/ShipAi/glitch2.ogg
+  - /Audio/_WF/Machines/ShipAi/glitch3.ogg
+  - /Audio/_WF/Machines/ShipAi/glitch4.ogg
+  - /Audio/_WF/Machines/ShipAi/glitch5.ogg
+
+- type: entity
+  id: ShipAiSaleBlocker
+  name: ship AI sale block
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: ShipyardSellCondition
+    blockSale: true
+    reason: ship-ai-sale-blocked

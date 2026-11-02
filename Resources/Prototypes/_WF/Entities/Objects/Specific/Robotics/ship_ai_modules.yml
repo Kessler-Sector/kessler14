@@ -1,0 +1,38 @@
+- type: entity
+  parent: BaseItem
+  id: BaseShipAiModule
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _WF/Objects/Specific/Robotics/ship_ai_modules.rsi
+    layers:
+    - state: module
+    - state: module-stripe
+  - type: Item
+    size: Small
+  - type: ShipAiModule
+  - type: StaticPrice
+    price: 250
+
+- type: entity
+  parent: BaseShipAiModule
+  id: ShipAiModuleProDoc
+  name: ProDoc expansion module
+  description: A health visualization module for a ship AI core. The AI sees crew vitals and can scan crew members on its ship.
+  components:
+  - type: Sprite
+    layers:
+    - state: module
+    - state: module-stripe
+      color: "#A600AC"
+  - type: ShipAiModule
+    components:
+    - type: ShowHealthBars
+      damageContainers:
+      - Biological
+    - type: ShowHealthIcons
+      damageContainers:
+      - Biological
+    actions:
+    - ActionShipAiCameraScan
+

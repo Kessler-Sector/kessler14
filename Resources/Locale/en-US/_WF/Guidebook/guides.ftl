@@ -3,6 +3,7 @@ guide-entry-wayfarer-rules = Server Rules
 guide-entry-community-goals = Community Goals
 guide-entry-consent = Consent
 guide-entry-contraband = Contraband
+guide-entry-ship-ai = Ship AI
 
 # Rules entries
 guide-entry-wayfarer-rule-a0 = Rule A0: Storytelling First

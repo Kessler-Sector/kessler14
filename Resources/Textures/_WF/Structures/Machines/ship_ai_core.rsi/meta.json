@@ -1,0 +1,1013 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "Taken from Goonstation at https://github.com/goonstation/goonstation/blob/bd116e09e9f6ddcb670221303a41285e1ebe1368/icons/mob/ai.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "empty"
+    },
+    {
+      "name": "dead",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "preview"
+    },
+    {
+      "name": "screen_blue"
+    },
+    {
+      "name": "screen_white"
+    },
+    {
+      "name": "screen_grey"
+    },
+    {
+      "name": "screen_green"
+    },
+    {
+      "name": "screen_red"
+    },
+    {
+      "name": "face_annoyed",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_baffled",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_blank",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_widesmile",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_sunglasses",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_cheeky",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_confused",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_content",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_crecent",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_exclamation",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_eye",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_eyesemoji",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_happy",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_heart",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_line",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_mad",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_music",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_neutral",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_pensive",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_question",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_sad",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_silly",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_smug",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_spooky",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_square",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_surprised",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_tired",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_triangle",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_unimpressed",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_unsure",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_veryhappy",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_wink",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_zzz",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_text",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_loading",
+      "delays": [
+        [
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5,
+          1.5
+        ]
+      ]
+    },
+    {
+      "name": "face_cursor",
+      "delays": [
+        [
+          1.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "face_nervous",
+      "delays": [
+        [
+          7.0,
+          0.1,
+          0.1,
+          0.1,
+          1.0,
+          0.1,
+          0.1,
+          0.1,
+          0.8,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          5.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          1.2,
+          0.1,
+          0.1,
+          0.1,
+          0.9,
+          0.1,
+          0.1,
+          0.1,
+          1.0,
+          0.1,
+          0.1,
+          0.1,
+          6.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          7.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.8,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_fidget",
+      "delays": [
+        [
+          15.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.5,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          10.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.4,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          8.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          12.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.4,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          13.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_devious",
+      "delays": [
+        [
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "screen_purple"
+    },
+    {
+      "name": "screen_pink"
+    },
+    {
+      "name": "screen_orange"
+    },
+    {
+      "name": "screen_yellow"
+    },
+    {
+      "name": "screen_cyan"
+    },
+    {
+      "name": "static",
+      "delays": [
+        [
+          0.02,
+          0.02,
+          0.02,
+          0.02,
+          0.02,
+          0.02,
+          0.02,
+          0.02
+        ]
+      ]
+    },
+    {
+      "name": "icon_blank"
+    },
+    {
+      "name": "icon_neutral"
+    },
+    {
+      "name": "face_skull"
+    },
+    {
+      "name": "face_sick"
+    },
+    {
+      "name": "casing_default"
+    },
+    {
+      "name": "lights_default"
+    },
+    {
+      "name": "casing_science"
+    },
+    {
+      "name": "lights_science"
+    },
+    {
+      "name": "casing_medical"
+    },
+    {
+      "name": "lights_medical"
+    },
+    {
+      "name": "casing_ntold"
+    },
+    {
+      "name": "lights_ntold"
+    },
+    {
+      "name": "casing_bee"
+    },
+    {
+      "name": "lights_bee"
+    },
+    {
+      "name": "casing_shock"
+    },
+    {
+      "name": "lights_shock"
+    },
+    {
+      "name": "casing_syndicate"
+    },
+    {
+      "name": "lights_syndicate"
+    },
+    {
+      "name": "casing_pumpkin"
+    },
+    {
+      "name": "casing_gold"
+    },
+    {
+      "name": "lights_gold"
+    },
+    {
+      "name": "casing_engineering"
+    },
+    {
+      "name": "lights_engineering",
+      "delays": [
+        [
+          1.5,
+          1.5
+        ]
+      ]
+    },
+    {
+      "name": "casing_soviet"
+    },
+    {
+      "name": "lights_soviet",
+      "delays": [
+        [
+          2.0,
+          2.0
+        ]
+      ]
+    },
+    {
+      "name": "casing_nt"
+    },
+    {
+      "name": "lights_nt"
+    },
+    {
+      "name": "casing_industrial"
+    },
+    {
+      "name": "lights_industrial",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "casing_lgun"
+    },
+    {
+      "name": "lights_lgun"
+    },
+    {
+      "name": "casing_dwaine"
+    },
+    {
+      "name": "lights_dwaine",
+      "delays": [
+        [
+          1.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "casing_ailes"
+    },
+    {
+      "name": "lights_ailes",
+      "delays": [
+        [
+          1.5,
+          1.5
+        ]
+      ]
+    },
+    {
+      "name": "casing_salvage"
+    },
+    {
+      "name": "lights_salvage",
+      "delays": [
+        [
+          15.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          25.5,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          25.5,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "casing_gardengear"
+    },
+    {
+      "name": "lights_gardengear"
+    },
+    {
+      "name": "casing_telegun"
+    },
+    {
+      "name": "lights_telegun",
+      "delays": [
+        [
+          5.0,
+          2.5
+        ]
+      ]
+    },
+    {
+      "name": "casing_kingsway"
+    },
+    {
+      "name": "lights_kingsway",
+      "delays": [
+        [
+          1.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "casing_clown"
+    },
+    {
+      "name": "lights_clown"
+    },
+    {
+      "name": "casing_mime"
+    },
+    {
+      "name": "lights_mime"
+    },
+    {
+      "name": "casing_tactical"
+    },
+    {
+      "name": "casing_regal"
+    },
+    {
+      "name": "casing_mauxite"
+    },
+    {
+      "name": "lights_mauxite"
+    },
+    {
+      "name": "casing_flock"
+    },
+    {
+      "name": "lights_flock",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "casing_crt"
+    },
+    {
+      "name": "lights_crt",
+      "delays": [
+        [
+          1.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "casing_rustic"
+    },
+    {
+      "name": "lights_rustic",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "casing_cardboard"
+    },
+    {
+      "name": "lights_cardboard"
+    },
+    {
+      "name": "cover_default"
+    },
+    {
+      "name": "cover_full"
+    },
+    {
+      "name": "cover_split"
+    },
+    {
+      "name": "cover_uneven"
+    },
+    {
+      "name": "cover_bulky"
+    },
+    {
+      "name": "cover_flock",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "cover_crt"
+    },
+    {
+      "name": "cover_rustic"
+    },
+    {
+      "name": "cover_cardboard"
+    },
+    {
+      "name": "DamageOverlay_Brute_25"
+    },
+    {
+      "name": "DamageOverlay_Brute_50"
+    },
+    {
+      "name": "DamageOverlay_Brute_75"
+    },
+    {
+      "name": "nobrain"
+    },
+    {
+      "name": "moustache"
+    },
+    {
+      "name": "face_tetris",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "face_tamagotchi"
+    },
+    {
+      "name": "face_flip",
+      "delays": [
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ]
+      ]
+    },
+    {
+      "name": "face_colourbars"
+    },
+    {
+      "name": "casing_green"
+    },
+    {
+      "name": "casing_blue"
+    },
+    {
+      "name": "casing_purple"
+    },
+    {
+      "name": "casing_pink"
+    },
+    {
+      "name": "casing_orange"
+    },
+    {
+      "name": "casing_yellow"
+    },
+    {
+      "name": "casing_cyan"
+    },
+    {
+      "name": "casing_white"
+    },
+    {
+      "name": "casing_black"
+    },
+    {
+      "name": "frame"
+    },
+    {
+      "name": "frame_back"
+    },
+    {
+      "name": "frame_top"
+    },
+    {
+      "name": "frame_wires"
+    },
+    {
+      "name": "frame_interface"
+    },
+    {
+      "name": "frame_radio"
+    },
+    {
+      "name": "frame_cell"
+    },
+    {
+      "name": "frame_glass"
+    }
+  ]
+}

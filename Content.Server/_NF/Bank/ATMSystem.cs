@@ -18,6 +18,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using Content.Shared._WF.Silicons.ShipAi; // Wayfarer
 
 namespace Content.Server._NF.Bank;
 
@@ -32,6 +33,7 @@ public sealed partial class BankSystem
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly HandsSystem _hands = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly ShipAiSystem _shipAi = default!; // Wayfarer
 
     private void InitializeATM()
     {
@@ -87,7 +89,7 @@ public sealed partial class BankSystem
 
         //spawn the cash stack of whatever cash type the ATM is configured to.
         var stackPrototype = _prototypeManager.Index<StackPrototype>(component.CashType);
-        var cashStack = _stackSystem.Spawn(args.Amount, stackPrototype, player.ToCoordinates());
+        var cashStack = _stackSystem.Spawn(args.Amount, stackPrototype, _shipAi.DropCoordinates(uid, player)); // Wayfarer: player.ToCoordinates()<_shipAi.DropCoordinates(uid, player)
         if (!_hands.TryPickupAnyHand(player, cashStack))
             _transform.SetLocalRotation(cashStack, Angle.Zero); // Orient these to grid north instead of map north
 

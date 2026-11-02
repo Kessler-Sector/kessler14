@@ -171,7 +171,12 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         //if (_whitelisted)
         //    return true;
 
+        // Wayfarer
+        /*
         if (job.Whitelisted && !_jobWhitelists.Contains(job.ID)) // WF: Globalwhitelist to join server =/= job whitelist
+        */
+        if (job.Whitelisted && !_jobWhitelists.Contains(job.WhitelistJob?.Id ?? job.ID)) // WF: Globalwhitelist to join server =/= job whitelist
+        // Wayfarer End
         {
             reason = FormattedMessage.FromUnformatted(Loc.GetString("role-not-whitelisted"));
             return false;

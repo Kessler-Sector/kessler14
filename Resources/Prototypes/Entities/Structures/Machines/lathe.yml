@@ -321,6 +321,7 @@
     - NFScienceBoardsStatic # Frontier
     - NFServiceBoardsStatic # Frontier
     - NFSalvageBoardsStatic # Frontier
+    - ShipBoardsStatic # Wayfarer
     dynamicPacks:
     - EngineeringBoards
     - CargoBoards
@@ -587,6 +588,7 @@
     - NFSurgeryMedicalToolsStatic #Frontier
     - NFTopicalsStatic # Frontier
     - NFMedicalArchetypeStatic # Frontier
+    - ShipAiModulesStatic # Wayfarer
     # dynamicPacks: # Frontier
     # - Chemistry # Frontier
   - type: Machine

@@ -37,6 +37,7 @@ namespace Content.Server.Preferences.Managers
         // Cache player prefs on the server so we don't need as much async hell related to them.
         private readonly Dictionary<NetUserId, PlayerPrefData> _cachedPlayerPrefs =
             new();
+        private readonly Dictionary<NetUserId, Task> _pendingSaves = new(); // Wayfarer
 
         private ISawmill _sawmill = default!;
 
@@ -144,8 +145,18 @@ namespace Content.Server.Preferences.Managers
 
             prefsData.Prefs = new PlayerPreferences(profiles, slot, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
 
+            // Wayfarer
+            /*
             if (ShouldStorePrefs(session.Channel.AuthType))
                 await _db.SaveCharacterSlotAsync(userId, profile, slot);
+            */
+            if (ShouldStorePrefs(session.Channel.AuthType))
+            {
+                var save = _db.SaveCharacterSlotAsync(userId, profile, slot);
+                _pendingSaves[userId] = save;
+                await save;
+            }
+            // Wayfarer End
         }
 
         public async Task SetConstructionFavorites(NetUserId userId, List<ProtoId<ConstructionPrototype>> favorites)
@@ -336,6 +347,7 @@ namespace Content.Server.Preferences.Managers
         public void OnClientDisconnected(ICommonSession session)
         {
             _cachedPlayerPrefs.Remove(session.UserId);
+            _pendingSaves.Remove(session.UserId); // Wayfarer
         }
 
         public bool HavePreferencesLoaded(ICommonSession session)
@@ -414,6 +426,10 @@ namespace Content.Server.Preferences.Managers
 
             async Task LoadPrefs()
             {
+                // Wayfarer
+                if (_pendingSaves.TryGetValue(session.UserId, out var pending))
+                    await Task.WhenAny(pending);
+                // Wayfarer End
                 var prefs = await _db.GetPlayerPreferencesAsync(session.UserId, cancel);
 
                 if (prefs != null)
