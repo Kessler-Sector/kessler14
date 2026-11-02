@@ -265,6 +265,7 @@
   parent: PunPunIDCard
   id: YipYipIDCard
   name: yip yip ID card
+  suffix: Yip Yip #Wayfarer
   components:
   - type: PresetIdCard
     name: Yip Yip
