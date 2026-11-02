@@ -7256,3 +7256,10 @@ Entries:
   id: 7322
   time: '2026-10-30T01:59:44.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/31
+- author: versengt
+  changes:
+    - type: Add
+      message: 'Added new ship: TI Knight for CGP'
+  id: 7323
+  time: '2026-11-02T01:33:59.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/11
