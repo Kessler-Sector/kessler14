@@ -10,15 +10,11 @@ using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Utility;
-using YamlDotNet.Core;
-using YamlDotNet.RepresentationModel;
 
 namespace Content.Server._Kessler.Persistence;
 
@@ -34,12 +30,13 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
     [Dependency] private readonly ILogManager _logManager = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly PersistenceLoadSystem _persistenceLoad = default!;
+    [Dependency] private readonly PersistenceSaveSystem _persistenceSave = default!;
     [Dependency] private readonly IResourceManager _res = default!;
     [Dependency] private readonly SectorSnapshotSystem _snapshot = default!;
 
     private const string KeepFlag = "keep";
-    private const string ForceSaveFlag = "forcesave";
+    private const string EngineDefaultFlag = "enginedefault";
 
     public override string Command => "persistenceroundtrip";
 
@@ -47,7 +44,7 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
     {
         var options = CompletionHelper.MapIds(EntityManager)
             .Append(new CompletionOption(KeepFlag))
-            .Append(new CompletionOption(ForceSaveFlag));
+            .Append(new CompletionOption(EngineDefaultFlag));
         return CompletionResult.FromHintOptions(options, Loc.GetString("cmd-persistenceroundtrip-hint"));
     }
 
@@ -55,14 +52,14 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
     {
         var mapId = _ticker.DefaultMap;
         var keep = false;
-        var forceSave = false;
+        var engineDefault = false;
 
         foreach (var arg in args)
         {
             if (arg == KeepFlag)
                 keep = true;
-            else if (arg == ForceSaveFlag)
-                forceSave = true;
+            else if (arg == EngineDefaultFlag)
+                engineDefault = true;
             else if (int.TryParse(arg, out var id))
                 mapId = new MapId(id);
             else
@@ -85,7 +82,7 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
         {
             StartedUtc = started,
             SourceMap = $"{EntityManager.ToPrettyString(mapUid.Value)} (map {mapId})",
-            ForceSave = forceSave,
+            SavePolicy = !engineDefault,
             SavePath = savePath.ToString(),
         };
 
@@ -130,21 +127,6 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
         var serializable = new HashSet<EntityUid>();
         void OnIsSerializable(Entity<MetaDataComponent> ent, ref bool result) => serializable.Add(ent.Owner);
 
-        var forced = new List<EntityPrototype>();
-        if (report.ForceSave)
-        {
-            foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
-            {
-                if (proto.MapSavable)
-                    continue;
-
-                proto.MapSavable = true;
-                forced.Add(proto);
-                report.ForcedPrototypes.Add(proto.ID);
-            }
-            report.ForcedPrototypes.Sort(StringComparer.Ordinal);
-        }
-
         var options = SerializationOptions.Default with
         {
             Category = FileCategory.Map,
@@ -160,8 +142,9 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
             try
             {
                 stopwatch.Restart();
-                (data, var category) = _mapLoader.SerializeEntitiesRecursive([mapUid], options);
+                (data, var category) = _persistenceSave.Serialize([mapUid], options, report.SavePolicy, report.ForcedPrototypes);
                 report.SerializeSeconds = stopwatch.Elapsed.TotalSeconds;
+                report.ForcedPrototypes.Sort(StringComparer.Ordinal);
 
                 if (category != FileCategory.Map)
                     report.Failure = $"Serialized category was {category}, expected {FileCategory.Map}";
@@ -169,10 +152,6 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
             finally
             {
                 _mapLoader.OnIsSerializable -= OnIsSerializable;
-                foreach (var proto in forced)
-                {
-                    proto.MapSavable = false;
-                }
 
                 report.SaveWarnings = capture.Warnings;
                 report.SaveErrors = capture.Errors;
@@ -218,7 +197,7 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
             return null;
 
         stopwatch.Restart();
-        WriteYaml(savePath, data);
+        _persistenceSave.Write(savePath, data);
         report.WriteSeconds = stopwatch.Elapsed.TotalSeconds;
 
         using (var stream = _res.UserData.Open(savePath, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -238,8 +217,9 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
         using (var capture = new LogCapture(_logManager.RootSawmill))
         {
             stopwatch.Restart();
-            var ok = _mapLoader.TryLoadGeneric(savePath, out result, loadOptions);
+            var ok = _persistenceLoad.TryLoadSave(savePath, loadOptions, out result);
             report.LoadSeconds = stopwatch.Elapsed.TotalSeconds;
+            report.SkippedMigrations = _persistenceLoad.SkippedMigrations;
 
             report.LoadWarnings = capture.Warnings;
             report.LoadErrors = capture.Errors;
@@ -340,18 +320,6 @@ public sealed class PersistenceRoundTripCommand : LocalizedEntityCommands
             default:
                 return 0;
         }
-    }
-
-    /// <summary>
-    /// Writes the data the same way <see cref="MapLoaderSystem"/> does, so serialization and file writing can be
-    /// timed separately.
-    /// </summary>
-    private void WriteYaml(ResPath path, MappingDataNode data)
-    {
-        var document = new YamlDocument(data.ToYaml());
-        using var writer = _res.UserData.OpenWriteText(path);
-        var stream = new YamlStream { document };
-        stream.Save(new YamlMappingFix(new Emitter(writer)), false);
     }
 
     private void DeleteLoaded(LoadResult result)

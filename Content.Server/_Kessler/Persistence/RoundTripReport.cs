@@ -14,7 +14,10 @@ public sealed class RoundTripReport
 
     public DateTime StartedUtc;
     public string SourceMap = "";
-    public bool ForceSave;
+    /// <summary>
+    /// Whether the Kessler save policy was applied (prototypes marked save: false saved unless transient).
+    /// </summary>
+    public bool SavePolicy;
     public List<string> ForcedPrototypes = new();
     public string SavePath = "";
     public string? Failure;
@@ -25,6 +28,11 @@ public sealed class RoundTripReport
     public double LoadSeconds;
     public double SnapshotSeconds;
     public long FileBytes;
+
+    /// <summary>
+    /// Migration entries not applied on load because their source prototype still exists.
+    /// </summary>
+    public int SkippedMigrations;
 
     /// <summary>
     /// Entities per prototype as written to the save file.
@@ -91,7 +99,10 @@ public sealed class RoundTripReport
         sb.AppendLine($"Started:      {StartedUtc:u}");
         sb.AppendLine($"Source map:   {SourceMap}");
         sb.AppendLine($"Save file:    {SavePath} ({FileBytes / 1024.0 / 1024.0:F1} MiB)");
-        sb.AppendLine($"Force save:   {ForceSave}{(ForceSave ? $" ({ForcedPrototypes.Count} prototypes switched to save: true)" : "")}");
+        sb.AppendLine(SavePolicy
+            ? $"Save policy:  Kessler ({ForcedPrototypes.Count} save: false prototypes saved anyway)"
+            : "Save policy:  engine default (save: false prototypes skipped)");
+        sb.AppendLine($"Migrations:   {SkippedMigrations} entries skipped on load (source prototype still exists)");
         if (Failure != null)
             sb.AppendLine($"FAILED:       {Failure}");
         sb.AppendLine();
@@ -166,7 +177,7 @@ public sealed class RoundTripReport
 
         if (ForcedPrototypes.Count > 0)
         {
-            sb.AppendLine("== Prototypes temporarily switched to save: true");
+            sb.AppendLine("== Prototypes marked save: false that were saved by the Kessler policy");
             foreach (var proto in ForcedPrototypes)
             {
                 sb.AppendLine($"  {proto}");
