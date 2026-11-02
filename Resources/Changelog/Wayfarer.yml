@@ -7279,3 +7279,10 @@ Entries:
   id: 7325
   time: '2026-11-02T01:44:10.0000000+00:00'
   url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/28
+- author: goodfaun
+  changes:
+    - type: Add
+      message: Web cocoons
+  id: 7326
+  time: '2026-11-02T01:51:18.0000000+00:00'
+  url: https://gitlab.com/projectwayfarer/wayfarer14/-/merge_requests/29
