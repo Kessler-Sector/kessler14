@@ -421,8 +421,15 @@ public sealed partial class DeepFryerSystem : SharedDeepfryerSystem
             _sawmill.Warning(
                 $"{ToPrettyString(uid)} did not have a {component.StorageName} container. It has been created.");
 
-        if (_solutionContainerSystem.EnsureSolution(uid, component.SolutionName, out var solutionExisted, out var solution))
+        // Kessler: a fryer loaded from a save already has its solution entity, but it is not flagged map-initialized
+        // yet during ComponentInit, so EnsureSolution would create a detached prototype solution and the saved oil
+        // would be ignored. Use the existing solution entity when there is one.
+        var solutionExisted = true;
+        if (_solutionContainerSystem.TryGetSolution(uid, component.SolutionName, out _, out var loadedSolution))
+            component.Solution = loadedSolution;
+        else if (_solutionContainerSystem.EnsureSolution(uid, component.SolutionName, out solutionExisted, out var solution))
             component.Solution = solution;
+        // End Kessler
 
         if (!solutionExisted)
             _sawmill.Warning(
