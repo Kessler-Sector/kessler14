@@ -15,6 +15,7 @@ Kessler Sector is a fully persistent Frontier-style SS14 server. This file adds 
 - New Kessler code goes in `_Kessler` folders that mirror the normal layout: `Content.Server/_Kessler/<Feature>/`, `Content.Shared/_Kessler/<Feature>/`, `Resources/Prototypes/_Kessler/`, `Resources/Locale/en-US/_Kessler/`, and so on. Namespaces follow the folder: `namespace Content.Server._Kessler.Persistence;`.
 - Edits to files outside `_Kessler` (including `_WF` and `_NF`) are marked the same way AGENTS.md describes, but with `Kessler` instead of `Wayfarer`: `// Kessler`, `# Kessler: 3<4`, and `// Kessler: why` ... `// End Kessler` for blocks.
 - Keep upstream edits minimal; prefer `partial` classes in `_Kessler` folders. Every edit to an upstream file is a future merge conflict.
+- **`Content.Shared` and `Content.Client` run in the client sandbox.** Only types and members listed in `RobustToolbox/Robust.Shared/ContentPack/Sandbox.yml` are allowed; anything else makes the client refuse to start. This has broken the client twice (`FormatException` in `GuidSerializer`, `StringComparer` in the damage serializer). Check new BCL types against that file, and run `SandboxTest` (part of the integration suite) before handing off any change to shared or client code.
 - We don't send fixes upstream to Wayfarer for now; the focus is Kessler only. Generic fixes stay in this repo with Kessler markers, and upstreaming may be revisited someday.
 
 ## Skills
