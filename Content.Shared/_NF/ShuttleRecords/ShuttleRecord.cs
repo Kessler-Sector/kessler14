@@ -7,7 +7,8 @@ namespace Content.Shared._NF.ShuttleRecords;
  * This class is NOT a indication that the shuttle is still in the game, merely a transaction record of it.
  */
 [Virtual, NetSerializable, Serializable]
-public class ShuttleRecord(
+[DataDefinition] // Kessler: saved with the sector services
+public partial class ShuttleRecord( // Kessler: partial
     string name,
     string suffix,
     string ownerName,
@@ -19,39 +20,45 @@ public class ShuttleRecord(
     TimeSpan? timeOfSale = null
 )
 {
-    [ViewVariables]
+    // Kessler: parameterless constructor required by DataDefinition
+    public ShuttleRecord() : this("", "", "", NetEntity.Invalid, false, 0, "")
+    {
+    }
+    // End Kessler
+
+    [ViewVariables, DataField] // Kessler: DataField
     public string Name { get; set; } = name;
 
     /// <summary>
     /// The ID of the VesselPrototype this shuttle came from. Used internally
     /// for the shipyard statistics printout.
     /// </summary>
-    [ViewVariables]
+    [ViewVariables, DataField] // Kessler: DataField
     public string VesselPrototypeId { get; set; } = vesselPrototypeId;
 
-    [ViewVariables]
+    [ViewVariables, DataField] // Kessler: DataField
     public string? Suffix { get; set; } = suffix;
 
-    [ViewVariables]
+    [ViewVariables, DataField] // Kessler: DataField
     public string OwnerName { get; set; } = ownerName;
 
     /**
      * Entity is deleted when the ship gets sold.
      * Use EntityManager.EntityExists(EntityUid) to check if the entity still exists.
      */
-    [ViewVariables]
+    [ViewVariables, DataField] // Kessler: DataField
     public NetEntity EntityUid { get; set; } = entityUid;
 
-    [ViewVariables]
+    [ViewVariables, DataField] // Kessler: DataField
     public TimeSpan? TimeOfPurchase { get; set; } = timeOfPurchase;
 
-    [ViewVariables]
+    [ViewVariables, DataField] // Kessler: DataField
     public TimeSpan? TimeOfSale { get; set; } = timeOfSale;
 
     // The amount of spesos it had costed to purchase this vessel.
-    [ViewVariables]
+    [ViewVariables, DataField] // Kessler: DataField
     public uint PurchasePrice { get; set; } = purchasePrice;
 
-    [ViewVariables]
+    [ViewVariables, DataField] // Kessler: DataField
     public bool PurchasedWithVoucher { get; set; } = purchasedWithVoucher;
 }
