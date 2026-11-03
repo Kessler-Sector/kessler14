@@ -22,12 +22,14 @@ namespace Content.Shared.Damage
     {
         // These exist solely so the wiki works. Please do not touch them or use them.
         [JsonPropertyName("types")]
-        [DataField("types", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<FixedPoint2, DamageTypePrototype>))]
+        // Kessler: read-only, DamageDict writes "types" itself. A stale "groups" written next to it would add the damage twice on load.
+        [DataField("types", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<FixedPoint2, DamageTypePrototype>), readOnly: true)]
+        // End Kessler
         [UsedImplicitly]
         private Dictionary<string, FixedPoint2>? _damageTypeDictionary;
 
         [JsonPropertyName("groups")]
-        [DataField("groups", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<FixedPoint2, DamageGroupPrototype>))]
+        [DataField("groups", customTypeSerializer: typeof(PrototypeIdDictionarySerializer<FixedPoint2, DamageGroupPrototype>), readOnly: true)] // Kessler
         [UsedImplicitly]
         private Dictionary<string, FixedPoint2>? _damageGroupDictionary;
 
@@ -36,7 +38,7 @@ namespace Content.Shared.Damage
         /// </summary>
         [JsonIgnore]
         [ViewVariables(VVAccess.ReadWrite)]
-        [IncludeDataField(customTypeSerializer: typeof(DamageSpecifierDictionarySerializer), readOnly: true)]
+        [IncludeDataField(customTypeSerializer: typeof(DamageSpecifierDictionarySerializer))] // Kessler: writable so persistent saves keep damage
         public Dictionary<string, FixedPoint2> DamageDict { get; set; } = new();
 
         /// <summary>

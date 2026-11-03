@@ -1,8 +1,10 @@
-﻿using Content.Shared.Damage.Prototypes;
+﻿using System.Linq; // Kessler
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.Manager;
+using Robust.Shared.Serialization.Markdown; // Kessler
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Validation;
 using Robust.Shared.Serialization.Markdown.Value;
@@ -11,8 +13,7 @@ using Robust.Shared.Serialization.TypeSerializers.Interfaces;
 
 namespace Content.Shared.Damage;
 
-//todo writing
-public sealed class DamageSpecifierDictionarySerializer : ITypeReader<Dictionary<string, FixedPoint2>, MappingDataNode>
+public sealed class DamageSpecifierDictionarySerializer : ITypeReader<Dictionary<string, FixedPoint2>, MappingDataNode>, ITypeWriter<Dictionary<string, FixedPoint2>> // Kessler: write damage so persistent saves keep it
 {
     private ITypeValidator<Dictionary<string, FixedPoint2>, MappingDataNode> _damageTypeSerializer = new PrototypeIdDictionarySerializer<FixedPoint2, DamageTypePrototype>();
     private ITypeValidator<Dictionary<string, FixedPoint2>, MappingDataNode> _damageGroupSerializer = new PrototypeIdDictionarySerializer<FixedPoint2, DamageGroupPrototype>();
@@ -78,4 +79,24 @@ public sealed class DamageSpecifierDictionarySerializer : ITypeReader<Dictionary
 
         return dict;
     }
+
+    // Kessler: write damage as "types", skipping zero entries. DamageableSystem adds zeroes for every supported type
+    // on init, so writing them would only bloat map saves.
+    public DataNode Write(ISerializationManager serializationManager, Dictionary<string, FixedPoint2> value,
+        IDependencyCollection dependencies, bool alwaysWrite = false, ISerializationContext? context = null)
+    {
+        var mapping = new MappingDataNode();
+        var types = new MappingDataNode();
+        foreach (var (type, damage) in value.OrderBy(entry => entry.Key, StringComparer.Ordinal))
+        {
+            if (damage != FixedPoint2.Zero)
+                types.Add(type, serializationManager.WriteValue(damage, alwaysWrite, context));
+        }
+
+        if (types.Count > 0)
+            mapping.Add("types", types);
+
+        return mapping;
+    }
+    // End Kessler
 }
