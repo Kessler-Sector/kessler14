@@ -30,6 +30,7 @@ Decisions made so far:
 - **Saves stay on the server.** Never send ship or world files to clients. (Triad Sector stores ship saves client-side, which forces it to sanitize and strip saves against tampering. That is why items vanish there. We don't copy that design.)
 - **Restarts every few days** for updates. Long load times at restart (tens of minutes) are acceptable. Runtime tick performance is the main concern.
 - **Architecture:** start with a whole-sector snapshot at restart, because cross-entity references (deed to ship, ID to station records, mind to body) then just work. Plan a persistent-ID layer so per-grid saves become possible later (incremental autosave, single-grid restore).
+- **Players still connected when a save loads** (a round restart rather than a process restart) are put straight back into their own bodies.
 - **Offline players stay in the world** as SSD bodies. Cryo is optional. SSD bodies need stasis (no hunger or thirst while SSD). Start with a server rule against robbing SSD players; add a mechanic only if it's abused.
 - **Inactive property is unloaded, never deleted.** Owners who haven't logged in for some days have their ships and bodies moved into storage and get them back on return. Scarce things (POI claims, docking spots) are released after a longer time, with contents returned to the owner's storage.
 - **Upkeep fees: yes.** Insurance: undecided. Player-run shops on POIs with offline trading: planned for later.
