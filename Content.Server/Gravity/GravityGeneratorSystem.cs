@@ -18,7 +18,21 @@ public sealed class GravityGeneratorSystem : EntitySystem
         SubscribeLocalEvent<GravityGeneratorComponent, ChargedMachineActivatedEvent>(OnActivated);
         SubscribeLocalEvent<GravityGeneratorComponent, ChargedMachineDeactivatedEvent>(OnDeactivated);
         // SubscribeLocalEvent<GravityGeneratorComponent, EmpPulseEvent>(OnEmpPulse); // Frontier: Upstream - #28984
+        SubscribeLocalEvent<GravityGeneratorComponent, ComponentStartup>(OnStartup); // Kessler
     }
+
+    // Kessler: GravityActive is not saved, and a loaded generator's PowerChargeComponent is already Active, so
+    // ChargedMachineActivatedEvent never fires again and the grid loads without gravity. Restore it from the
+    // saved charge state. The grid starts up before its children, so its GravityComponent is ready here.
+    private void OnStartup(Entity<GravityGeneratorComponent> ent, ref ComponentStartup args)
+    {
+        if (!TryComp(ent, out PowerChargeComponent? charge) || !charge.Active)
+            return;
+
+        var ev = new ChargedMachineActivatedEvent();
+        OnActivated(ent, ref ev);
+    }
+    // End Kessler
 
     public override void Update(float frameTime)
     {
