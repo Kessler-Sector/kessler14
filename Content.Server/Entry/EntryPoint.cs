@@ -29,6 +29,7 @@ using Content.Server.Voting.Managers;
 using Content.Shared._Harmony.Common.JoinQueue; // Harmony Queue
 using Content.Shared.CCVar;
 using Content.Shared.Kitchen;
+using Content.Server._Kessler.Persistence; // Kessler
 using Content.Shared.Localizations;
 using Robust.Server;
 using Robust.Server.ServerStatus;
@@ -192,6 +193,14 @@ namespace Content.Server.Entry
                     break;
             }
         }
+
+        // Kessler: save the persistent sector while entities and players still exist
+        public override void Shutdown()
+        {
+            _sysMan?.GetEntitySystem<PersistentSectorSystem>().SaveOnShutdown();
+            base.Shutdown();
+        }
+        // End Kessler
 
         protected override void Dispose(bool disposing)
         {

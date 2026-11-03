@@ -25,6 +25,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Robust.Server;
 using Robust.Server.Player;
+using Content.Server._Kessler.Persistence; // Kessler
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
@@ -51,6 +52,7 @@ public sealed class NFAdventureRuleSystem : GameRuleSystem<NFAdventureRuleCompon
     [Dependency] private readonly CustomObjectiveSummarySystem _customObjectiveSummary = default!;
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
     [Dependency] private readonly SectorServiceSystem _sectorService = default!;
+    [Dependency] private readonly PersistentSectorSystem _persistentSector = default!; // Kessler
 
     private readonly HttpClient _httpClient = new();
 
@@ -252,6 +254,11 @@ public sealed class NFAdventureRuleSystem : GameRuleSystem<NFAdventureRuleCompon
             if (location.SpawnGamePreset.Length > 0 && !location.SpawnGamePreset.Contains(currentPreset))
                 continue;
 
+            // Kessler: a sector loaded from the persistent save already has its POIs; only those on their own map are not in it
+            if (_persistentSector.SectorLoaded && !location.SpawnOwnMap)
+                continue;
+            // End Kessler
+
             if (location.SpawnGroup == "CargoDepot")
                 depotProtos.Add(location);
             else if (location.SpawnGroup == "MarketStation")
@@ -279,7 +286,8 @@ public sealed class NFAdventureRuleSystem : GameRuleSystem<NFAdventureRuleCompon
         base.Started(uid, component, gameRule, args);
 
         // Using invalid entity, we don't have a relevant entity to reference here.
-        RaiseLocalEvent(EntityUid.Invalid, new StationsGeneratedEvent(), broadcast: true); // TODO: attach this to a meaningful entity.
+        if (!_persistentSector.SectorLoaded) // Kessler: loaded stations already have their dead drops and bus routes
+            RaiseLocalEvent(EntityUid.Invalid, new StationsGeneratedEvent(), broadcast: true); // TODO: attach this to a meaningful entity.
     }
 
     private async Task ReportRound(string message, int color = 0x77DDE7)

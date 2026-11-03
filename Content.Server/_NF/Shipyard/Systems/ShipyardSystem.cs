@@ -314,6 +314,7 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
         }
 
         _map.DeleteMap(ShipyardMap.Value);
+        ShipyardMap = null; // Kessler: a stale id can be reused by the next round's maps, including a loaded sector
     }
 
     public void SetupShipyardIfNeeded()

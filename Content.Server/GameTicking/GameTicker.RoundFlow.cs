@@ -131,6 +131,11 @@ namespace Content.Server.GameTicking
                 SendServerMessage(msg);
             }
 
+            // Kessler: a persistent sector replaces the game map
+            if (TryLoadPersistentSector())
+                return;
+            // End Kessler
+
             // Let game rules dictate what maps we should load.
             RaiseLocalEvent(new LoadingMapsEvent(maps));
 
@@ -426,7 +431,8 @@ namespace Content.Server.GameTicking
             }
 
             // MapInitialize *before* spawning players, our codebase is too shit to do it afterwards...
-            _map.InitializeMap(DefaultMap);
+            if (!_map.IsInitialized(DefaultMap)) // Kessler: a loaded persistent sector is already initialized
+                _map.InitializeMap(DefaultMap);
 
             SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
 
