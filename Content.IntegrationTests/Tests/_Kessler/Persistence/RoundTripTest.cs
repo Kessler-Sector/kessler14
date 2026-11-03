@@ -150,7 +150,7 @@ public sealed class RoundTripTest
     /// <summary>
     /// Saves a map and loads it into a new paused map through the persistence systems, returning the new map's uid.
     /// </summary>
-    private static EntityUid SaveAndLoad(IEntityManager entManager, EntityUid map, ResPath path)
+    internal static EntityUid SaveAndLoad(IEntityManager entManager, EntityUid map, ResPath path)
     {
         Assert.That(entManager.System<PersistenceSaveSystem>().TrySaveMap(map, path));
         Assert.That(entManager.System<PersistenceLoadSystem>().TryLoadSave(path, LoadOptions, out var result));

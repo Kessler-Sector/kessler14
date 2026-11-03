@@ -41,7 +41,13 @@ public sealed class MobStateActionsSystem : EntitySystem
 
         foreach (var act in component.GrantedActions)
         {
-            Del(act);
+            // Kessler: while a mob is being loaded from a save, deleting its saved actions (still listed by its action
+            // container) makes the whole load fail, so they are deleted after the load instead.
+            if (LifeStage(uid) < EntityLifeStage.MapInitialized)
+                QueueDel(act);
+            else
+                Del(act);
+            // End Kessler
         }
         component.GrantedActions.Clear();
 
