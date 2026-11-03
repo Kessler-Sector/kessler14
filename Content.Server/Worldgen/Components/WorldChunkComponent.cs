@@ -17,6 +17,9 @@ public sealed partial class WorldChunkComponent : Component
     /// <summary>
     ///     The map this chunk belongs to.
     /// </summary>
-    [DataField("map")] public EntityUid Map;
+    /// <remarks>
+    ///     Kessler: nullable so the prototype default is not written to saves as an invalid entity reference.
+    /// </remarks>
+    [DataField("map")] public EntityUid? Map; // Kessler
 }
 

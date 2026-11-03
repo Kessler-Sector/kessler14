@@ -62,6 +62,15 @@ public sealed class PersistenceSaveSystem : EntitySystem
     };
 
     /// <summary>
+    /// Prototypes that map files may contain but persistent saves leave out.
+    /// </summary>
+    private static readonly HashSet<string> UnsavedPrototypes = new()
+    {
+        // FTL arrival effect. It points at a ship in FTL, and ships are landed before a persistent save.
+        "FtlVisualizerEntity",
+    };
+
+    /// <summary>
     /// Components removed from persistent saves. They hold runtime-only links that the engine does not mark as
     /// unsaved because map files never contain them.
     /// </summary>
@@ -89,8 +98,17 @@ public sealed class PersistenceSaveSystem : EntitySystem
     }
 
     /// <summary>
+    /// Whether entities of a prototype are written to a persistent save.
+    /// </summary>
+    public bool IsPersisted(EntityPrototype proto)
+    {
+        return proto.MapSavable ? !UnsavedPrototypes.Contains(proto.ID) : !IsTransient(proto);
+    }
+
+    /// <summary>
     /// Serializes the given entities and their children. If <paramref name="applyPolicy"/> is true, prototypes marked
-    /// <c>save: false</c> are saved too unless they are transient; their ids are added to <paramref name="forced"/>.
+    /// <c>save: false</c> are saved too unless they are transient; their ids are added to <paramref name="forced"/>. Prototypes
+    /// in <see cref="UnsavedPrototypes"/> are left out.
     /// </summary>
     public (MappingDataNode Node, FileCategory Category) Serialize(
         HashSet<EntityUid> entities,
@@ -99,12 +117,20 @@ public sealed class PersistenceSaveSystem : EntitySystem
         List<string> forced)
     {
         var flipped = new List<EntityPrototype>();
+        var unsaved = new List<EntityPrototype>();
         if (applyPolicy)
         {
             foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
             {
-                if (proto.MapSavable || proto.Abstract || IsTransient(proto))
+                if (proto.Abstract || proto.MapSavable == IsPersisted(proto))
                     continue;
+
+                if (proto.MapSavable)
+                {
+                    proto.MapSavable = false;
+                    unsaved.Add(proto);
+                    continue;
+                }
 
                 proto.MapSavable = true;
                 flipped.Add(proto);
@@ -158,6 +184,11 @@ public sealed class PersistenceSaveSystem : EntitySystem
             foreach (var proto in flipped)
             {
                 proto.MapSavable = false;
+            }
+
+            foreach (var proto in unsaved)
+            {
+                proto.MapSavable = true;
             }
         }
     }

@@ -300,7 +300,8 @@ public sealed class MindSystem : SharedMindSystem
         if (mind.UserId != null)
         {
             UserMinds.Remove(mind.UserId.Value);
-            if (_players.GetPlayerData(mind.UserId.Value).ContentData() is { } oldData)
+            // Kessler: a mind loaded from a save keeps the user id of a player who may not have connected since
+            if (_players.TryGetPlayerData(mind.UserId.Value, out var oldPlayerData) && oldPlayerData.ContentData() is { } oldData)
                 oldData.Mind = null;
             mind.UserId = null;
         }

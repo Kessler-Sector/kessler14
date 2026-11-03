@@ -74,6 +74,12 @@ public sealed class WorldgenConfigSystem : EntitySystem
             return;
 
         var target = _map.GetMapOrInvalid(_gameTicker.DefaultMap);
+
+        // Kessler: a persistent sector loaded from a save is already configured; adding the components again throws
+        if (HasComp<WorldControllerComponent>(target))
+            return;
+        // End Kessler
+
         Log.Debug($"Trying to configure {_gameTicker.DefaultMap}, aka {ToPrettyString(target)} aka {target}");
         var cfg = _proto.Index<WorldgenConfigPrototype>(_worldgenConfig);
 

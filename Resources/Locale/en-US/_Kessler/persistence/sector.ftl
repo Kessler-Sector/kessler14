@@ -1,0 +1,11 @@
+cmd-sectorsave-desc = Saves the persistent sector now. The server pauses until the save is written.
+cmd-sectorsave-help = Usage: {$command}
+cmd-sectorsave-disabled = Persistence is disabled (kessler.persistence.enabled).
+cmd-sectorsave-success = Persistent sector saved. See the server log for timings.
+cmd-sectorsave-failed = Saving the persistent sector failed. See the server log.
+cmd-persistenceactivity-desc = Spawns wandering mobs and starts fires on the sector's largest grid, to measure tick time under load. Dev servers only.
+cmd-persistenceactivity-help = Usage: {$command} <mobs> <fires>
+cmd-persistenceactivity-no-sector = No sector map with a station grid.
+cmd-persistenceactivity-done = Spawned {$mobs} mobs and started {$fires} fires on {$grid}.
+cmd-tickstats-desc = Prints entity system tick time statistics (mean, percentiles, max) and memory use.
+cmd-tickstats-help = Usage: {$command} [seconds, default 60]
