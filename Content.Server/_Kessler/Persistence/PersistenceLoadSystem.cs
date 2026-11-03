@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Content.Server._NF.PublicTransit;
 using Content.Server.Holiday;
 using Content.Server.NPC;
@@ -8,6 +9,7 @@ using Content.Server.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Players;
 using Robust.Server.Player;
+using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map.Events;
@@ -30,6 +32,7 @@ public sealed class PersistenceLoadSystem : EntitySystem
 {
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IResourceManager _res = default!;
     [Dependency] private readonly PublicTransitSystem _publicTransit = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
@@ -47,6 +50,60 @@ public sealed class PersistenceLoadSystem : EntitySystem
 
         SubscribeLocalEvent<BeforeEntityReadEvent>(OnBeforeEntityRead,
             after: new[] { typeof(MapMigrationSystem), typeof(HolidaySystem) });
+    }
+
+    private static readonly Regex EntityLine = new(@"^  - uid: (\d+)$", RegexOptions.Compiled);
+    private static readonly Regex ComponentLine = new(@"^    - type: (\w+)$", RegexOptions.Compiled);
+    private static readonly Regex ParentLine = new(@"^      parent: (\d+)$", RegexOptions.Compiled);
+    private static readonly Regex ContainedLine = new(@"^\s+(?:ent: |- )(\d+)$", RegexOptions.Compiled);
+
+    /// <summary>
+    /// Checks that every parent and container entry in a save refers to an entity the save contains. Loading a save
+    /// that fails this check creates the broken entities first and then fails while starting them, and the map
+    /// loader's cleanup of such a load can itself fail and leave half the save running.
+    /// </summary>
+    public bool TryValidateSave(ResPath path, [NotNullWhen(false)] out string? problem)
+    {
+        var defined = new HashSet<int>();
+        var references = new List<(int Entity, string Component, int Target)>();
+        var entity = 0;
+        string? component = null;
+        using (var reader = _res.UserData.OpenText(path))
+        {
+            while (reader.ReadLine() is { } line)
+            {
+                if (EntityLine.Match(line) is { Success: true } uid)
+                {
+                    entity = int.Parse(uid.Groups[1].Value);
+                    defined.Add(entity);
+                    component = null;
+                }
+                else if (ComponentLine.Match(line) is { Success: true } type)
+                {
+                    component = type.Groups[1].Value;
+                }
+                else if (component == "Transform" && ParentLine.Match(line) is { Success: true } parent)
+                {
+                    references.Add((entity, component, int.Parse(parent.Groups[1].Value)));
+                }
+                else if (component == "ContainerContainer" && ContainedLine.Match(line) is { Success: true } contained)
+                {
+                    references.Add((entity, component, int.Parse(contained.Groups[1].Value)));
+                }
+            }
+        }
+
+        var missing = references.Where(r => !defined.Contains(r.Target)).ToList();
+        if (missing.Count == 0)
+        {
+            problem = null;
+            return true;
+        }
+
+        var targets = missing.Select(r => r.Target).Distinct().ToList();
+        problem = $"{missing.Count} references to {targets.Count} entities that are not in the save (" +
+                  string.Join(", ", missing.Take(5).Select(r => $"{r.Component} of {r.Entity} -> {r.Target}")) + ")";
+        return false;
     }
 
     /// <summary>

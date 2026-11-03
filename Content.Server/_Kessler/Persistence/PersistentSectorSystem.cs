@@ -16,6 +16,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Enums;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -133,18 +134,28 @@ public sealed class PersistentSectorSystem : EntitySystem
         }
 
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        if (!_persistenceLoad.TryValidateSave(savePath, out var problem))
+        {
+            FailLoad($"the save is broken: {problem}");
+            return false;
+        }
+
         var options = new MapLoadOptions { ExpectedCategory = FileCategory.Map };
+        // Everything that exists before the load, so a failed load can be cleaned up completely.
+        var existing = EntityManager.GetEntities().ToHashSet();
         LoadResult? result;
         try
         {
             if (!_persistenceLoad.TryLoadSave(savePath, options, out result) || result.Maps.Count != 1)
             {
+                DeleteLoadedEntities(existing);
                 FailLoad("the save file could not be loaded");
                 return false;
             }
         }
         catch (Exception e)
         {
+            DeleteLoadedEntities(existing);
             FailLoad($"loading threw: {e}");
             return false;
         }
@@ -205,6 +216,38 @@ public sealed class PersistentSectorSystem : EntitySystem
         var lines = diffs.Take(50).Select(d => $"  {d.Metric} {d.Key}: {d.Before} -> {d.After}");
         Log.Warning($"Loaded sector differs from its save snapshot ({diffs.Count} differences, {papers} changed papers):"
                     + Environment.NewLine + string.Join(Environment.NewLine, lines));
+    }
+
+    /// <summary>
+    /// Deletes every entity a failed load left behind. The map loader cleans up after itself, but its cleanup can
+    /// throw halfway, which left a half-loaded sector (stations, minds, ships) running next to the generated one.
+    /// </summary>
+    private void DeleteLoadedEntities(HashSet<EntityUid> existing)
+    {
+        var leftovers = EntityManager.GetEntities().Where(uid => !existing.Contains(uid)).ToList();
+        if (leftovers.Count == 0)
+            return;
+
+        // Maps first: deleting a map deletes everything on it. Then whatever is left, such as minds and stations.
+        var deleted = 0;
+        foreach (var uid in leftovers.OrderByDescending(uid => HasComp<MapComponent>(uid)))
+        {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
+            try
+            {
+                Del(uid);
+                deleted++;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Could not delete {ToPrettyString(uid)} left by the failed load: {e}");
+            }
+        }
+
+        var remaining = leftovers.Count(uid => !TerminatingOrDeleted(uid));
+        Log.Warning($"Deleted {deleted} entities left by the failed load ({leftovers.Count} found, {remaining} remain).");
     }
 
     /// <summary>
@@ -394,6 +437,14 @@ public sealed class PersistentSectorSystem : EntitySystem
         Log.Info($"Saved persistent sector ({reason}): {entities} entities, {settled} ships landed from FTL, " +
                  $"serialize {serializeTime.TotalSeconds:F2} s, write {writeTime.TotalSeconds:F2} s, " +
                  $"total {stopwatch.Elapsed.TotalSeconds:F2} s.");
+
+        var leftOut = _persistenceSave.LastLeftOut;
+        if (leftOut.Count > 0)
+        {
+            _chat.SendAdminAnnouncement($"The persistent sector was saved without {leftOut.Count} entities that failed to " +
+                                        "save (see the server log): " +
+                                        string.Join(", ", leftOut.Take(5).Select(uid => ToPrettyString(uid).ToString())));
+        }
     }
 
     /// <summary>

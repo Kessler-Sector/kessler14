@@ -42,6 +42,15 @@ public sealed class RoundTripTest
         "KitchenDeepFryer",
         // Adds its actions in ComponentStartup, which runs on load before the saved actions are flagged as contained.
         "MobHarpy",
+        // Player species: a body whose component throws on save is dropped while its contents are still written.
+        "MobVox",
+        "MobHuman",
+        "MobReptilian",
+        "MobMoth",
+        "MobDwarf",
+        "MobArachnid",
+        "MobDiona",
+        "MobSlimePerson",
     };
 
     [Test]

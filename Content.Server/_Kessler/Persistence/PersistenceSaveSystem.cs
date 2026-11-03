@@ -6,6 +6,7 @@ using Content.Shared.Mind;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Map.Events;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -29,7 +30,7 @@ namespace Content.Server._Kessler.Persistence;
 /// </remarks>
 public sealed class PersistenceSaveSystem : EntitySystem
 {
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
+    [Dependency] private readonly IDependencyCollection _dependency = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IResourceManager _res = default!;
     [Dependency] private readonly PublicTransitSystem _publicTransit = default!;
@@ -106,10 +107,26 @@ public sealed class PersistenceSaveSystem : EntitySystem
     }
 
     /// <summary>
+    /// How many times <see cref="Serialize"/> re-serializes to leave out entities that threw.
+    /// </summary>
+    private const int MaxExclusionPasses = 3;
+
+    /// <summary>
+    /// Entities the last <see cref="Serialize"/> left out because serializing them threw, with everything inside them.
+    /// </summary>
+    public IReadOnlyCollection<EntityUid> LastLeftOut { get; private set; } = Array.Empty<EntityUid>();
+
+    /// <summary>
     /// Serializes the given entities and their children. If <paramref name="applyPolicy"/> is true, prototypes marked
     /// <c>save: false</c> are saved too unless they are transient; their ids are added to <paramref name="forced"/>. Prototypes
     /// in <see cref="UnsavedPrototypes"/> are left out.
     /// </summary>
+    /// <remarks>
+    /// When a component throws, the engine drops its entity but can still write the entity's children, which then
+    /// point at a parent that is not in the save and make the whole save fail to load. So when the options ignore
+    /// throwing entities, the save is serialized again with those entities and everything inside them left out from
+    /// the start; references to them are written as invalid. They are listed in <see cref="LastLeftOut"/>.
+    /// </remarks>
     public (MappingDataNode Node, FileCategory Category) Serialize(
         HashSet<EntityUid> entities,
         SerializationOptions options,
@@ -140,18 +157,18 @@ public sealed class PersistenceSaveSystem : EntitySystem
 
         var roots = WithNullspaceRoots(entities);
         var included = new HashSet<EntityUid>();
-        void OnIsSerializable(Entity<MetaDataComponent> ent, ref bool serializable) => included.Add(ent.Owner);
+        var excluded = new HashSet<EntityUid>();
+        LastLeftOut = Array.Empty<EntityUid>();
 
-        _mapLoader.OnIsSerializable += OnIsSerializable;
         // Bus routes cannot be serialized; they are rebuilt after a load (PersistenceLoadSystem).
         _publicTransit.DetachRoutesForSave();
         try
         {
-            (MappingDataNode Node, FileCategory Category)? result = null;
+            SerializedPass? result = null;
             Exception? error = null;
             try
             {
-                result = _mapLoader.SerializeEntitiesRecursive(roots, options);
+                result = SerializeOnce(roots, options, included, excluded);
             }
             catch (Exception e)
             {
@@ -167,20 +184,33 @@ public sealed class PersistenceSaveSystem : EntitySystem
                 Log.Warning($"Re-serializing with {missed.Count} auto-included nullspace entities as roots: "
                             + string.Join(", ", missed.Select(uid => ToPrettyString(uid))));
                 roots.UnionWith(missed);
-                result = _mapLoader.SerializeEntitiesRecursive(roots, options);
+                result = SerializeOnce(roots, options, included, excluded);
             }
             else if (error != null)
             {
                 ExceptionDispatchInfo.Capture(error).Throw();
             }
 
-            StripRuntimeComponents(result!.Value.Node);
-            return result.Value;
+            for (var pass = 0; pass < MaxExclusionPasses && result!.Erroring.Count > 0; pass++)
+            {
+                foreach (var uid in result.Erroring)
+                {
+                    AddWithDescendants(uid, excluded);
+                }
+
+                Log.Error($"Leaving {excluded.Count} entities out of the save because serializing them threw (see the " +
+                          "errors above), together with everything inside them: " +
+                          string.Join(", ", result.Erroring.Select(uid => ToPrettyString(uid))));
+                result = SerializeOnce(roots, options, included, excluded);
+            }
+
+            LastLeftOut = excluded;
+            StripRuntimeComponents(result!.Node);
+            return (result.Node, result.Category);
         }
         finally
         {
             _publicTransit.RestoreRoutesAfterSave();
-            _mapLoader.OnIsSerializable -= OnIsSerializable;
             foreach (var proto in flipped)
             {
                 proto.MapSavable = false;
@@ -190,6 +220,51 @@ public sealed class PersistenceSaveSystem : EntitySystem
             {
                 proto.MapSavable = true;
             }
+        }
+    }
+
+    private sealed record SerializedPass(MappingDataNode Node, FileCategory Category, HashSet<EntityUid> Erroring);
+
+    /// <summary>
+    /// One serialization pass, like <see cref="MapLoaderSystem.SerializeEntitiesRecursive"/>, but it leaves out
+    /// <paramref name="excluded"/> and reports the entities whose components threw.
+    /// </summary>
+    private SerializedPass SerializeOnce(
+        HashSet<EntityUid> roots,
+        SerializationOptions options,
+        HashSet<EntityUid> included,
+        HashSet<EntityUid> excluded)
+    {
+        var maps = roots.Select(uid => Transform(uid).MapID).ToHashSet();
+        RaiseLocalEvent(new BeforeSerializationEvent(roots, maps));
+
+        var serializer = new EntitySerializer(_dependency, options);
+        // References to entities that are left out are written as invalid instead of dangling ids.
+        serializer.ErroringEntities.UnionWith(excluded);
+        serializer.OnIsSerializeable += (Entity<MetaDataComponent> ent, ref bool serializable) =>
+        {
+            included.Add(ent.Owner);
+            if (excluded.Contains(ent.Owner))
+                serializable = false;
+        };
+        serializer.SerializeEntityRecursive(roots);
+        var data = serializer.Write();
+        var category = serializer.GetCategory();
+        RaiseLocalEvent(new AfterSerializationEvent(roots, data, category));
+
+        var erroring = serializer.ErroringEntities.Where(uid => !excluded.Contains(uid)).ToHashSet();
+        return new SerializedPass(data, category, erroring);
+    }
+
+    private void AddWithDescendants(EntityUid uid, HashSet<EntityUid> set)
+    {
+        if (!set.Add(uid) || !TryComp(uid, out TransformComponent? xform))
+            return;
+
+        var children = xform.ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            AddWithDescendants(child, set);
         }
     }
 
