@@ -33,4 +33,10 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<int> PersistenceAutosaveMinutes =
         CVarDef.Create("kessler.persistence.autosave_minutes", 0, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Seconds between tick time log lines from the tick time monitor. 0 disables the log.
+    /// </summary>
+    public static readonly CVarDef<int> TickLogSeconds =
+        CVarDef.Create("kessler.diagnostics.tick_log_seconds", 0, CVar.SERVERONLY);
 }
