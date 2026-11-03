@@ -28,7 +28,8 @@ public sealed class GuidSerializer : ITypeSerializer<Guid, ValueDataNode>, IType
         if (Guid.TryParse(node.Value, out var guid))
             return guid;
 
-        throw new FormatException($"The input string '{node.Value}' can't be converted to Guid");
+        // FormatException is not allowed by the client sandbox.
+        throw new InvalidMappingException($"The input string '{node.Value}' can't be converted to Guid");
     }
 
     public ValidationNode Validate(
