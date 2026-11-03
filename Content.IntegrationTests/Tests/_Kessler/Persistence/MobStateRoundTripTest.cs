@@ -54,15 +54,15 @@ public sealed class MobStateRoundTripTest
 
         await server.WaitAssertion(() =>
         {
-
-            // Damage is not saved yet (DamageableComponent.Damage is read-only), so the mouse may load alive. Either way
-            // the load must succeed and the granted actions must match the loaded state.
+            // The granted actions must match the loaded state.
             var stateActions = entManager.GetComponent<MobStateActionsComponent>(loaded);
             var state = entManager.GetComponent<MobStateComponent>(loaded).CurrentState;
             var expected = stateActions.Actions.TryGetValue(state, out var protos) ? protos.Count : 0;
             var container = entManager.GetComponent<ActionsContainerComponent>(loaded).Container;
             Assert.Multiple(() =>
             {
+                Assert.That(state, Is.EqualTo(MobState.Critical));
+                Assert.That(expected, Is.GreaterThan(0), "A critical mouse has no state actions to test with");
                 Assert.That(stateActions.GrantedActions, Has.Count.EqualTo(expected), $"Wrong actions for {state}");
                 Assert.That(stateActions.GrantedActions.All(entManager.EntityExists), "A state action was deleted");
                 Assert.That(stateActions.GrantedActions.All(container.ContainedEntities.Contains),
