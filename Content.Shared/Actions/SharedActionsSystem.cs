@@ -676,9 +676,13 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (GetAction(action) is not {} ent)
             return false;
 
+        // Kessler: an action loaded from a save is not flagged as contained until its container starts up
         DebugTools.Assert(ent.Comp.Container == null ||
                           (TryComp(ent.Comp.Container, out ActionsContainerComponent? containerComp)
-                           && containerComp.Container.Contains(ent)));
+                           && (LifeStage(ent) < EntityLifeStage.Initialized
+                               ? containerComp.Container.ContainedEntities.Contains(ent)
+                               : containerComp.Container.Contains(ent))));
+        // End Kessler
 
         if (ent.Comp.AttachedEntity is {} user)
             RemoveAction(user, (ent, ent));

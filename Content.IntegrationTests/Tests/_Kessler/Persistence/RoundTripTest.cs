@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Server._Kessler.Persistence;
 using Content.Server.Nyanotrasen.Kitchen.Components;
+using Content.Shared._DV.Harpy;
+using Content.Shared._EE.Flight;
+using Content.Shared.Actions.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
@@ -37,6 +40,8 @@ public sealed class RoundTripTest
         "CrateNPCCow",
         "MechRipley",
         "KitchenDeepFryer",
+        // Adds its actions in ComponentStartup, which runs on load before the saved actions are flagged as contained.
+        "MobHarpy",
     };
 
     [Test]
@@ -100,6 +105,46 @@ public sealed class RoundTripTest
             {
                 Assert.That(component.Solution, Is.SameAs(loadedSolution));
                 Assert.That(loadedSolution!.Volume.Float(), Is.EqualTo(50f));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// A loaded harpy must keep the actions it was saved with, still granted, instead of spawning new ones. Its
+    /// components add actions in ComponentStartup, which runs before the saved actions are initialized.
+    /// </summary>
+    [Test]
+    public async Task HarpyKeepsSavedActions()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var snapshots = entManager.System<SectorSnapshotSystem>();
+
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitPost(() =>
+        {
+            var harpy = entManager.SpawnEntity("MobHarpy", testMap.GridCoords);
+            var actionsBefore = entManager.GetComponent<ActionsComponent>(harpy).Actions.Count;
+
+            var loadedMap = SaveAndLoad(entManager, testMap.MapUid, new ResPath("/kessler-roundtrip-test-harpy.yml"));
+            var loadedHarpy = snapshots.CollectTree([loadedMap])
+                .Single(uid => entManager.HasComponent<HarpySingerComponent>(uid));
+
+            var actions = entManager.GetComponent<ActionsComponent>(loadedHarpy).Actions;
+            var midi = entManager.GetComponent<HarpySingerComponent>(loadedHarpy).MidiAction;
+            var flight = entManager.GetComponent<FlightComponent>(loadedHarpy).ToggleActionEntity;
+            Assert.Multiple(() =>
+            {
+                Assert.That(actions, Has.Count.EqualTo(actionsBefore));
+                Assert.That(midi, Is.Not.Null);
+                Assert.That(actions, Does.Contain(midi!.Value));
+                Assert.That(flight, Is.Not.Null);
+                Assert.That(actions, Does.Contain(flight!.Value));
+                Assert.That(entManager.GetComponent<ActionComponent>(midi.Value).AttachedEntity, Is.EqualTo(loadedHarpy));
             });
         });
 

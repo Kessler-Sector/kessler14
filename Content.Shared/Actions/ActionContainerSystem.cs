@@ -93,7 +93,11 @@ public sealed class ActionContainerSystem : EntitySystem
 
         if (Exists(actionId))
         {
-            if (!comp.Container.Contains(actionId.Value))
+            // Kessler: when a save is loaded, the performer starts up before its saved actions are initialized, and
+            // possibly before its container manager has flagged them as contained, so Container.Contains asserts.
+            var loading = LifeStage(actionId.Value) < EntityLifeStage.Initialized;
+            if (loading ? !comp.Container.ContainedEntities.Contains(actionId.Value) : !comp.Container.Contains(actionId.Value))
+            // End Kessler
             {
                 Log.Error($"Action {ToPrettyString(actionId.Value)} is not contained in the expected container {ToPrettyString(uid)}");
                 return false;
@@ -105,7 +109,7 @@ public sealed class ActionContainerSystem : EntitySystem
             actionId = ent;
             action = ent.Comp;
             DebugTools.Assert(Transform(ent).ParentUid == uid);
-            DebugTools.Assert(_container.IsEntityInContainer(ent));
+            DebugTools.Assert(loading || _container.IsEntityInContainer(ent)); // Kessler
             DebugTools.Assert(ent.Comp.Container == uid);
             return true;
         }
