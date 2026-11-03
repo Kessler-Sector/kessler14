@@ -33,7 +33,8 @@ public sealed class SectorServiceSystem : EntitySystem
         Log.Debug($"OnComponentStartup! Entity: {uid} internal: {_entity}");
         if (_entity == EntityUid.Invalid)
         {
-            _entity = Spawn();
+            // Kessler: a host loaded from a save already has its service entity; keep it instead of spawning an empty one.
+            _entity = Exists(component.SectorUid) ? component.SectorUid.Value : Spawn(); // Kessler: Spawn()<keep loaded entity
             component.SectorUid = _entity;
 
             foreach (var servicePrototype in _prototypeManager.EnumeratePrototypes<SectorServicePrototype>())

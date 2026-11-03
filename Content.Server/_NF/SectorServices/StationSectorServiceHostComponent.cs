@@ -8,5 +8,6 @@ namespace Content.Server._NF.SectorServices;
 public sealed partial class StationSectorServiceHostComponent : Component
 {
     [ViewVariables(VVAccess.ReadOnly)]
-    public EntityUid SectorUid = EntityUid.Invalid;
+    [DataField] // Kessler: saved, so the service entity is part of a persistent save
+    public EntityUid? SectorUid; // Kessler: EntityUid = Invalid<EntityUid?, only the hosting station has one
 }

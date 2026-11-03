@@ -15,7 +15,7 @@ Kessler Sector is a fully persistent Frontier-style SS14 server. This file adds 
 - New Kessler code goes in `_Kessler` folders that mirror the normal layout: `Content.Server/_Kessler/<Feature>/`, `Content.Shared/_Kessler/<Feature>/`, `Resources/Prototypes/_Kessler/`, `Resources/Locale/en-US/_Kessler/`, and so on. Namespaces follow the folder: `namespace Content.Server._Kessler.Persistence;`.
 - Edits to files outside `_Kessler` (including `_WF` and `_NF`) are marked the same way AGENTS.md describes, but with `Kessler` instead of `Wayfarer`: `// Kessler`, `# Kessler: 3<4`, and `// Kessler: why` ... `// End Kessler` for blocks.
 - Keep upstream edits minimal; prefer `partial` classes in `_Kessler` folders. Every edit to an upstream file is a future merge conflict.
-- Fixes that would help any fork (making an entity saveable, saving state that was runtime-only, round-trip tests) are good candidates to send back upstream to Wayfarer, which shrinks our diff.
+- We don't send fixes upstream to Wayfarer for now; the focus is Kessler only. Generic fixes stay in this repo with Kessler markers, and upstreaming may be revisited someday.
 
 ## Skills
 
@@ -30,6 +30,7 @@ Decisions made so far:
 - **Saves stay on the server.** Never send ship or world files to clients. (Triad Sector stores ship saves client-side, which forces it to sanitize and strip saves against tampering. That is why items vanish there. We don't copy that design.)
 - **Restarts every few days** for updates. Long load times at restart (tens of minutes) are acceptable. Runtime tick performance is the main concern.
 - **Architecture:** start with a whole-sector snapshot at restart, because cross-entity references (deed to ship, ID to station records, mind to body) then just work. Plan a persistent-ID layer so per-grid saves become possible later (incremental autosave, single-grid restore).
+- **Players still connected when a save loads** (a round restart rather than a process restart) are put straight back into their own bodies.
 - **Offline players stay in the world** as SSD bodies. Cryo is optional. SSD bodies need stasis (no hunger or thirst while SSD). Start with a server rule against robbing SSD players; add a mechanic only if it's abused.
 - **Inactive property is unloaded, never deleted.** Owners who haven't logged in for some days have their ships and bodies moved into storage and get them back on return. Scarce things (POI claims, docking spots) are released after a longer time, with contents returned to the owner's storage.
 - **Upkeep fees: yes.** Insurance: undecided. Player-run shops on POIs with offline trading: planned for later.
@@ -42,6 +43,10 @@ Decisions made so far:
 - **Map migrations** (`migration.yml`, `nf_migration.yml`, holiday replacements) rename or delete prototypes on every file read, and many target prototypes that still exist. Persistent saves are loaded through `PersistenceLoadSystem.TryLoadSave`, which only applies entries whose source prototype no longer exists.
 - **Construction node `actions` re-run on every `ComponentStartup`**, including on load. Actions with side effects (emptying a solution, sounds, admin logs) must not be node actions on a node an entity rests on.
 - **`ComponentInit` handlers that call `EnsureSolution` and cache the result** get a detached solution on load, because the entity is not flagged map-initialized yet. Look the solution up with `TryGetSolution` first (see the deep fryer fix).
+- **The engine cannot serialize every type.** `Guid` had no serializer (`Content.Shared/_Kessler/Serialization/GuidSerializer.cs` adds one); classes stored in data fields must be `[DataDefinition]`. An entity whose component throws is dropped from the save with everything inside it, so a player body fails as a whole.
+- **Auto-included nullspace entities** (minds, stations, the sector service entity) are written by `EntitySerializer.ProcessAutoInclude` without reserving YAML ids, so references to their children (a mind's job roles) break depending on hash order. `PersistenceSaveSystem` passes minds and stations as explicit roots and re-serializes if it still finds an auto-included entity with children.
+- **Runtime-only links saved by accident:** `ActorComponent` (body to connected player) is stripped from persistent saves. NPC blackboards are not saved and lose their `Owner`; the sector service entity (sector bank, shuttle records, bounties, mail, ...) was referenced by nothing saved. `PersistenceLoadSystem` restores what has to be rebuilt after a load (NPC owners, bus stops, player data to mind links).
+- **Returning players:** a loaded mind keeps its `UserId` and `OwnedEntity`, and upstream's reconnect path (`GameTicker.PlayerStatusChanged`) puts the player back into that body. Covered by `MindRoundTripTest`.
 - Only `[DataField]` fields are saved. Runtime-only state resets on load and has to be found by testing.
 - Loading must not re-run map-init on already-initialized entities, or fills and spawners run again and duplicate items.
 - `persistenceroundtrip` (Stage A) saves a map, loads it into a new paused map and writes a diff report to the server data folder. `Content.IntegrationTests/Tests/_Kessler/Persistence/RoundTripTest.cs` covers single entities through the same save and load path.

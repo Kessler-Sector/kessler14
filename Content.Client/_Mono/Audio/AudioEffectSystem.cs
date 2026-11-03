@@ -40,7 +40,7 @@ public sealed class AudioEffectSystem : EntitySystem
     // actually this problem applies for effects too
     private bool? _auxiliariesSafe = null;
 
-    private static readonly Dictionary<ProtoId<AudioPresetPrototype>, (EntityUid AuxiliaryUid, EntityUid EffectUid)> CachedEffects = new();
+    private readonly Dictionary<ProtoId<AudioPresetPrototype>, (EntityUid AuxiliaryUid, EntityUid EffectUid)> CachedEffects = new(); // Kessler: static<instance, a static cache leaked entity uids between clients in integration tests
 
     /// <summary>
     ///     An auxiliary with no effect; for removing effects.
@@ -181,7 +181,7 @@ public sealed class AudioEffectSystem : EntitySystem
             return true;
 
         // resolve the cached auxiliary
-        if (!_cachedBlankAuxiliaryUid.IsValid())
+        if (!HasComp<AudioAuxiliaryComponent>(_cachedBlankAuxiliaryUid)) // Kessler: !IsValid()<!HasComp, the entity is gone after a reconnect
             _cachedBlankAuxiliaryUid = _audioSystem.CreateAuxiliary().Entity;
 
         _audioSystem.SetAuxiliary(entity, entity.Comp, _cachedBlankAuxiliaryUid);
@@ -204,9 +204,16 @@ public sealed class AudioEffectSystem : EntitySystem
 
         if (CachedEffects.TryGetValue(preset, out var cached))
         {
-            auxiliaryUid = cached.AuxiliaryUid;
-            effectUid = cached.EffectUid;
-            return true;
+            // Kessler: cached entities are flushed when the client disconnects; recreate them instead of using stale uids.
+            if (HasComp<AudioAuxiliaryComponent>(cached.AuxiliaryUid))
+            {
+                auxiliaryUid = cached.AuxiliaryUid;
+                effectUid = cached.EffectUid;
+                return true;
+            }
+
+            CachedEffects.Remove(preset);
+            // End Kessler
         }
 
         return TryCacheEffect(preset, out auxiliaryUid, out effectUid);
