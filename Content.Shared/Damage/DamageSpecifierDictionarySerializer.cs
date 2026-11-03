@@ -87,7 +87,10 @@ public sealed class DamageSpecifierDictionarySerializer : ITypeReader<Dictionary
     {
         var mapping = new MappingDataNode();
         var types = new MappingDataNode();
-        foreach (var (type, damage) in value.OrderBy(entry => entry.Key, StringComparer.Ordinal))
+        // StringComparer is not on the client sandbox whitelist; string.CompareOrdinal is.
+        var entries = value.ToList();
+        entries.Sort((a, b) => string.CompareOrdinal(a.Key, b.Key));
+        foreach (var (type, damage) in entries)
         {
             if (damage != FixedPoint2.Zero)
                 types.Add(type, serializationManager.WriteValue(damage, alwaysWrite, context));
