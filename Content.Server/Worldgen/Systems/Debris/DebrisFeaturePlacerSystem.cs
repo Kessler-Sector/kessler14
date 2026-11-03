@@ -162,7 +162,8 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
         if (!TryComp<WorldChunkComponent>(args.Chunk, out var chunk))
             return;
 
-        var chunkMap = chunk.Map;
+        if (chunk.Map is not { } chunkMap) // Kessler: var chunkMap = chunk.Map;
+            return; // Kessler
 
         if (!TryComp<MapComponent>(chunkMap, out var map))
             return;

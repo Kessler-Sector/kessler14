@@ -43,7 +43,7 @@ public sealed class WorldControllerSystem : EntitySystem
         if (HasComp<LoadedChunkComponent>(uid))
         {
             var ev = new WorldChunkUnloadedEvent(uid, component.Coordinates);
-            RaiseLocalEvent(component.Map, ref ev);
+            RaiseLocalEvent(component.Map.Value, ref ev); // Kessler
             RaiseLocalEvent(uid, ref ev, broadcast: true);
         }
 
@@ -59,7 +59,8 @@ public sealed class WorldControllerSystem : EntitySystem
             return;
 
         var ev = new WorldChunkLoadedEvent(uid, chunk.Coordinates);
-        RaiseLocalEvent(chunk.Map, ref ev);
+        if (chunk.Map is { } map) // Kessler
+            RaiseLocalEvent(map, ref ev); // Kessler
         RaiseLocalEvent(uid, ref ev, broadcast: true);
         //_sawmill.Debug($"Loaded chunk {ToPrettyString(uid)} at {chunk.Coordinates}");
     }
@@ -76,7 +77,8 @@ public sealed class WorldControllerSystem : EntitySystem
             return; // SAFETY: This is in case a loaded chunk gets deleted, to avoid double unload.
 
         var ev = new WorldChunkUnloadedEvent(uid, chunk.Coordinates);
-        RaiseLocalEvent(chunk.Map, ref ev);
+        if (chunk.Map is { } map) // Kessler
+            RaiseLocalEvent(map, ref ev); // Kessler
         RaiseLocalEvent(uid, ref ev);
         //_sawmill.Debug($"Unloaded chunk {ToPrettyString(uid)} at {coords}");
     }
@@ -164,7 +166,7 @@ public sealed class WorldControllerSystem : EntitySystem
         {
             var coords = chunk.Coordinates;
 
-            if (!chunksToLoad[chunk.Map].ContainsKey(coords))
+            if (chunk.Map is not { } map || !chunksToLoad[map].ContainsKey(coords)) // Kessler
             {
                 RemCompDeferred<LoadedChunkComponent>(uid);
                 chunksUnloaded++;
