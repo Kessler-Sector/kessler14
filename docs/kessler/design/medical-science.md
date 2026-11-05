@@ -1,6 +1,6 @@
 # Medical, chemistry and science: long-term depth
 
-Status: design proposal, no code changed. Written alongside `progression.md` (general framework: stages, reputation and licences, item rarity tiers, economy rates) and the other-departments design. Where this document needs something from the framework it says so, and the full list is in [What this needs from the progression framework](#what-this-needs-from-the-progression-framework).
+Status: design proposal, no code changed. Written alongside `progression.md` (branch `claude/design-progression-bc57bb`: reputation tracks, licences, rarity tiers, money bands per stage) and the other-departments design. This document uses the framework's names directly: reputation tracks `Medical` and `Science`, the `licence` prototype schema, rarity tiers `Common` to `Relic`, and stages S0 to S4. How each piece plugs in is in [How this plugs into the progression framework](#how-this-plugs-into-the-progression-framework).
 
 ## Summary
 
@@ -18,6 +18,7 @@ Top recommendations, in build order:
 4. **Blueprint copies with limited runs (S3, the EVE model).** Research unlocks a master blueprint for the researching ship; anything sold is a copy with N runs that costs research points to print. Science ships become ongoing suppliers rather than one-shot vendors.
 5. **Tiered chemistry with per-sector formulas (C1, C2).** Basic medicine stays cheap and plentiful. Strong medicine needs rare inputs from exploration and science, and the upper-tier recipes are seeded per sector, so a chemist's knowledge is earned in game and worth something.
 6. **Licences gate contracts and supplies, never mechanics (M4).** Anyone can operate. Licensed surgeons, chemists and scientists get the paid cases, the restricted inputs and the reputation.
+7. **Bring medical bounty pay into the framework's money bands.** A bounty corpse pays 30k to 60k for roughly 20 to 30 minutes of work, about 3 to 6 times the S1/S2 band (12k to 40k an hour). Price all new medical and science work as expected minutes times the band rate.
 
 ## Contents
 
@@ -31,7 +32,7 @@ Top recommendations, in build order:
 - [How the three feed each other and the economy](#how-the-three-feed-each-other-and-the-economy)
 - [Persistence approach](#persistence-approach)
 - [Persistence bugs found during the survey](#persistence-bugs-found-during-the-survey)
-- [What this needs from the progression framework](#what-this-needs-from-the-progression-framework)
+- [How this plugs into the progression framework](#how-this-plugs-into-the-progression-framework)
 - [Build order](#build-order)
 - [Open decisions](#open-decisions)
 
@@ -155,12 +156,14 @@ Patients deteriorate on a schedule (the condition advances stage by stage). Disc
 
 **Rate.** Target "one case per active medic per 20 to 40 minutes", inversely weighted by how many real players have needed medical care recently. Cap per clinic and per sector so it can't be farmed by stacking medic alts.
 
+**Pay and reputation.** Payout is the case's expected minutes times the band rate for its tier (about 150 a minute for S0 cases up to about 500 a minute for S2 surgical cases), times an outcome factor. It is paid from the framework's `WorkOrders` sector account, so the total faucet scales with online players. Each discharge calls `KesslerReputationSystem.TryAward(..., "Medical", expectedMinutes, reason)` for every participant (the paramedic who brought the patient in, the surgeon, the chemist whose medicine was used, if logged), at the standard 1 rep a minute.
+
 **Why.** It is the single biggest fix for "lowpop doctors only do bounties". Living patients with time pressure turn medical into triage instead of a damage-zeroing chore.
 
 - **Effort:** large (the rule and the delivery are medium; NPC patient behaviour is the long tail).
 - **Code:** a new `Content.Server/_Kessler/Medical/PatientGenerator/` rule system. Extend or wrap `MedicalBountySystem` (`_NF`, keep upstream edits small; prefer a `_Kessler` system that reuses `MedicalBountyRedemptionComponent` via an event). Spawn points via existing POI and shuttle spawn code (`NfAdventureRuleSystem`). Patients are humanoid NPCs with a stasis-like idle HTN (`Resources/Prototypes/NPCs/`).
 - **Depends on:** M2 (conditions). Reputation and licences from the framework for routing and pay. The sector map waypoint system.
-- **Persistence:** patients are mobs, saved by `PersistenceSaveSystem` like any player body. The condition state is `[DataField]`s on the patient (M2). The "deadline" is stored as *remaining duration* that only ticks while the server runs, not as an absolute `CurTime`, because game time restarts after a sector load. The generator's per-clinic cooldowns live on the clinic entity, the sector-wide rate on the sector map entity. Covered by a round-trip test: save a patient mid-condition, load, and check stage and remaining time.
+- **Persistence:** patients are mobs, saved by `PersistenceSaveSystem` like any player body. The condition state is `[DataField]`s on the patient (M2). The patient's deterioration is stored as *remaining duration* that only ticks while the server runs: nobody can treat a patient while the server is down, so real time would kill patients during a restart. Contract deadlines (when a referral expires if nobody accepts it) use real UTC time, as the framework requires. Neither uses an absolute `CurTime`, because game time restarts after a sector load. The generator's per-clinic cooldowns live on the clinic entity, the sector-wide rate on the sector map entity. Covered by a round-trip test: save a patient mid-condition, load, and check stage and remaining time.
 
 ### M2. Conditions: a case library
 
@@ -177,7 +180,7 @@ Patients deteriorate on a schedule (the condition advances stage by stage). Disc
 | Xeno infection | odd emotes, mutations | blood sample *plus* science analysis | experimental cure from science (S1 biological data) | inner-body anomaly, artifacts |
 | Addiction / withdrawal | tremors, craving | patient history (examine) | tapering doses over real time | status effects |
 
-Each condition has tiers (common to exotic, from the framework's rarity scale). Exotic ones come from exotic places: deep POIs, anomalies, artifacts. Player characters can catch them too (from artifacts, anomalies, xeno mobs), so real patients appear even at lowpop.
+Each condition has a rarity tier from the framework (`Common` to `Exotic`). `Common` and `Standard` conditions make up most generated cases, `Superior` ones need a GP or surgeon licence to be referred, and `Rare` and `Exotic` ones come from exotic places: deep POIs, anomalies, artifacts. Player characters can catch them too (from artifacts, anomalies, xeno mobs), so real patients appear even at lowpop.
 
 **Why.** Turns treatment into a diagnosis puzzle with variety. A doctor who has seen 50 cases still meets one they haven't. This is what Baystation and Paradise medicine gets right.
 
@@ -200,15 +203,17 @@ Each condition has tiers (common to exotic, from the framework's rarity scale). 
 
 ### M4. Medical licences and specialisation
 
-**What.** Medical uses the framework's licence system with these tracks:
+**What.** Medical adds department licences using the framework's `licence` schema (requirements: track level, a previous licence held for N real days, a fee). All sit on the `Medical` reputation track (levels L1 120, L2 600, L3 1,800, L4 4,800 rep; about 2, 10, 30 and 80 hours of focused work, slowed by the 180 rep a day soft cap):
 
-- **First Responder** (paramedic): distress beacons, field stabilisation, rescue fees.
-- **General Practitioner**: clinic referrals, common conditions.
-- **Surgeon**: organ transplants, limb reattachment, cybernetics installation, brain transfer cases.
-- **Pharmacist** (shared with chemistry, C4): sells T2+ medicine to NPCs, buys restricted inputs.
-- **Xenomedicine** (late): xeno infections, outbreak work, anomaly hosts.
+| Licence | Requires | Fee | Unlocks |
+|---|---|---|---|
+| `FirstResponderLicence` | `Medical` L1 | 2,000 | distress beacons, rescue fees (M7) |
+| `GeneralPractitionerLicence` | `Medical` L1 | 2,000 | clinic referrals for `Common`/`Standard` conditions, registering a clinic (M5) |
+| `PharmacistLicence` | `Medical` L2, GP or First Responder held 3 days | 15,000 | upper rows of the pharmacy board (C4), restricted chem inputs from cargo |
+| `SurgeonLicence` | `Medical` L2, GP held 3 days | 15,000 | transplant, reattachment, cybernetics and brain-transfer cases; `Superior` conditions |
+| `XenomedicineLicence` | `Medical` L3 and `Science` L2, Surgeon held 7 days | 50,000 | `Rare`/`Exotic` conditions, outbreak work (M3), anomaly-host cases |
 
-Licences are earned by *completed cases* of the right kind (logged per character), plus a fee. They unlock contract types, higher payouts and restricted supplies. They do not unlock surgery steps or reactions.
+Rep comes from completed cases of the right kind (M1/M2 discharges award `Medical` rep to every participant). Licences unlock contract types, higher payouts and restricted supplies. They do not unlock surgery steps or reactions. The framework already gates medical *ships* by `Medical` L1/L2/L3 by ship size; these licences sit alongside that.
 
 Optional, small: an experience bonus (a modest speed bonus per surgery type after N successful cases, using Shitmed's existing step speed multipliers). Recommend shipping without it first.
 
@@ -236,7 +241,7 @@ Optional, small: an experience bonus (a modest speed bonus per surgery type afte
 - reagent clearance (bloodstream must be free of the toxin, not just damage zero),
 - rare "VIP" bounties at deeper wrecks with higher pay.
 
-Also move bounty corpses into the framework's tier system (deeper wreck = higher tier).
+Also move bounty corpses into the framework's tier system (deeper wreck = higher tier), and **reprice them to the money bands**. Today the base reward alone is 13.5k to 40.5k (Coyote tripled it), so a 20 to 30 minute job pays 30k to 60k, about 3 to 6 times the S1/S2 band. Reprice as expected minutes times the band rate, with harder Shitmed requirements paying more, and award `Medical` rep on redemption.
 
 - **Effort:** small to medium (mostly YAML and a few new `MedicalBountyPrototype` fields).
 - **Code:** `MedicalBountyPrototype.cs` and `MedicalBountySystem.cs` (upstream `_NF` files: mark edits `// Kessler`, or move the new requirement checks into a `_Kessler` system that listens to redemption), `medical_bounties.yml`.
@@ -270,12 +275,12 @@ Organs decay unless preserved (stasis bags, freezers, cryo). That creates logist
 
 ### C1. Reagent tiers
 
-**What.** Sort medicine into tiers by what it needs, not by a lock:
+**What.** Sort medicine into tiers by what it needs, not by a lock. Each tier maps to a framework rarity tier: T0 `Common`, T1 `Standard`, T2 `Superior`, T3 `Rare` (the framework already lists Cognizine and Omnizine as `Rare`, about 60 participant-hours per drop and about 5 a week sector-wide). `Exotic` reagents are event or artifact-only.
 
 - **T0 basic:** from dispenser elements only (Bicaridine, Kelotane, Dylovene, Dexalin, Inaprovaline, Tricordrazine, ...). Cheap, always available. Keeps principle 1.
 - **T1 advanced:** needs intermediates, heat or catalysts, and possibly upgraded machines (centrifuge, electrolysis, heater). Stronger or more specific.
 - **T2 rare:** needs at least one input from outside chemistry: carpotoxin, zombie blood, plasma, anomaly cores, artifact by-products (artifexium), xeno organ extracts, rare plants. `Ambuzol` and `Cognizine` already work this way. Move the strongest heals and the condition-specific cures (M2) here.
-- **T3 exotic:** needs sector-limited inputs from deep POIs, events or outbreaks (M3), plus a per-sector formula (C2).
+- **T3 rare:** needs a `Rare` input material from deep POIs, events or outbreaks (M3), plus a per-sector formula (C2). This follows the framework rule that `Rare` items need a `Rare` input or a limited-run recipe, so a T3 medicine is supply-limited by its input, not by the recipe.
 
 **Rebalance to go with it:** keep T0 healing good enough to survive, and give T2 and T3 qualitatively different effects (cure a condition, regrow tissue, reverse organ failure) rather than just bigger numbers.
 
@@ -314,7 +319,7 @@ Organs decay unless preserved (stasis bags, freezers, cryo). That creates logist
 
 ### C4. Pharmacy contracts
 
-**What.** A pharmacy contract board: NPC orders for reagent batches with quantity, tier, deadline and (with C3) grade. Common orders keep a steady medium income; rare orders need T2/T3 reagents and pay well. Pharmacist licence (M4) unlocks the upper rows. Contracts deliver through the existing cargo or bounty redemption flow.
+**What.** A pharmacy contract board: NPC orders for reagent batches with quantity, tier, deadline and (with C3) grade. Common orders keep a steady medium income; rare orders need T2/T3 reagents and pay well. `PharmacistLicence` (M4) unlocks the upper rows. Contracts deliver through the existing cargo or bounty redemption flow, pay from the `WorkOrders` account at expected minutes times the band rate, award `Medical` rep, and use real UTC deadlines.
 
 - **Effort:** small to medium (reuse the cargo bounty system, `Resources/Prototypes/Catalog/Bounties/`, with reagent entries).
 - **Depends on:** framework licences and economy rates, C1.
@@ -355,7 +360,7 @@ Data is produced as items (data disks or sample canisters) that are fed into the
 
 1. **Re-tier the tree.** Move the strong techs into tiers 2 to 4 with `tierPrerequisites` (for example 0.6 of tier 1 before tier 2). Tier 3 and 4 need S1 data.
 2. **Specialisation.** Set `lockoutTier` to 3: a server that picks a main discipline can go to tier 4 in it and up to tier 2 elsewhere. A ship that wants everything needs several servers (several ships), and specialised ships trade blueprint copies with each other (S3).
-3. **Add new top-tier techs** where Kessler content needs them: energy surgical tools (owner already wants them behind science), advanced cybernetics, T3 chem formula disks, anomaly containment, artifact-derived equipment.
+3. **Add new top-tier techs** where Kessler content needs them: energy surgical tools (owner already wants them behind science), advanced cybernetics, T3 chem formula disks, anomaly containment, artifact-derived equipment, and **tier-4 (bluespace) machine parts**. Today T4 parts have no tech-tree unlock at all: they come from rogue-silicon expedition blueprints (a permanent lathe unlock) plus about 10 bluespace ore per cave expedition (from the progression survey). That permanent unlock breaks the framework rule that `Rare` items never come from unlimited lathe recipes. Recommend a tier-4 science tech that needs material data (S1) from bluespace ore and lets the lithograph print *limited-run* T4 copies (S3), and turning the expedition reward into a limited-run copy too. This gives science a sector-wide product every engineer wants.
 4. **Scale costs moderately**, about 2 to 3 times for tier 1 and higher for upper tiers, *after* S1 and S9 are in, so the length comes from variety more than from waiting.
 
 **Target length.** A dedicated player playing about 2 hours a day should master one discipline in **3 to 5 weeks** and get most of the useful mid-tier techs in **about 1 week**. Every discipline to tier 4 should be beyond one ship.
@@ -369,11 +374,22 @@ Data is produced as items (data disks or sample canisters) that are fed into the
 
 **What.**
 
-- **Master blueprints (originals).** Researching a tech gives the researching ship's lithograph the ability to print *copies*. A master blueprint item exists only from rare loot or late-tier rewards, has unlimited runs, and is the most valuable item science can own.
-- **Blueprint copies.** Everything the lithograph prints is a copy with a number of **runs** (for example 20 for tier 1, 10 for tier 2, 5 for tier 3). Each item the lathe prints uses one run. At zero runs the blueprint stops working (stays as a trophy or recyclable).
+- **Master blueprints (originals).** Researching a tech gives the researching ship's lithograph the ability to print *copies*. A master blueprint item exists only from rare loot or late-tier rewards, has unlimited runs, and is the most valuable item science can own. Masters exist only for recipes whose output is `Common`, `Standard` or `Superior`: the framework forbids unlimited recipes for `Rare` and above.
+- **Blueprint copies.** Everything the lithograph prints is a copy with a number of **runs**, set by the rarity of what it makes:
+
+  | Output rarity | Runs per copy |
+  |---|---|
+  | `Common` | unlimited (no copy needed; plain blueprint as today) |
+  | `Standard` | 20 |
+  | `Superior` | 10 |
+  | `Rare` | 1 to 3 (the framework's rule) |
+  | `Exotic` and up | never printable; loot or events only |
+
+  Each item the lathe prints uses one run. At zero runs the blueprint stops working (stays as a trophy or recyclable).
 - **Copy cost.** Paper plus **research points** per copy, scaled by tier, and S1 data for tier 3 and up. Points are spent by the seller, so selling copies is a business, not free money.
 - **Copy research (optional).** Techs that raise runs per copy or lower cost, giving a reason to keep researching after a discipline is complete.
-- **Licences.** For restricted items (arsenal, NFSD, high-tier cybernetics) the lathe only accepts the blueprint if the ship owner holds the right licence (framework).
+- **Licences.** For restricted items (arsenal, NFSD, high-tier cybernetics) the lathe only accepts the blueprint if the ship owner holds the right licence (framework). Printing `Superior` and `Rare` copies needs `Science` L2 and L3 respectively on the printing character.
+- **Reputation.** Selling copies earns no rep by itself (that would reward the copy loop). `Science` rep comes from the research work: unlocking techs, delivering S1 data, codex discoveries (S5/S6) and projects (S7), at the standard 1 rep per minute of expected effort.
 
 Per-ship research stays as it is (each ship has its own server).
 
@@ -386,7 +402,7 @@ Per-ship research stays as it is (each ship has its own server).
 
 ### S4. Invention
 
-**What.** Combine a blueprint copy with research data and a rare component for a *chance* at an improved blueprint: a better variant of the item (a higher rarity tier per the framework, for example more efficient stock parts, better cybernetics, stronger tools). Failure consumes the inputs. Invention techs raise the chance.
+**What.** Combine a blueprint copy with research data and a rare component for a *chance* at an improved blueprint: a better variant of the item, one framework rarity tier up (for example a `Superior` cybernetic from a `Standard` copy). The output is always a limited-run copy at the new tier's run count. Failure consumes the inputs. Invention techs raise the chance. Tune the chance so the expected participant-hours per `Rare` result matches the framework's ~60 hour target.
 
 - **Effort:** medium to large (needs item variants with rarity; the machine and roll are medium).
 - **Code:** an invention machine under `_Kessler/Research/`, improved recipe prototypes.
@@ -473,7 +489,7 @@ Recommend both: the buffer handles idle time, diminishing returns stop vessel-st
 - **Money in:** NPC patients (M1), rescues (M7), pharmacy contracts (C4), artifact collectors (S6), medical bounties (M6). Rates come from the framework.
 - **Money out (sinks):** licences (M4), blueprint copy costs (S3), rare inputs bought from other players and NPCs, invention failures (S4), clinic and lab upkeep through ship upkeep (1% a day of purchase price, already built).
 - **Player-to-player trade:** blueprint copies, data disks, formula papers, organs, T2/T3 medicine, artifacts.
-- **Rule of thumb for the framework:** at lowpop, a medic, a chemist or a scientist should each earn a living comparable to a salvager from NPC demand alone; at highpop most of their income should come from players.
+- **Rule of thumb:** at lowpop, a medic, a chemist or a scientist should each reach their stage's money band (S1 12k to 20k an hour, S2 25k to 40k) from NPC demand alone; at highpop most of their income should come from players.
 
 ## Persistence approach
 
@@ -487,7 +503,7 @@ Every proposal above puts its state in one of three places:
 
 Rules that apply throughout:
 
-- **Timers as remaining duration**, ticking only while the server runs, or as real UTC time where real time is the point (as upkeep does). Never an absolute `CurTime`, which restarts with each loaded round.
+- **Deadlines in real UTC time**, as the framework requires (contract expiry, licence "held N days", outbreak schedule). **In-world processes** that need someone present to respond (patient deterioration, organ decay, anomaly growth, project progress) are stored as remaining duration and tick only while the server runs, so a restart neither kills a patient nor finishes a project. Never an absolute `CurTime`, which restarts with each loaded round.
 - **No `NetEntity` in `[DataField]`s.** Use `EntityUid` (the serializer remaps it on load).
 - **No side effects in `ComponentStartup` or `ComponentInit`** that would run again on load. Guard with a saved "initialized" flag.
 - **Every new component gets a round-trip test** in `Content.IntegrationTests/Tests/_Kessler/Persistence/`.
@@ -501,15 +517,27 @@ Not part of this design, but they affect live data and should be fixed before me
 2. **Artifact graphs store `NetEntity` ids.** `XenoArtifactComponent.CachedActiveNodes`, `CachedSegments` and `NodeVertices`, and `XenoArtifactNodeComponent.Attached`, are `NetEntity` `[DataField]`s. I found no `NetEntity` type serializer in RobustToolbox, so either the component fails to serialize (and `PersistenceSaveSystem` drops the artifact) or it writes ids that point at other entities after load. Fix: store `EntityUid`s and rebuild caches after load.
 3. **Anomaly vessels forget their anomaly.** `AnomalyVesselComponent.Anomaly` is `[ViewVariables]` only, not a `[DataField]`, and `AnomalyComponent.ConnectedVessel` likewise. After a load, vessels stop producing points until re-linked with a scanner. Fix: make the vessel's link a `[DataField]` and relink the anomaly side after load (in `PersistenceLoadSystem`).
 
-## What this needs from the progression framework
+## How this plugs into the progression framework
 
-1. **Per-character progression storage** in the database (profile ID): licences, case and contract history, formula knowledge, reputation. M4, C2, M5 and S5/S6 credit all need it.
-2. **Licence system** with tracks, requirements (counts of logged activities plus a fee), and a check API usable from server systems (patient routing, contract boards, lathe blueprint acceptance).
-3. **Item rarity tiers** with names, colours and a way to tag an item, reagent, organ, condition, artifact or blueprint with a tier.
-4. **Reputation** per character and per ship or organisation (clinic rating, discovery credit).
-5. **Economy rates:** target hourly income per activity at low and high population, so NPC patient pay, pharmacy contracts, collector prices, blueprint copy costs, licence fees and point disk prices can be set against salvage and cargo.
-6. **Stages:** which tech tiers, reagent tiers and condition tiers belong to which progression stage, so a new player and a veteran doctor see different work.
-7. **A sector-wide codex or achievement record** (first discoveries), if the framework wants one shared across departments; otherwise S5/S6 keep their own on the sector entity.
+From `progression.md` (branch `claude/design-progression-bc57bb`):
+
+| Framework piece | Used here |
+|---|---|
+| Reputation track `Medical` (Medical Guild) | M1/M2 discharges, M6 bounties, M7 rescues, C4 contracts. Award to every participant via `KesslerReputationSystem.TryAward`. |
+| Reputation track `Science` (Science Consortium) | tech unlocks, S1 data deliveries, S5/S6 codex discoveries, S7 projects. Not blueprint copy sales. |
+| Rep rate 1 a minute, levels L1 120 to L5 12,000, 180 a day soft cap | size every award as expected minutes of effort |
+| `licence` prototype (track level, previous licence held N days, fee) | `FirstResponderLicence`, `GeneralPractitionerLicence`, `PharmacistLicence`, `SurgeonLicence`, `XenomedicineLicence` (M4); `Science` L2/L3 for printing `Superior`/`Rare` copies (S3) |
+| Ship gating by track level | medical ships need `Medical` L1/L2/L3 by size (framework); science ships the same with `Science` |
+| Rarity tiers `Common` to `Relic` with target hours | reagent tiers (C1), condition tiers (M2), blueprint runs (S3), invention outputs (S4), organs and cybernetics (M8), artifact origins (S6). Listed in `rarityTable` prototypes. |
+| Rule: `Rare` and up never from unlimited recipes | masters only up to `Superior`; `Rare` copies 1 to 3 runs; T4 parts move from a permanent expedition unlock to limited-run copies (S2) |
+| Money bands S0 to S4, `WorkOrders` sector account | NPC patient pay, pharmacy contracts, rescue fees, collector prices: expected minutes times band rate, paid from `WorkOrders` |
+| Deadlines in real UTC time | contract expiry and licence hold times; in-world processes use remaining duration instead (see [Persistence approach](#persistence-approach)) |
+
+Still open on the framework side:
+
+1. **Clinic and lab reputation** per ship or organisation (M5 rating, S5/S6 discovery credit). The framework defines per-character rep only.
+2. **A shared codex** of first discoveries. If the framework doesn't add one, S5/S6 keep their own on the sector entity.
+3. **Per-character knowledge storage** for chem formulas (C2): a DB table next to reputation and licences.
 
 ## Build order
 
@@ -576,3 +604,9 @@ Phases 1 and 2 don't need the framework and can start as soon as Phase 0 lands. 
 
 11. **Should research points stay tradeable through point disks?**
     Recommendation: yes, priced through the framework's economy rates. Tradeable points let scientists sell output to ships without a science department.
+
+12. **Cut medical bounty pay to the money bands?**
+    Recommendation: yes, when M6 lands. Today one corpse pays 30k to 60k for 20 to 30 minutes, about 3 to 6 times the S1/S2 band. Keep the higher figures for the harder Shitmed bounties only.
+
+13. **Tier-4 parts: keep the permanent expedition blueprint, or move to limited-run copies and a science tech?**
+    Recommendation: limited-run copies from both the expedition reward and a tier-4 science tech that needs bluespace material data. It follows the framework's `Rare` rule and gives science a product engineers need.
