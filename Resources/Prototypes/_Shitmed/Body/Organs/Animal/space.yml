@@ -7,7 +7,6 @@
     removable: false
     onAdd:
     - type: BreathingImmunity
-  - type: DestroyItemOnPickup
 
 - type: entity
   parent: OrganAnimalHeart
@@ -18,16 +17,13 @@
     removable: false
     onAdd:
     - type: PressureImmunity
-  - type: DestroyItemOnPickup
 
 - type: entity
   parent: OrganAnimalHeart
   id: OrganGoliathHeart
   name: goliath heart
   components:
-  - type: Organ
-    onAdd:
-    - type: GoliathTentacle
+  # Kessler: the goliath tentacle organ action relies on an action type we don't have
   - type: Sprite
     sprite: _Shitmed/Mobs/Species/Space/Goliath/organs.rsi
     state: heart-on

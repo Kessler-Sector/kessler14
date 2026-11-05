@@ -9,6 +9,8 @@
     sprite: Mobs/Species/Human/parts.rsi
   # - type: BodyPart # Frontier: no shitmed
   #   species: Felinid # Frontier: no shitmed
+  - type: BodyPart # Shitmed
+    species: Felinid
 
 - type: entity
   parent: [ PartFelinidBase, BaseTorso ]

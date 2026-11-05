@@ -93,6 +93,8 @@
       amount: 3
     - id: MaterialGoliathHide1
       amount: 3
+  - type: Body # Shitmed Change
+    prototype: Goliath
 
 - type: entity
   parent: BaseAction

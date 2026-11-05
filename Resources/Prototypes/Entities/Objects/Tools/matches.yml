@@ -52,6 +52,13 @@
     burntIcon: match_burnt
   - type: StaticPrice
     price: 2
+  - type: Cautery # Shitmed
+    speed: 0.2
+  - type: SurgeryTool # Shitmed
+    startSound:
+      path: /Audio/Weapons/Guns/Hits/energy_meat1.ogg
+    endSound:
+      path: /Audio/Weapons/Guns/Hits/energy_meat1.ogg
 
 - type: entity
   parent: Matchstick

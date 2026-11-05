@@ -70,6 +70,8 @@
       interactFailureString: petting-failure-generic
       interactSuccessSound:
         path: /Audio/Animals/lizard_happy.ogg
+    - type: Body # Shitmed Change
+      prototype: LaserRaptor
 
 - type: entity
   id: MobTomatoKiller

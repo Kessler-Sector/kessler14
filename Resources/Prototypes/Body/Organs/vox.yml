@@ -63,6 +63,7 @@
   - type: Metabolizer
     metabolizerTypes: [Vox]
   - type: Sprite
+    state: heart-on
     sprite: Mobs/Species/Vox/organs.rsi
 
 - type: entity
@@ -134,3 +135,4 @@
           Quantity: 10
         - ReagentId: GreyMatter
           Quantity: 5
+

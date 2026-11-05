@@ -30,13 +30,13 @@ public sealed partial class OrganComponent : Component, ISurgeryToolComponent //
     ///     without referencing the prototype or hardcoding.
     /// </summary>
 
-    [DataField, AlwaysPushInheritance]
+    [DataField] // Kessler: AlwaysPushInheritance breaks scalar fields on our engine
     public string SlotId = "";
 
-    [DataField, AlwaysPushInheritance]
+    [DataField] // Kessler: AlwaysPushInheritance breaks scalar fields on our engine
     public string ToolName { get; set; } = "An organ";
 
-    [DataField, AlwaysPushInheritance]
+    [DataField] // Kessler: AlwaysPushInheritance breaks scalar fields on our engine
     public float Speed { get; set; } = 1f;
 
     /// <summary>

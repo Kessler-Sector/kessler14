@@ -19,6 +19,7 @@
       - left arm
       - right leg
       - left leg
+      - head # Shitmed
       organs:
         heart: OrganAvaliHeart
         lungs: OrganAvaliLungs

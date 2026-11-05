@@ -11,6 +11,8 @@
             Quantity: 3
           - ReagentId: DarkBlood
             Quantity: 10
+    - type: BodyPart # Shitmed
+      species: Shadekin
 
 - type: entity
   id: TorsoShadekin

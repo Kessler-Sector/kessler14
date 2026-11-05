@@ -173,6 +173,11 @@
   - type: PirateBountyItem
     id: Cappy
   - type: SouthernAccent
+  - type: SurgeryTarget # Shitmed
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key: # Shitmed
+        type: SurgeryBui
 
 - type: entity
   id: MobCatElCapo

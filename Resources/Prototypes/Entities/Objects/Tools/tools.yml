@@ -51,6 +51,19 @@
       Steel: 100
   - type: StaticPrice
     price: 15 # Frontier 30<15
+  - type: Retractor # Shitmed
+    speed: 0.35
+  - type: Hemostat # Shitmed
+    speed: 0.6
+  - type: SurgeryTool # Shitmed
+    startSound:
+      path: /Audio/Items/wirecutter.ogg
+      params:
+        variation: 0.125
+    endSound:
+      path: /Audio/Items/wirecutter.ogg
+      params:
+        variation: 0.125
 
 - type: entity
   name: screwdriver
@@ -107,6 +120,15 @@
     rsi:
       sprite: _WF/Clothing/Helmetaddons/Tools/screwdriver.rsi
       state: helmet
+  - type: Retractor # Shitmed
+    speed: 0.45
+  - type: Tending # Shitmed
+    speed: 0.65
+  - type: SurgeryTool # Shitmed
+    startSound:
+      collection: Screwdriver
+    endSound:
+      path: /Audio/_Shitmed/Medical/Surgery/retractor2.ogg
 
 - type: entity
   name: wrench

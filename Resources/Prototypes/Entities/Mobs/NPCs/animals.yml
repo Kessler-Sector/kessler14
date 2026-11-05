@@ -641,6 +641,7 @@
               sprite: Mobs/Animals/mothroach/displacement.rsi
               state: neck
 
+    - type: SurgeryTarget # Shitmed
 # Note that the mallard duck is actually a male drake mallard, with the brown duck being the female variant of the same species, however ss14 lacks sex specific textures
 # The white duck is more akin to a pekin or call duck.
 
@@ -931,6 +932,11 @@
       guides:
         - Chef
         - FoodRecipes
+    - type: SurgeryTarget # Shitmed
+    - type: UserInterface # Shitmed
+      interfaces:
+        enum.SurgeryUIKey.Key:
+          type: SurgeryBui
 
 - type: entity
   name: crab
@@ -1000,6 +1006,11 @@
         task: RuminantCompound
     - type: Body
       prototype: AnimalHemocyanin
+    - type: SurgeryTarget # Shitmed
+    - type: UserInterface # Shitmed
+      interfaces:
+        enum.SurgeryUIKey.Key:
+          type: SurgeryBui
 
 - type: entity
   name: goat
@@ -1106,6 +1117,11 @@
       task: RuminantHostileCompound
 
 # Note that we gotta make this bitch vomit someday when you feed it anthrax or sumthin. Needs to be a small item thief too and aggressive if attacked.
+  - type: SurgeryTarget # Shitmed
+  - type: UserInterface # Shitmed
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
 - type: entity
   name: goose
   parent: SimpleMobBase
@@ -1441,6 +1457,17 @@
             - !type:WashCreamPieReaction
     - type: LabGrown # Frontier
     - type: Crawler
+    - type: SurgeryTarget
+    - type: Targeting
+    - type: HumanoidAppearance
+      species: Monkey
+    # Shitmed Change End
+    - type: UserInterface # Shitmed
+      interfaces:
+        enum.StrippingUiKey.Key:
+          type: StrippableBoundUserInterface
+        enum.SurgeryUIKey.Key:
+          type: SurgeryBui
 
 - type: entity
   name: monkey
@@ -1638,6 +1665,13 @@
       name: ghost-role-information-kobold-name
       description: ghost-role-information-kobold-description
       rules: ghost-role-information-nonantagonist-rules
+    # Shitmed Change Start
+    - type: HumanoidAppearance
+      species: Kobold
+    - type: Body
+      prototype: Kobold
+      requiredLegs: 2
+    # Shitmed Change End
 
 - type: entity
   name: kobold
@@ -1880,6 +1914,11 @@
           behaviors:
             - !type:GibBehavior
               recursive: false
+    - type: SurgeryTarget # Shitmed
+    - type: UserInterface # Shitmed
+      interfaces:
+        enum.SurgeryUIKey.Key:
+          type: SurgeryBui
 
 - type: entity
   parent: MobMouse
@@ -2549,6 +2588,11 @@
         groups:
           Brute: -0.07
           Burn: -0.07
+    - type: SurgeryTarget # Shitmed
+    - type: UserInterface # Shitmed
+      interfaces:
+        enum.SurgeryUIKey.Key:
+          type: SurgeryBui
 
 - type: entity
   parent: MobSpiderBase

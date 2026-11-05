@@ -46,6 +46,13 @@
   - type: PhysicalComposition
     materialComposition:
       Steel: 100
+  - type: Retractor # Shitmed: Same as wirecutters
+    speed: 0.35
+  - type: SurgeryTool # Shitmed
+    startSound:
+      path: /Audio/_Shitmed/Medical/Surgery/retractor1.ogg
+    endSound:
+      path: /Audio/_Shitmed/Medical/Surgery/retractor2.ogg
 
 - type: entity
   name: scythe
@@ -100,6 +107,11 @@
   - type: PhysicalComposition
     materialComposition:
       Steel: 100
+  - type: BoneSaw # Shitmed
+    speed: 0.35
+  - type: SurgeryTool # Shitmed
+    startSound:
+      path: /Audio/_Shitmed/Medical/Surgery/saw.ogg
 
 - type: entity
   name: spade

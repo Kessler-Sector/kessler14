@@ -22,6 +22,7 @@
       - left arm
       - right leg
       - left leg
+      - head # Shitmed
       organs:
         heart: OrganShadekinHeart
         core: OrganShadekinCore

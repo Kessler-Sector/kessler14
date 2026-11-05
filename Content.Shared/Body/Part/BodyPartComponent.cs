@@ -38,16 +38,16 @@ public sealed partial class BodyPartComponent : Component, ISurgeryToolComponent
     [DataField, AutoNetworkedField]
     public FixedPoint2 VitalDamage = 100;
 
-    [DataField, AlwaysPushInheritance]
+    [DataField] // Kessler: AlwaysPushInheritance breaks scalar fields on our engine
     public string ToolName { get; set; } = "A body part";
 
-    [DataField, AlwaysPushInheritance]
+    [DataField] // Kessler: AlwaysPushInheritance breaks scalar fields on our engine
     public string SlotId = "";
 
     [DataField, AutoNetworkedField]
     public bool? Used { get; set; } = null;
 
-    [DataField, AlwaysPushInheritance]
+    [DataField] // Kessler: AlwaysPushInheritance breaks scalar fields on our engine
     public float Speed { get; set; } = 1f;
 
     /// <summary>
@@ -126,7 +126,7 @@ public sealed partial class BodyPartComponent : Component, ISurgeryToolComponent
     /// <summary>
     ///     Shitmed Change: The ID of the base layer for this body part.
     /// </summary>
-    [DataField, AutoNetworkedField, AlwaysPushInheritance]
+    [DataField, AutoNetworkedField] // Kessler: AlwaysPushInheritance breaks scalar fields on our engine
     public string? BaseLayerId;
 
     /// <summary>

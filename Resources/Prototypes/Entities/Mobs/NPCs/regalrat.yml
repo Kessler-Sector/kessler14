@@ -129,6 +129,11 @@
     attributes:
       gender: male
   - type: Sharp
+  - type: SurgeryTarget # Shitmed
+  - type: UserInterface # Shitmed
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
 
 - type: entity
   id: MobRatKingBuff

@@ -11,6 +11,8 @@
         Quantity: 3
       - ReagentId: Blood
         Quantity: 10
+  - type: BodyPart # Shitmed
+    species: Tajaran
 
 - type: entity
   id: TorsoTajaran

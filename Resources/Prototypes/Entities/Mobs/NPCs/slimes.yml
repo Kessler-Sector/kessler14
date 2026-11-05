@@ -111,6 +111,11 @@
     speechSounds: Slime
   - type: TypingIndicator
     proto: slime
+  - type: SurgeryTarget # Shitmed
+  - type: UserInterface # Shitmed
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
 
 - type: entity
   name: basic slime
