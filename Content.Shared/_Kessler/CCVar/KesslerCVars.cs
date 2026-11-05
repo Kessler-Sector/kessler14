@@ -93,4 +93,11 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<string> StoragePath =
         CVarDef.Create("kessler.storage.path", "/kessler/storage", CVar.SERVERONLY);
+
+    /// <summary>
+    /// Whether bodies in cryo storage are deleted after Frontier's nf14.uncryo.maxtime. Off: a stored character waits
+    /// for its player however long they're away.
+    /// </summary>
+    public static readonly CVarDef<bool> CryoExpire =
+        CVarDef.Create("kessler.cryo.expire", false, CVar.SERVERONLY);
 }

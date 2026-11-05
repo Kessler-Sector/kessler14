@@ -62,6 +62,7 @@ public sealed partial class CryoSleepSystem
         var storedBody = storedBodies[^1];
         var cryopod = storedBody.Cryopod;
         var body = storedBody.Body;
+        KesslerPrepareReturn(body); // Kessler
         
         if (!Exists(cryopod) || Deleted(cryopod) || !TryComp<CryoSleepComponent>(cryopod, out var cryoComp))
         {
