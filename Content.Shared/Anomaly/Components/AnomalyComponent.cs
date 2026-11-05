@@ -193,7 +193,7 @@ public sealed partial class AnomalyComponent : Component
     /// The vessel that the anomaly is connceted to. Stored so that multiple
     /// vessels cannot connect to the same anomaly.
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField, ViewVariables(VVAccess.ReadWrite)] // Kessler: saved, or a loaded anomaly can be linked to a second vessel
     public EntityUid? ConnectedVessel;
 
     /// <summary>

@@ -17,7 +17,7 @@ public sealed partial class AnomalyVesselComponent : Component
     /// The anomaly that the vessel is storing.
     /// Can be null.
     /// </summary>
-    [ViewVariables]
+    [DataField, ViewVariables] // Kessler: saved, or a loaded vessel loses its anomaly
     public EntityUid? Anomaly;
 
     /// <summary>
