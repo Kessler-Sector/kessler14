@@ -112,6 +112,7 @@ public sealed partial class CryoSleepSystem : EntitySystem
         SubscribeNetworkEvent<RemoveStoredCharacterRequestMessage>(OnRemoveStoredCharacterRequest); // Wayfarer
 
         InitReturning();
+        InitKessler(); // Kessler
     }
 
     private EntityUid GetStorageMap()
@@ -473,7 +474,7 @@ public sealed partial class CryoSleepSystem : EntitySystem
     }
 
 
-    public void CryoStoreBody(EntityUid bodyId, EntityUid cryopod, bool immediate = false)
+    public void CryoStoreBody(EntityUid bodyId, EntityUid cryopod, bool immediate = false, bool ghost = true) // Kessler: ghost
     {
         if (!TryComp<CryoSleepComponent>(cryopod, out var cryo))
             return;
@@ -499,13 +500,17 @@ public sealed partial class CryoSleepSystem : EntitySystem
 
                 // Capture the character slot so we can restore the correct bank account on resume.
                 var characterSlot = -1;
-                if (_player.TryGetSessionById(id.Value, out var playerSession) &&
-                    _prefsManager.TryGetCachedPreferences(id.Value, out var prefs) &&
-                    TryComp<BankAccountComponent>(bodyId, out var bankComp) &&
+                // Kessler: the body's bank slot is saved, so read it even when the player is offline (away players
+                // are put into cryo automatically).
+                if (TryComp<BankAccountComponent>(bodyId, out var bankComp) &&
                     bankComp.CharacterSlot >= 0)
                 {
                     characterSlot = bankComp.CharacterSlot;
                 }
+
+                // Kessler: an away player's mind may be visiting a ghost; store the body we were given.
+                if (!ghost)
+                    body = bodyId;
 
                 var newBody = new StoredBody() { Body = body, Cryopod = cryopod, Mind = mindEntity, StationName = stationName, CharacterSlot = characterSlot };
 
@@ -516,19 +521,27 @@ public sealed partial class CryoSleepSystem : EntitySystem
                 _storedBodies[id.Value].Add(newBody);
             }
 
-            _ghost.OnGhostAttempt(mindEntity, false, true, mind: mind);
+            // Kessler: an away player is offline; a ghost would be left behind on the ship (and isn't saved), so just
+            // detach the mind. They resume the character from the lobby.
+            if (ghost)
+                _ghost.OnGhostAttempt(mindEntity, false, true, mind: mind);
+            else
+                _mind.TransferTo(mindEntity, null, createGhost: false, mind: mind);
         }
 
         if (!immediate)
             _container.Remove(bodyId, cryo.BodyContainer, reparent: false, force: true);
 
-        var storage = GetStorageMap();
-        _transform.SetCoordinates(bodyId, new EntityCoordinates(storage, Vector2.Zero));
+        KesslerStoreBody(bodyId, cryopod); // Kessler: persistent storage on the sector map
 
         RaiseLocalEvent(bodyId, new CryosleepEnterEvent(cryopod, mind?.UserId), true);
 
         if (cryo.CryosleepDoAfter != null && _doAfter.GetStatus(cryo.CryosleepDoAfter) == DoAfterStatus.Running)
             _doAfter.Cancel(cryo.CryosleepDoAfter);
+
+        // Kessler: stored bodies are never deleted unless kessler.cryo.expire is set.
+        if (!_configurationManager.GetCVar(Content.Shared._Kessler.CCVar.KesslerCVars.CryoExpire))
+            return;
 
         // Start a timer. When it ends, the body needs to be deleted.
         Timer.Spawn(TimeSpan.FromSeconds(_configurationManager.GetCVar(NFCCVars.CryoExpirationTime)), () =>
@@ -692,6 +705,8 @@ public sealed partial class CryoSleepSystem : EntitySystem
 
         if (storedBody == null)
             return;
+
+        KesslerPrepareReturn(body); // Kessler
 
         // Get the stored mind entity
         var mindId = storedBody.Value.Mind;

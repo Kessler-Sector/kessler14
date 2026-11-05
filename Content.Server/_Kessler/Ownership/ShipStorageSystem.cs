@@ -17,7 +17,11 @@ using Content.Server.Station.Systems;
 using Content.Shared._Kessler.CCVar;
 using Content.Shared._NF.Bank.Components;
 using Content.Shared._NF.Shipyard.Components;
+using Content.Server._NF.CryoSleep;
+using Content.Shared.Ghost;
+using Content.Shared.Mind;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Verbs;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
@@ -56,6 +60,9 @@ public sealed class ShipStorageSystem : EntitySystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly BankSystem _bank = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly CryoSleepSystem _cryo = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private TimeSpan _nextCheck;
 
@@ -95,6 +102,9 @@ public sealed class ShipStorageSystem : EntitySystem
     public void StoreDueShips(DateTime now)
     {
         var inactiveAfter = TimeSpan.FromDays(_cfg.GetCVar(KesslerCVars.StorageInactiveDays));
+
+        // Bodies first: an away owner's SSD body is usually aboard their ship and would keep it from being stored.
+        StoreAwayBodies(now, inactiveAfter);
         var due = new List<(EntityUid Ship, ShipStorageReason Reason)>();
 
         var query = EntityQueryEnumerator<ShipOwnershipComponent>();
@@ -114,6 +124,39 @@ public sealed class ShipStorageSystem : EntitySystem
         {
             if (!TryStoreShip(ship, reason, now, out var problem))
                 Log.Info($"Not storing {ToPrettyString(ship)} ({reason}) yet: {problem}");
+        }
+    }
+
+    /// <summary>
+    /// Puts the SSD bodies of players who have been away for at least <paramref name="inactiveAfter"/> into cryo
+    /// storage. They get them back through the usual cryo return when they log in.
+    /// </summary>
+    public void StoreAwayBodies(DateTime now, TimeSpan inactiveAfter)
+    {
+        var away = new List<EntityUid>();
+        var query = EntityQueryEnumerator<MindComponent>();
+        while (query.MoveNext(out _, out var mind))
+        {
+            // The owned body, not the current entity: a player who ghosted and logged off still owns their body.
+            if (mind.UserId is not { } userId
+                || mind.OwnedEntity is not { } body
+                || HasComp<GhostComponent>(body)
+                || _mobState.IsDead(body)
+                || _cryo.IsInCryoStorage(body))
+            {
+                continue;
+            }
+
+            if (IsOwnerInactive(userId.UserId, now, inactiveAfter))
+                away.Add(body);
+        }
+
+        foreach (var body in away)
+        {
+            if (_cryo.TryCryoStoreAwayBody(body))
+                Log.Info($"Put {ToPrettyString(body)} into cryo storage; their player has been away");
+            else
+                Log.Warning($"Couldn't put {ToPrettyString(body)} into cryo storage: no cryopod in the sector");
         }
     }
 
@@ -212,6 +255,9 @@ public sealed class ShipStorageSystem : EntitySystem
             StoredAt = now,
         };
 
+        // Ghosts aren't saved and would drag their player's mind into the ship's file; leave them where they are.
+        MoveGhostsOff(ship);
+
         try
         {
             if (!_persistenceSave.TrySaveGrid(ship, path))
@@ -242,6 +288,26 @@ public sealed class ShipStorageSystem : EntitySystem
         Del(ship);
         problem = null;
         return true;
+    }
+
+    private void MoveGhostsOff(EntityUid ship)
+    {
+        if (Transform(ship).MapUid is not { } map)
+            return;
+
+        var ghosts = new List<EntityUid>();
+        var query = EntityQueryEnumerator<GhostComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.GridUid == ship)
+                ghosts.Add(uid);
+        }
+
+        foreach (var ghost in ghosts)
+        {
+            var position = _transform.GetWorldPosition(ghost);
+            _transform.SetCoordinates(ghost, new EntityCoordinates(map, position));
+        }
     }
 
     private Entity<ShipStorageRegistryComponent> GetRegistry(EntityUid? near = null)

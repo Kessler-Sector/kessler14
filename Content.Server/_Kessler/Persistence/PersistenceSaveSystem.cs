@@ -281,24 +281,33 @@ public sealed class PersistenceSaveSystem : EntitySystem
     private HashSet<EntityUid> WithNullspaceRoots(HashSet<EntityUid> entities)
     {
         var roots = new HashSet<EntityUid>(entities);
+        // Saving a whole map takes the minds and stations of everything on it. Saving single grids (a stored ship) only
+        // takes those on the grids themselves, not on the rest of their map.
         var maps = new HashSet<EntityUid>();
+        var grids = new HashSet<EntityUid>();
         foreach (var uid in entities)
         {
-            if (Transform(uid).MapUid is { } mapUid)
+            if (HasComp<MapComponent>(uid))
+                maps.Add(uid);
+            else if (Transform(uid).GridUid is { } gridUid)
+                grids.Add(gridUid);
+            else if (Transform(uid).MapUid is { } mapUid)
                 maps.Add(mapUid);
         }
+
+        bool Saved(EntityUid? uid) => OnMaps(uid, maps) || OnGrids(uid, grids);
 
         var minds = EntityQueryEnumerator<MindComponent>();
         while (minds.MoveNext(out var uid, out var mind))
         {
-            if (IsNullspaceRoot(uid) && (OnMaps(mind.OwnedEntity, maps) || OnMaps(mind.VisitingEntity, maps)))
+            if (IsNullspaceRoot(uid) && (Saved(mind.OwnedEntity) || Saved(mind.VisitingEntity)))
                 roots.Add(uid);
         }
 
         var stations = EntityQueryEnumerator<StationDataComponent>();
         while (stations.MoveNext(out var uid, out var station))
         {
-            if (IsNullspaceRoot(uid) && station.Grids.Any(grid => OnMaps(grid, maps)))
+            if (IsNullspaceRoot(uid) && station.Grids.Any(grid => Saved(grid)))
                 roots.Add(uid);
         }
 
@@ -339,6 +348,12 @@ public sealed class PersistenceSaveSystem : EntitySystem
     private bool IsNullspaceRoot(EntityUid uid)
     {
         return !Transform(uid).ParentUid.IsValid() && !HasComp<MapComponent>(uid);
+    }
+
+    private bool OnGrids(EntityUid? uid, HashSet<EntityUid> grids)
+    {
+        return uid != null && grids.Count > 0 && TryComp(uid, out TransformComponent? xform) && xform.GridUid is { } gridUid
+               && grids.Contains(gridUid);
     }
 
     private bool OnMaps(EntityUid? uid, HashSet<EntityUid> maps)

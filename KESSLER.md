@@ -44,7 +44,9 @@ Decisions made so far:
   - Only the owner logging in counts as activity; crew using the ship do not.
   - Build order: owner records, then billing and debt, then storage. POI shops later reuse all three.
   - Storage as built: ships are saved to `kessler.storage.path` and listed on the sector map (`ShipStorageRegistryComponent`), so the list always matches the world. Stored files are never deleted, so restoring an older backup still works. A ship is only stored when nobody who might come back is aboard, the same rule as selling. Recall is a right-click option on any shipyard console with the owner's ID inserted.
-  - Not done yet: moving inactive owners' SSD bodies into cryo (until then, a ship with its owner's body aboard isn't stored), and dealing with crew who stay aboard an impounded ship.
+  - Players away for 7 days have their SSD body put into cryo storage first (no ghost is made; they resume the character from the lobby), so their ship can then be stored.
+  - **Cryo storage persists.** Frontier kept cryo'd bodies on a separate paused map and in memory, and deleted them after 3 days, so every cryo'd character would be lost at a restart. Bodies now sit in a paused container on a holder entity on the sector map, and the list of them is written onto it before each sector save (`BeforeSectorSaveEvent`). Expiry is off (`kessler.cryo.expire`).
+  - Not done yet: crew who stay aboard an impounded ship can still block the impound.
 - **Target population about 50.** Staff-run story arcs are a later addition, not part of the core loop.
 
 ## Persistence technical notes

@@ -393,6 +393,9 @@ public sealed class PersistentSectorSystem : EntitySystem
         // Ships mid-jump are on a separate hyperspace map that is not saved; land them first.
         var settled = _shuttle.CompleteFtlForSave();
 
+        // Systems that keep state in memory write it onto saved entities now.
+        RaiseLocalEvent(new BeforeSectorSaveEvent());
+
         var options = SerializationOptions.Default with
         {
             Category = FileCategory.Map,
