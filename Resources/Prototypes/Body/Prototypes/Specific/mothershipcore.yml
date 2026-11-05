@@ -1,3 +1,4 @@
+# Kessler: Shitmed only attaches parts whose slot name contains the standard name for the part ("left hand").
 - type: body
   id: MothershipCoreBody
   name: "core"
@@ -6,15 +7,15 @@
     torso:
       part: TorsoBorg
       connections:
-      - right2hand
-      - right1hand
-      - left1hand
-      - left2hand
-    left1hand:
-      part: LeftArmBorg
-    left2hand:
-      part: LeftArmBorg
-    right1hand:
-      part: RightArmBorg
-    right2hand:
-      part: RightArmBorg
+      - right hand 2
+      - right hand
+      - left hand
+      - left hand 2
+    left hand:
+      part: SiliconLeftHand
+    left hand 2:
+      part: SiliconLeftHand
+    right hand:
+      part: SiliconRightHand
+    right hand 2:
+      part: SiliconRightHand

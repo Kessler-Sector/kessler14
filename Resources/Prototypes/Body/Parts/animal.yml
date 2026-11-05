@@ -142,7 +142,6 @@
   - type: BodyPart
     partType: Hand
     symmetry: Left
-    slotId: lefthand
 
 - type: entity
   parent: PartAnimalBase
@@ -158,4 +157,3 @@
   - type: BodyPart
     partType: Hand
     symmetry: Right
-    slotId: righthand

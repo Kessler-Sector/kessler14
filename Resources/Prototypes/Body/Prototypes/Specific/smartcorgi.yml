@@ -6,8 +6,8 @@
     torso:
       part: TorsoAnimal
       connections:
-      - righthand
-      - lefthand
+      - right hand
+      - left hand
       - legs
       organs:
         brain: OrganHumanBrain # feels strange but it is what it is
@@ -16,9 +16,9 @@
         liver: OrganAnimalLiver
         heart: OrganAnimalHeart
         kidneys: OrganAnimalKidneys
-    lefthand:
+    left hand:
       part: LeftHandSmartCorgi
-    righthand:
+    right hand:
       part: RightHandSmartCorgi
     legs:
       part: LegsAnimal

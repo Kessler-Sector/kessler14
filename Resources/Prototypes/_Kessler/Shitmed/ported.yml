@@ -320,3 +320,27 @@
     Plastic: 200
     Plasma: 200
 
+
+# Kessler: the mothership core and bots hold things in borg arms, so they need hand-type parts.
+# Shitmed turned the borg arms into real arms with hand slots of their own.
+- type: entity
+  parent: [ PartSiliconBase, BaseLeftHand ]
+  id: SiliconLeftHand
+  name: cyborg left arm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: borg_l_arm
+  - type: Icon
+    state: borg_l_arm
+
+- type: entity
+  parent: [ PartSiliconBase, BaseRightHand ]
+  id: SiliconRightHand
+  name: cyborg right arm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: borg_r_arm
+  - type: Icon
+    state: borg_r_arm

@@ -12,7 +12,8 @@ public sealed partial class BodyPartAppearanceComponent : Component
     /// <summary>
     ///     HumanoidVisualLayer type for this body part.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    // Kessler: saved as "layer"; "type" collides with the component's own type key in map saves.
+    [DataField("layer"), AutoNetworkedField]
     public HumanoidVisualLayers Type { get; set; }
 
     /// <summary>

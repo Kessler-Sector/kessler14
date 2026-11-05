@@ -132,9 +132,10 @@ namespace Content.Server.Hands.Systems
                 _ => throw new ArgumentOutOfRangeException(nameof(part.Comp.Symmetry))
             };
 
+            // Kessler: a hand that is the body's root part (bots) has no parent part to check.
             if (part.Comp.Enabled
-                && _bodySystem.TryGetParentBodyPart(part, out var _, out var parentPartComp)
-                && parentPartComp.Enabled)
+                && (!_bodySystem.TryGetParentBodyPart(part, out var _, out var parentPartComp)
+                    || parentPartComp.Enabled))
                 AddHand(ent.AsNullable(), slot, location);
         }
 
@@ -145,7 +146,9 @@ namespace Content.Server.Hands.Systems
 
         private void HandleBodyPartRemoved(EntityUid uid, HandsComponent component, ref BodyPartRemovedEvent args)
         {
-            if (args.Part.Comp is null
+            // Kessler: a body being deleted takes its held items with it instead of dropping them.
+            if (TerminatingOrDeleted(uid)
+                || args.Part.Comp is null
                 || args.Part.Comp.PartType != BodyPartType.Hand)
                 return;
 

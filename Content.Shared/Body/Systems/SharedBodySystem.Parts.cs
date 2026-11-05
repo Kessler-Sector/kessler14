@@ -385,7 +385,7 @@ public partial class SharedBodySystem
             bodyEnt.Comp.LegEntities.Remove(legEnt);
             UpdateMovementSpeed(bodyEnt);
             Dirty(bodyEnt, bodyEnt.Comp);
-            if (bodyEnt.Comp.LegEntities.Count == 0 && bodyEnt.Comp.RequiredLegs > 0) // Mono
+            if (bodyEnt.Comp.LegEntities.Count == 0) // Kessler: upstream rule, Monolith also required RequiredLegs > 0
                 Standing.Down(bodyEnt); // Shitmed Change
         }
     }
