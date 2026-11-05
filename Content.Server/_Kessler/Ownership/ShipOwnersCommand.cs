@@ -20,6 +20,7 @@ public sealed class ShipOwnersCommand : LocalizedEntityCommands
         {
             count++;
             var purchasedAt = ownership.PurchasedAt;
+            var nextUpkeep = ownership.NextUpkeep;
             shell.WriteLine(Loc.GetString("cmd-shipowners-line",
                 ("ship", meta.EntityName),
                 ("uid", uid.ToString()),
@@ -27,7 +28,10 @@ public sealed class ShipOwnersCommand : LocalizedEntityCommands
                 ("profile", ownership.OwnerProfileId?.ToString() ?? "?"),
                 ("price", ownership.PurchasePrice),
                 ("voucher", ownership.PurchasedWithVoucher ? "yes" : "no"),
-                ("date", purchasedAt.ToString("yyyy-MM-dd HH:mm"))));
+                ("date", purchasedAt.ToString("yyyy-MM-dd HH:mm")),
+                ("next", nextUpkeep.ToString("yyyy-MM-dd HH:mm")),
+                ("debt", ownership.UpkeepDebt),
+                ("impound", ownership.ImpoundDue ? Loc.GetString("cmd-shipowners-impound") : "")));
         }
 
         shell.WriteLine(Loc.GetString("cmd-shipowners-total", ("count", count)));
