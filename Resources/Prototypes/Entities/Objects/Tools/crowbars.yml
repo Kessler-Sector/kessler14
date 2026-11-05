@@ -55,6 +55,12 @@
     - 0,0,0,1
 
 # Standard (grey) Crowbar
+  - type: Tweezers # Shitmed
+    speed: 0.55
+  - type: SurgeryTool # Shitmed
+    startSound: /Audio/Items/crowbar.ogg
+
+# Standard (grey) Crowbar
 - type: entity
   parent: BaseCrowbar
   id: Crowbar

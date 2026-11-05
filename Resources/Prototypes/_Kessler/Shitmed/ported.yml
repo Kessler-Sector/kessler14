@@ -1,0 +1,346 @@
+# Kessler: prototypes Monolith keeps outside its _Shitmed folders that the surgery port needs.
+
+- type: damageContainer
+  id: OrganicPart
+  supportedGroups:
+  - Brute
+  - Burn
+
+- type: Tag
+  id: Organ
+
+- type: Tag
+  id: Heart
+
+- type: Tag
+  id: Liver
+
+- type: Tag
+  id: Eyes
+
+- type: Tag
+  id: Kidneys
+
+- type: sourcePort
+  id: OperatingTable
+  name: signal-port-name-operating-table
+  description: signal-port-description-operating-table-sender
+
+- type: latheRecipePack
+  id: MedicalSynthLimbsStatic
+  recipes:
+  - SynthLiver
+  - SynthHeart
+  - SynthLungs
+  - SynthEyes
+  - SynthHeadEmpty
+  - SynthLeftLeg
+  - SynthRightLeg
+  - SynthLeftFoot
+  - SynthRightFoot
+  - SynthLeftArm
+  - SynthRightArm
+  - SynthLeftHand
+  - SynthRightHand
+
+
+- type: latheRecipePack
+  id: MedicalPizzaLimbsStatic
+  recipes:
+  - PizzaLeftArm
+  - PizzaRightArm
+
+## Dynamic
+
+
+- type: latheRecipe
+  id: EnergyScalpel
+  result: EnergyScalpel
+  completetime: 2
+  materials:
+    Steel: 600
+    Glass: 150
+    Gold: 150
+
+- type: latheRecipe
+  id: EnergyCautery
+  result: EnergyCautery
+  completetime: 2
+  materials:
+    Steel: 600
+    Glass: 150
+    Plasma: 150
+
+- type: latheRecipe
+  id: AdvancedRetractor
+  result: AdvancedRetractor
+  completetime: 2
+  materials:
+    Steel: 600
+    Glass: 150
+    Silver: 150
+
+- type: technology
+  id: CyberneticEnhancements
+  name: research-technology-cybernetic-enhancements
+  entityIcon: SecurityCyberneticEyes
+  discipline: NFMedical # Kessler: Frontier's medical tree
+  tier: 1
+  cost: 10000
+  recipeUnlocks:
+  - JawsOfLifeLeftArm
+  - JawsOfLifeRightArm
+  - SpeedLeftLeg
+  - SpeedRightLeg
+  - DexLeftHand
+  - DexRightHand
+  - BasicCyberneticEyes
+  - SecurityCyberneticEyes
+  - MedicalCyberneticEyes
+  technologyPrerequisites:
+  - NFMechanizedTreatment # Kessler: our closest medical tech
+  position: 3, 12
+
+
+- type: entity
+  id: MedicalBiofabMachineBoard
+  parent: BaseMachineCircuitboard
+  name: medical biofab machine board
+  description: A machine printed circuit board for a medical biofab.
+  components:
+    - type: Sprite
+      state: medical
+    - type: MachineBoard
+      prototype: MedicalBiofabricator
+      requirements:
+        MatterBin: 2
+        Manipulator: 2
+- type: latheRecipe
+  id: SynthLiver
+  result: BioSynthLiver
+  completetime: 10
+  materials:
+    Biomass: 7 # 10>7 Mono
+
+- type: latheRecipe
+  id: SynthHeart
+  result: BioSynthHeart
+  completetime: 10
+  materials:
+    Biomass: 7 # 10>7 Mono
+
+- type: latheRecipe
+  id: SynthLungs
+  result: BioSynthLungs
+  completetime: 10
+  materials:
+    Biomass: 7 # 10>7 Mono
+
+- type: latheRecipe
+  id: SynthEyes
+  result: BioSynthEyes
+  completetime: 10
+  materials:
+    Biomass: 7 # 10>7 Mono
+
+- type: latheRecipe
+  id: SynthHeadEmpty
+  result: BioSynthHeadEmpty
+  completetime: 10
+  materials:
+    Biomass: 5
+
+- type: latheRecipe
+  id: SynthLeftLeg
+  result: BioSynthLeftLeg
+  completetime: 5
+  materials:
+    Biomass: 7
+
+- type: latheRecipe
+  id: SynthRightLeg
+  result: BioSynthRightLeg
+  completetime: 5
+  materials:
+    Biomass: 7
+
+- type: latheRecipe
+  id: SynthLeftFoot
+  result: BioSynthLeftFoot
+  completetime: 5
+  materials:
+    Biomass: 3
+
+- type: latheRecipe
+  id: SynthRightFoot
+  result: BioSynthRightFoot
+  completetime: 5
+  materials:
+    Biomass: 3
+
+- type: latheRecipe
+  id: SynthLeftArm
+  result: BioSynthLeftArm
+  completetime: 5
+  materials:
+    Biomass: 7
+
+- type: latheRecipe
+  id: SynthRightArm
+  result: BioSynthRightArm
+  completetime: 5
+  materials:
+    Biomass: 7
+
+- type: latheRecipe
+  id: SynthLeftHand
+  result: BioSynthLeftHand
+  completetime: 5
+  materials:
+    Biomass: 3
+
+- type: latheRecipe
+  id: SynthRightHand
+  result: BioSynthRightHand
+  completetime: 5
+  materials:
+    Biomass: 3
+
+- type: latheRecipe
+  id: PizzaLeftArm
+  result: PizzaLeftArm
+  completetime: 5
+  materials:
+    Biomass: 5
+
+- type: latheRecipe
+  id: JawsOfLifeLeftArm
+  result: JawsOfLifeLeftArm
+  completetime: 5
+  materials:
+    Steel: 1000
+    Glass: 500
+    Plastic: 500
+    Gold: 300
+    Silver: 300
+
+- type: latheRecipe
+  id: JawsOfLifeRightArm
+  result: JawsOfLifeRightArm
+  completetime: 5
+  materials:
+    Steel: 1000
+    Glass: 500
+    Plastic: 500
+    Gold: 300
+    Silver: 300
+
+- type: latheRecipe
+  id: SpeedLeftLeg
+  result: SpeedLeftLeg
+  completetime: 5
+  materials:
+    Steel: 1000
+    Glass: 500
+    Plastic: 500
+    Gold: 300
+    Silver: 300
+
+- type: latheRecipe
+  id: SpeedRightLeg
+  result: SpeedRightLeg
+  completetime: 5
+  materials:
+    Steel: 1000
+    Glass: 500
+    Plastic: 500
+    Gold: 300
+    Silver: 300
+
+- type: latheRecipe
+  id: DexLeftHand
+  result: DexLeftHand
+  completetime: 5
+  materials:
+    Steel: 500
+    Glass: 250
+    Plastic: 250
+    Gold: 150
+    Silver: 150
+
+- type: latheRecipe
+  id: DexRightHand
+  result: DexRightHand
+  completetime: 5
+  materials:
+    Steel: 500
+    Glass: 250
+    Plastic: 250
+    Gold: 150
+    Silver: 150
+
+- type: latheRecipe
+  id: BasicCyberneticEyes
+  result: BasicCyberneticEyes
+  completetime: 5
+  materials:
+    Steel: 1000
+    Glass: 500
+    Plastic: 500
+    Gold: 300
+    Silver: 300
+
+- type: latheRecipe
+  id: SecurityCyberneticEyes
+  result: SecurityCyberneticEyes
+  completetime: 5
+  materials:
+    Steel: 1000
+    Glass: 500
+    Plastic: 500
+    Gold: 300
+    Silver: 300
+
+- type: latheRecipe
+  id: MedicalCyberneticEyes
+  result: MedicalCyberneticEyes
+  completetime: 5
+  materials:
+    Steel: 1000
+    Glass: 500
+    Plastic: 500
+    Gold: 300
+    Silver: 300
+
+- type: latheRecipe
+  id: BoneGel
+  result: BoneGel
+  completetime: 2
+  materials:
+    Plastic: 200
+    Plasma: 200
+
+
+# Kessler: the mothership core and bots hold things in borg arms, so they need hand-type parts.
+# Shitmed turned the borg arms into real arms with hand slots of their own.
+- type: entity
+  parent: [ PartSiliconBase, BaseLeftHand ]
+  id: SiliconLeftHand
+  name: cyborg left arm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: borg_l_arm
+  - type: Icon
+    state: borg_l_arm
+
+- type: entity
+  parent: [ PartSiliconBase, BaseRightHand ]
+  id: SiliconRightHand
+  name: cyborg right arm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: borg_r_arm
+  - type: Icon
+    state: borg_r_arm

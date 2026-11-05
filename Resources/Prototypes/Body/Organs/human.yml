@@ -58,6 +58,7 @@
   - type: Sprite
     state: brain
   - type: Organ
+    slotId: brain # Shitmed Change
   - type: Input
     context: "ghost"
   - type: Brain
@@ -103,6 +104,9 @@
   - type: Item
     size: Small
     heldPrefix: eyeballs
+  - type: Organ # Shitmed Change
+    slotId: eyes # Shitmed Change
+  - type: Eyes # Shitmed Change
 
 - type: entity
   id: OrganHumanTongue
@@ -132,6 +136,7 @@
   components:
   - type: Sprite
     state: ears
+  - type: Ears # Shitmed Change
 
 - type: entity
   id: OrganHumanLungs
@@ -169,6 +174,8 @@
         reagents:
         - ReagentId: UncookedAnimalProteins
           Quantity: 5
+  - type: Organ # Shitmed Change
+    slotId: lungs # Shitmed Change
 
 - type: entity
   id: OrganHumanHeart
@@ -192,6 +199,9 @@
   - type: Item
     size: Small
     heldPrefix: heart
+  - type: Heart # Shitmed Change
+  - type: Organ # Shitmed Change
+    slotId: heart # Shitmed Change
 
 - type: entity
   id: OrganHumanStomach
@@ -235,6 +245,8 @@
     groups:
     - id: Food
     - id: Drink
+  - type: Organ # Shitmed Change
+    slotId: stomach # Shitmed Change
 
 - type: entity
   id: OrganHumanLiver
@@ -253,6 +265,9 @@
     groups:
     - id: Alcohol
       rateModifier: 0.1 # removes alcohol very slowly along with the stomach removing it as a drink
+  - type: Liver # Shitmed Change
+  - type: Organ # Shitmed Change
+    slotId: liver # Shitmed Change
 
 - type: entity
   id: OrganHumanKidneys
@@ -272,3 +287,5 @@
     maxReagents: 5
     metabolizerTypes: [Human]
     removeEmpty: true
+  - type: Organ # Shitmed
+    slotId: kidneys

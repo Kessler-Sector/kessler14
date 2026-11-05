@@ -8,7 +8,7 @@
       connections:
       - torso
       organs:
-        brain: OrganVoxStack
+        brain: OrganVoxStack # Wayfarer
         eyes: OrganVoxEyes
     torso:
       part: TorsoVox
@@ -17,6 +17,7 @@
       - left arm
       - right leg
       - left leg
+      - head # Shitmed
       organs:
         heart: OrganVoxHeart
         lungs: OrganVoxLungs

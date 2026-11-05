@@ -1,189 +1,100 @@
 - type: entity
-  id: PartIPC
-  parent: BaseItem
-  name: "ipc body part"
   abstract: true
+  parent: BasePartInorganic
+  id: PartIPCBase
+  name: "ipc body part"
   components:
-  - type: Damageable
-    damageContainer: Inorganic # Shitmed Change
-  - type: BodyPart
-  - type: ContainerContainer
-    containers:
-      bodypart: !type:Container
-        ents: []
-  - type: StaticPrice
-    price: 100
+  - type: Sprite
+    sprite: _EE/Mobs/Species/IPC/parts.rsi
+  - type: Icon
+    sprite: _EE/Mobs/Species/IPC/parts.rsi
+  - type: Destructible # no ashing trigger
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 110
+      behaviors:
+      - !type:GibPartBehavior { }
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Slash
+        damage: 150
+      behaviors:
+      - !type:GibPartBehavior { }
 
 - type: entity
+  parent: [ PartIPCBase, BaseTorsoInorganic ]
   id: TorsoIPC
   name: "ipc torso"
-  parent: PartIPC
   components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "torso_m"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "torso_m"
   - type: BodyPart
-    partType: Torso
-  - type: ContainerContainer
-    containers:
-      torso_slot: !type:ContainerSlot {}
+    organs:
+      posbrain:
+        id: "posbrain"
+      pump:
+        id: "pump"
+  - type: Destructible # no ashing trigger
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 400
+      behaviors:
+      - !type:GibPartBehavior { }
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Slash
+        damage: 400
+      behaviors:
+      - !type:GibPartBehavior { }
 
 - type: entity
+  parent: [ PartIPCBase, BaseHead ]
   id: HeadIPC
   name: "ipc head"
-  parent: PartIPC
   components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "head_m"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "head_m"
   - type: BodyPart
-    partType: Head
-    vital: true
-  - type: Input
-    context: "ghost"
-  - type: MovementSpeedModifier
-    baseWalkSpeed: 0
-    baseSprintSpeed: 0
-  - type: InputMover
-  - type: GhostOnMove
-  - type: Tag
-    tags:
-      - Head
+    organs: # posibrain is stored in the torso
+      eyes:
+        id: "eyes"
 
 - type: entity
+  parent: [ PartIPCBase, BaseLeftArm ]
   id: LeftArmIPC
   name: "left ipc arm"
-  parent: PartIPC
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "l_arm"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "l_arm"
-  - type: BodyPart
-    partType: Arm
-    symmetry: Left
 
 - type: entity
+  parent: [ PartIPCBase, BaseRightArm ]
   id: RightArmIPC
   name: "right ipc arm"
-  parent: PartIPC
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "r_arm"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "r_arm"
-  - type: BodyPart
-    partType: Arm
-    symmetry: Right
 
 - type: entity
+  parent: [ PartIPCBase, BaseLeftHand ]
   id: LeftHandIPC
   name: "left ipc hand"
-  parent: PartIPC
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "l_hand"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "l_hand"
-  - type: BodyPart
-    partType: Hand
-    symmetry: Left
 
 - type: entity
+  parent: [ PartIPCBase, BaseRightHand ]
   id: RightHandIPC
   name: "right ipc hand"
-  parent: PartIPC
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "r_hand"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "r_hand"
-  - type: BodyPart
-    partType: Hand
-    symmetry: Right
 
 - type: entity
+  parent: [ PartIPCBase, BaseLeftLeg ]
   id: LeftLegIPC
   name: "left ipc leg"
-  parent: PartIPC
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "l_leg"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "l_leg"
-  - type: BodyPart
-    partType: Leg
-    symmetry: Left
-  - type: MovementBodyPart
 
 - type: entity
+  parent: [ PartIPCBase, BaseRightLeg ]
   id: RightLegIPC
   name: "right ipc leg"
-  parent: PartIPC
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "r_leg"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "r_leg"
-  - type: BodyPart
-    partType: Leg
-    symmetry: Right
-  - type: MovementBodyPart
 
 - type: entity
+  parent: [ PartIPCBase, BaseLeftFoot ]
   id: LeftFootIPC
   name: "left ipc foot"
-  parent: PartIPC
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "l_foot"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "l_foot"
-  - type: BodyPart
-    partType: Foot
-    symmetry: Left
 
 - type: entity
+  parent: [ PartIPCBase, BaseRightFoot ]
   id: RightFootIPC
   name: "right ipc foot"
-  parent: PartIPC
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "r_foot"
-  - type: Icon
-    sprite: _EE/Mobs/Species/IPC/parts.rsi
-    state: "r_foot"
-  - type: BodyPart
-    partType: Foot
-    symmetry: Right

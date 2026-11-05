@@ -13,6 +13,8 @@
         Quantity: 3
       - ReagentId: AmmoniaBlood
         Quantity: 10
+  - type: BodyPart # Shitmed
+    species: AurelianVox
 
 - type: entity
   parent: [PartAurelianVox, BaseTorso]

@@ -17,8 +17,9 @@
       - left arm
       - right leg
       - left leg
+      - head # Shitmed Change
       organs:
-        heart: OrganAnimalHeart
+        heart: OrganAnimalHeart # Kessler: keep Wayfarer value
         lungs: OrganHarpyLungs
         stomach: OrganAnimalStomach
         liver:  OrganAnimalLiver

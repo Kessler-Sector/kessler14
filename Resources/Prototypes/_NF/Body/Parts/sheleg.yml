@@ -11,6 +11,8 @@
         Quantity: 3
       - ReagentId: Cryoxadone
         Quantity: 10
+  - type: BodyPart # Shitmed
+    species: Sheleg
 
 - type: entity
   id: TorsoSheleg

@@ -10,6 +10,7 @@
       - state: lung-r
   - type: Lung
   - type: Metabolizer
+    updateInterval: 2.0
     #updateInterval: 2.0 # Coyote, gives it the same update interval as normal lungs.
     removeEmpty: true
     solutionOnBody: false
@@ -32,3 +33,5 @@
         reagents:
         - ReagentId: UncookedAnimalProteins
           Quantity: 5
+  - type: Organ
+    slotId: lungs

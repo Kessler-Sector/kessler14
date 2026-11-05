@@ -92,6 +92,13 @@
   - type: StaticPrice # Frontier
     price: 15 # Frontier
   - type: NFLighter # Frontier
+  - type: Cautery # Shitmed
+    speed: 0.45
+  - type: SurgeryTool # Shitmed
+    startSound:
+      collection: lighterOnSounds
+    endSound:
+      collection: lighterOffSounds
 
 - type: entity
   name: cheap lighter

@@ -11,6 +11,8 @@
         Quantity: 3
       - ReagentId: GoblinBlood
         Quantity: 10
+  - type: BodyPart # Shitmed
+    species: Goblin
 
 - type: entity
   id: TorsoGoblin

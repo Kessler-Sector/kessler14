@@ -6,6 +6,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Physics.Components; // Kessler
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -120,6 +121,13 @@ public sealed class GibbingSystem : EntitySystem
 
         foreach (var container in _containerSystem.GetAllContainers(gibbable))
         {
+            // Kessler: solution containers hold an entity's reagents, not loose items. Dropping them leaves orphaned
+            // solution entities behind, which Shitmed's gibbing of body part contents otherwise does.
+            var containerId = container.ID;
+            if (containerId.StartsWith("solution@"))
+                continue;
+            // End Kessler
+
             var valid = true;
             if (allowedContainers != null)
                 valid = allowedContainers.Contains(container.ID);
@@ -320,6 +328,11 @@ public sealed class GibbingSystem : EntitySystem
     private void FlingDroppedEntity(EntityUid target, Vector2? direction, float impulse, float impulseVariance,
         Angle scatterConeAngle)
     {
+        // Kessler: Shitmed gibs drop body part contents, and some of those have no physics to fling.
+        if (!HasComp<PhysicsComponent>(target))
+            return;
+        // End Kessler
+
         var scatterAngle = direction?.ToAngle() ?? _random.NextAngle();
         var scatterVector = _random.NextAngle(scatterAngle - scatterConeAngle / 2, scatterAngle + scatterConeAngle / 2)
             .ToVec() * (impulse + _random.NextFloat(impulseVariance));

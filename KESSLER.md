@@ -76,3 +76,17 @@ Decisions made so far:
 1. **Stage A: in-process save/load diff.** A dev command snapshots the sector (entity counts per prototype; totals for battery charge, solution volume, stacks, cash; paper content), saves the map, loads it into a fresh map, snapshots again and diffs. No restart, no round-flow changes.
 2. **Stage B: across a real restart.** A config option makes the round rule load the save instead of generating the sector. Check power, atmos, doors, shuttles and a player's body afterwards, and measure save time, load time and tick time with a full sector.
 3. Character persistence, update infrastructure, ownership and upkeep, then the persistent-ID layer and per-grid saves.
+
+## Medical
+
+Surgery comes from **Monolith's Shitmed** (`_Shitmed` folders), ported onto our older engine. The plan is two steps, both before the server opens to players, so no saved bodies need converting:
+
+1. **Shitmed (done on `medical/shitmed`):** body-part targeting, limb and organ surgery, amputation and reattachment, cybernetics, the medical biofabricator.
+2. **Goob's injury layer on top:** wounds, bones, traumas, pain and consciousness ("Woundmed"). Most of its runtime state isn't saved yet, so porting it means adding `[DataField]`s, relinking after load and round-trip tests.
+
+Port notes:
+- Monolith's version of a file with `// Shitmed Change` markers was merged by hand; everything else of ours stays. Monolith-only features we don't have (cortical borer, abductors, goliath organ action, item tax) are left out.
+- Our engine rejects `[AlwaysPushInheritance]` on plain text and number fields when parent and child both set them, so those flags are removed in `OrganComponent` and `BodyPartComponent`.
+- Body slot names use spaces (`left arm`), not underscores, and the torso connects to the head. New species bodies must follow that.
+- Missing prototypes Monolith keeps outside `_Shitmed` live in `Resources/Prototypes/_Kessler/Shitmed/ported.yml`.
+- `surgery.can_operate_on_self` (default true) allows self-surgery, which matters at low population.

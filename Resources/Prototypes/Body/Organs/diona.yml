@@ -6,6 +6,7 @@
   - type: Sprite
     sprite: Mobs/Species/Diona/organs.rsi
   - type: Organ
+    species: "Diona"
   - type: Food
   - type: Extractable
     grindableSolutionName: organ
@@ -51,6 +52,15 @@
         reagents:
         - ReagentId: GreyMatter
           Quantity: 5
+  - type: MindContainer
+    showExamineInfo: true
+  - type: Speech
+    enabled: false
+  - type: Emoting
+    enabled: false
+  - type: Organ # Shitmed
+    slotId: brain
+  - type: Brain # Shitmed
 
 - type: entity
   id: OrganDionaEyes
@@ -62,6 +72,9 @@
     layers:
       - state: eyeball-l
       - state: eyeball-r
+  - type: Organ
+    slotId: eyes
+  - type: Eyes
 
 - type: entity
   id: OrganDionaStomach
@@ -97,6 +110,8 @@
   - type: Item
     size: Small
     heldPrefix: stomach
+  - type: Organ
+    slotId: stomach
 
 - type: entity
   id: OrganDionaLungs
@@ -130,6 +145,8 @@
         canReact: False
 
 # Organs that turn into nymphs on removal
+  - type: Organ
+    slotId: lungs
 - type: entity
   id: OrganDionaBrainNymph
   parent: OrganDionaBrain

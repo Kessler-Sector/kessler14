@@ -85,3 +85,13 @@
   materials: # abominations are slow and essentially worse than even carp
     Biomass: 70 # Frontier: 28<70
     Plasma: 500 # more biomass but less plasma
+
+
+# Shitmed Change
+- type: latheRecipe
+  id: PizzaRightArm
+  result: PizzaRightArm
+  completetime: 5
+  materials:
+    Biomass: 5
+# Shitmed Change End

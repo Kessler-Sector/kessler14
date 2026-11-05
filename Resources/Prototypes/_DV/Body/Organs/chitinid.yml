@@ -39,6 +39,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Organ
+    slotId: liver # Shitmed
 #    slotId: liver # Shitmed
 #    onAdd:  # Shitmed: Need to fix this in some otherway.
 #    - type: UnpoweredFlashlight
@@ -65,3 +66,4 @@
   - type: Item
     size: Small
     heldPrefix: liver
+  - type: Liver # Shitmed

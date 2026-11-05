@@ -103,6 +103,18 @@
   - type: CanHostGuardian
   - type: WeldingHealable
   - type: RoleplayIncentive # Wayfarer
+  - type: UserInterface
+    interfaces:
+      enum.InstrumentUiKey.Key:
+        type: InstrumentBoundUserInterface
+      enum.VoiceMaskUIKey.Key:
+        type: VoiceMaskBoundUserInterface
+      enum.HumanoidMarkingModifierKey.Key:
+        type: HumanoidMarkingModifierBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+      enum.SurgeryUIKey.Key: # Shitmed
+        type: SurgeryBui
 
 - type: entity
   save: false

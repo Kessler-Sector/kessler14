@@ -17,6 +17,7 @@
       - left arm
       - right leg
       - left leg
+      - head # Shitmed
       organs:
         heart: OrganDwarfHeart
         lungs: OrganHumanLungs
@@ -32,9 +33,9 @@
       connections:
       - left hand
     right hand:
-      part: RightHandHuman
+      part: RightHandHuman # Kessler: no dwarf hands here
     left hand:
-      part: LeftHandHuman
+      part: LeftHandHuman # Kessler: no dwarf hands here
     right leg:
       part: RightLegHuman
       connections:

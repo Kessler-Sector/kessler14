@@ -4,4 +4,4 @@
   root: hand 1
   slots:
     hand 1:
-      part: LeftArmBorg
+      part: SiliconLeftHand # Kessler: needs a hand-type part

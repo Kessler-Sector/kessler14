@@ -1186,6 +1186,7 @@
       - id: MedicalRecordsComputerCircuitboard
       # Lathes
       - id: MedicalTechFabCircuitboard
+      - id: MedicalBiofabMachineBoard # Shitmed
       # Machines
       - id: ChemMasterMachineCircuitboard
       - id: CentrifugeMachineCircuitboard
