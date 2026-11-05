@@ -398,7 +398,7 @@ Per-ship research stays as it is (each ship has its own server).
 - **Effort:** medium.
 - **Code:** `BlueprintComponent` (Wizden, `Content.Shared/Research/Components/`) and `BlueprintLatheSystem` (`_NF`): add runs and a "master" flag in a `_Kessler` component on the blueprint rather than editing `BlueprintComponent`. Hook lathe production (`LatheSystem` finishing an item) to consume a run from the blueprint that provided the recipe, and remove the recipe when runs reach zero (`BlueprintSystem.GetBlueprintRecipes` already rebuilds from contained blueprints). Lithograph cost in `lathe.yml` plus a points cost via `ResearchSystem.ModifyServerPoints`.
 - **Depends on:** framework licences and item rarity. S2 for tiers.
-- **Persistence:** runs and master flag as `[DataField]`s on the blueprint entity, which sits in the lathe's container and is saved with it. **Migration for existing blueprints:** existing saves have permanent blueprints. Recommend converting them on first load to masters only if few exist (they are a grandfathered reward), otherwise to copies with a generous run count. See the open decisions.
+- **Persistence:** runs and master flag as `[DataField]`s on the blueprint entity, which sits in the lathe's container and is saved with it. **Migration for existing blueprints:** existing saves have permanent blueprints. Convert them on first load to copies with a multiple of their tier's run count, with masters only for `Common` to `Superior` recipes. See the open decisions.
 
 ### S4. Invention
 
@@ -588,7 +588,7 @@ Phases 1 and 2 don't need the framework and can start as soon as Phase 0 lands. 
    Recommendation: never re-roll during a sector's life. Re-rolling wipes the value of what players learned. A new sector (a full wipe) is the only reset.
 
 6. **What happens to existing permanent blueprints when copies arrive (S3)?**
-   Recommendation: convert them on first load to copies with a generous run count (for example 100), and grant one master per discipline the ship has fully researched. Players keep what they earned and the market still starts moving.
+   Recommendation: convert them on first load to copies with five times their tier's run count (`Standard` 100, `Superior` 50; `Rare` stays at 3 under the framework rule), and grant masters for the `Common` to `Superior` recipes of each discipline the ship has fully researched. Players keep what they earned and the market still starts moving.
 
 7. **Target length for the tech tree.**
    Recommendation: one discipline to the top in 3 to 5 weeks at about 2 hours a day; useful mid-tier in a week; all disciplines beyond one ship (lockout tier 3).
