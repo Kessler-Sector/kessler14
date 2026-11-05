@@ -22,6 +22,7 @@ public sealed partial class AnomalySystem
     {
         SubscribeLocalEvent<AnomalyVesselComponent, ComponentShutdown>(OnVesselShutdown);
         SubscribeLocalEvent<AnomalyVesselComponent, MapInitEvent>(OnVesselMapInit);
+        SubscribeLocalEvent<AnomalyVesselComponent, ComponentStartup>(OnVesselStartup); // Kessler
         SubscribeLocalEvent<AnomalyVesselComponent, UpgradeExamineEvent>(OnUpgradeExamine);
         SubscribeLocalEvent<AnomalyVesselComponent, InteractUsingEvent>(OnVesselInteractUsing);
         SubscribeLocalEvent<AnomalyVesselComponent, ExaminedEvent>(OnExamined);
@@ -68,6 +69,14 @@ public sealed partial class AnomalySystem
     {
         UpdateVesselAppearance(uid,  component);
     }
+
+    // Kessler: appearance data is not saved and map-init does not run on load, so show a loaded vessel's anomaly again
+    private void OnVesselStartup(EntityUid uid, AnomalyVesselComponent component, ComponentStartup args)
+    {
+        if (component.Anomaly != null)
+            UpdateVesselAppearance(uid, component);
+    }
+    // End Kessler
 
     private void OnUpgradeExamine(EntityUid uid, AnomalyVesselComponent component, UpgradeExamineEvent args)
     {

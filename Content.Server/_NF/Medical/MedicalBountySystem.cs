@@ -90,10 +90,15 @@ public sealed partial class MedicalBountySystem : EntitySystem
         if (component.Bounty == null)
         {
             if (_cachedPrototypes.Count > 0)
-                component.Bounty = _random.Pick(_cachedPrototypes);
+                component.Bounty = _random.Pick(_cachedPrototypes).ID; // Kessler: added .ID
             else
                 return; // Nothing to do, keep bounty at null.
         }
+
+        // Kessler: the component stores the bounty's id
+        if (component.Bounty is not { } bountyId || !_proto.TryIndex(bountyId, out var bounty))
+            return;
+        // End Kessler
 
         // Precondition: check entity can fulfill bounty conditions
         if (!TryComp<DamageableComponent>(entity, out var damageable) ||
@@ -102,8 +107,8 @@ public sealed partial class MedicalBountySystem : EntitySystem
 
         // Apply damage from prototype, keep track of value
         DamageSpecifier damageToApply = new DamageSpecifier();
-        var bountyValueAccum = component.Bounty.BaseReward;
-        foreach (var (damageType, damageValue) in component.Bounty.DamageSets)
+        var bountyValueAccum = bounty.BaseReward;
+        foreach (var (damageType, damageValue) in bounty.DamageSets)
         {
             if (!_proto.TryIndex<DamageTypePrototype>(damageType, out var damageProto))
                 continue;
@@ -115,7 +120,7 @@ public sealed partial class MedicalBountySystem : EntitySystem
         _damageable.TryChangeDamage(entity, damageToApply, true, damageable: damageable);
 
         // Inject reagents into chemical solution, if any
-        foreach (var (reagentType, reagentValue) in component.Bounty.Reagents)
+        foreach (var (reagentType, reagentValue) in bounty.Reagents)
         {
             if (!_proto.HasIndex<ReagentPrototype>(reagentType))
                 continue;
@@ -148,6 +153,7 @@ public sealed partial class MedicalBountySystem : EntitySystem
 
         if (!TryComp<MedicalBountyComponent>(bountyUid, out var medicalBounty) ||
             medicalBounty.Bounty == null ||
+            !_proto.TryIndex(medicalBounty.Bounty.Value, out var bounty) || // Kessler
             !TryComp<DamageableComponent>(bountyUid, out var damageable))
         {
             _popup.PopupEntity(Loc.GetString("medical-bounty-redemption-fail-no-bounty"), uid);
@@ -156,7 +162,7 @@ public sealed partial class MedicalBountySystem : EntitySystem
         }
 
         // Check that the entity inside is alive.
-        var bounty = medicalBounty.Bounty;
+        // var bounty = medicalBounty.Bounty; // Kessler: indexed above
         if (damageable.TotalDamage > bounty.MaximumDamageToRedeem)
         {
             _popup.PopupEntity(Loc.GetString("medical-bounty-redemption-fail-too-much-damage"), uid);
@@ -270,6 +276,7 @@ public sealed partial class MedicalBountySystem : EntitySystem
         // We either have no value or no way to accurately calculate the value of the bounty.
         if (!TryComp<MedicalBountyComponent>(bountyUid, out var medicalBounty) ||
             medicalBounty.Bounty == null ||
+            !_proto.TryIndex(medicalBounty.Bounty.Value, out var bounty) || // Kessler
             !TryComp<DamageableComponent>(bountyUid, out var damageable) ||
             !TryComp<MobStateComponent>(bountyUid, out var mobState))
         {
@@ -277,7 +284,7 @@ public sealed partial class MedicalBountySystem : EntitySystem
         }
 
         // Check that the entity inside is sufficiently healed.
-        var bounty = medicalBounty.Bounty;
+        // var bounty = medicalBounty.Bounty; // Kessler: indexed above
         if (damageable.TotalDamage > bounty.MaximumDamageToRedeem)
         {
             return new MedicalBountyRedemptionUIState(MedicalBountyRedemptionStatus.TooDamaged, 0, paidToStation);
