@@ -91,10 +91,12 @@ Decisions made so far:
 
 ## Medical
 
-Surgery comes from **Monolith's Shitmed** (`_Shitmed` folders), ported onto our older engine. The plan is two steps, both before the server opens to players, so no saved bodies need converting:
+Surgery comes from **Monolith's Shitmed** (`_Shitmed` folders), ported onto our older engine:
 
-1. **Shitmed (done on `medical/shitmed`):** body-part targeting, limb and organ surgery, amputation and reattachment, cybernetics, the medical biofabricator.
-2. **Goob's injury layer on top:** wounds, bones, traumas, pain and consciousness ("Woundmed"). Most of its runtime state isn't saved yet, so porting it means adding `[DataField]`s, relinking after load and round-trip tests.
+- **Shitmed (done):** body-part targeting, limb and organ surgery, amputation and reattachment, cybernetics, the medical biofabricator, and per body part damage in the health analyzer and MedTek cartridge.
+- **Goob's injury layer ("Woundmed"): shelved for now.** Wounds, bones, traumas, pain and consciousness on top of Shitmed. It is cheapest to add before the server opens to players; afterwards every saved body would need converting. Most of its runtime state isn't saved yet, so porting it means adding `[DataField]`s, relinking after load and round-trip tests.
+- **Biofabricator board:** found as medical loot; that is intended.
+- **Energy surgical tools** (energy scalpel, searing tool, mechanical pinches, `SMSurgery` pack): should be locked behind science. Wire them up during the science rework.
 
 Port notes:
 - Monolith's version of a file with `// Shitmed Change` markers was merged by hand; everything else of ours stays. Monolith-only features we don't have (cortical borer, abductors, goliath organ action, item tax) are left out.
