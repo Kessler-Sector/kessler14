@@ -39,4 +39,34 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<int> TickLogSeconds =
         CVarDef.Create("kessler.diagnostics.tick_log_seconds", 0, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Whether ship owners are billed daily upkeep.
+    /// </summary>
+    public static readonly CVarDef<bool> UpkeepEnabled =
+        CVarDef.Create("kessler.upkeep.enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Upkeep per billing interval, as a share of the ship's purchase price.
+    /// </summary>
+    public static readonly CVarDef<float> UpkeepRate =
+        CVarDef.Create("kessler.upkeep.rate", 0.01f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Real hours between upkeep charges.
+    /// </summary>
+    public static readonly CVarDef<float> UpkeepIntervalHours =
+        CVarDef.Create("kessler.upkeep.interval_hours", 24f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Real days a ship may stay in upkeep debt before it is due for impounding.
+    /// </summary>
+    public static readonly CVarDef<float> UpkeepGraceDays =
+        CVarDef.Create("kessler.upkeep.grace_days", 3f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// How often, in seconds, the server checks for upkeep that is due.
+    /// </summary>
+    public static readonly CVarDef<float> UpkeepCheckSeconds =
+        CVarDef.Create("kessler.upkeep.check_seconds", 60f, CVar.SERVERONLY);
 }

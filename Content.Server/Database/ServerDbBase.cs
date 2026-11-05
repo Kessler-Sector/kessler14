@@ -217,6 +217,22 @@ namespace Content.Server.Database
             return profile == 0 ? null : profile;
         }
 
+        // Kessler: take money from a character's bank account by profile ID, for upkeep billed while the owner is
+        // offline. Returns the new balance, or null if the profile doesn't exist or can't afford it.
+        public async Task<int?> TryWithdrawBankBalanceAsync(int profileId, int amount)
+        {
+            await using var db = await GetDb();
+
+            var profile = await db.DbContext.Profile.SingleOrDefaultAsync(p => p.Id == profileId);
+            if (profile == null || amount < 0 || profile.BankBalance < amount)
+                return null;
+
+            profile.BankBalance -= amount;
+            await db.DbContext.SaveChangesAsync();
+            return profile.BankBalance;
+        }
+        // End Kessler
+
         private static async Task SetSelectedCharacterSlotAsync(NetUserId userId, int newSlot, ServerDbContext db)
         {
             var prefs = await db.Preference.SingleAsync(p => p.UserId == userId.UserId);

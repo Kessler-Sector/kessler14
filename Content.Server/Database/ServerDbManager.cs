@@ -53,6 +53,7 @@ namespace Content.Server.Database
         Task DeleteSlotAndSetSelectedIndex(NetUserId userId, int deleteSlot, int newSlot);
         Task<PlayerPreferences?> GetPlayerPreferencesAsync(NetUserId userId, CancellationToken cancel);
         Task<int?> GetProfileIdAsync(NetUserId userId, int slot); // Wayfarer (NEW) - Get database profile ID
+        Task<int?> TryWithdrawBankBalanceAsync(int profileId, int amount); // Kessler: upkeep billing for offline owners
 
         #endregion
 
@@ -736,6 +737,14 @@ namespace Content.Server.Database
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetProfileIdAsync(userId, slot));
         }
+
+        // Kessler
+        public Task<int?> TryWithdrawBankBalanceAsync(int profileId, int amount)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.TryWithdrawBankBalanceAsync(profileId, amount));
+        }
+        // End Kessler
 
         public Task AssignUserIdAsync(string name, NetUserId userId)
         {

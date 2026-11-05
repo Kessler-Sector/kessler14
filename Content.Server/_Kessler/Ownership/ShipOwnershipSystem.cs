@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Server.Database;
 using Content.Server.Preferences.Managers;
+using Content.Shared._Kessler.CCVar;
 using Content.Shared._NF.Bank.Components;
+using Robust.Shared.Configuration;
 using Robust.Server.Player;
 using Robust.Shared.Network;
 
@@ -15,6 +17,7 @@ public sealed class ShipOwnershipSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IServerPreferencesManager _prefs = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     public override void Initialize()
     {
@@ -49,6 +52,10 @@ public sealed class ShipOwnershipSystem : EntitySystem
         comp.PurchasePrice = price;
         comp.PurchasedWithVoucher = purchasedWithVoucher;
         comp.PurchasedAt = DateTime.UtcNow;
+        comp.NextUpkeep = comp.PurchasedAt + TimeSpan.FromHours(_cfg.GetCVar(KesslerCVars.UpkeepIntervalHours));
+        comp.UpkeepDebt = 0;
+        comp.DebtSince = null;
+        comp.ImpoundDue = false;
 
         if (slot >= 0)
             ResolveProfileId(shuttle, userId, slot);
