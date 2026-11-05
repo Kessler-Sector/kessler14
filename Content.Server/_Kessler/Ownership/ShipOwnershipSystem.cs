@@ -71,6 +71,18 @@ public sealed class ShipOwnershipSystem : EntitySystem
         ship.Comp.OwnerProfileId = profileId;
     }
 
+    /// <summary>
+    /// A ship back from storage starts a fresh upkeep cycle: storage is free and any debt has been paid.
+    /// </summary>
+    public void ResetAfterRecall(Entity<ShipOwnershipComponent> ship, DateTime now)
+    {
+        ship.Comp.NextUpkeep = now + TimeSpan.FromHours(_cfg.GetCVar(KesslerCVars.UpkeepIntervalHours));
+        ship.Comp.UpkeepDebt = 0;
+        ship.Comp.DebtSince = null;
+        ship.Comp.ImpoundDue = false;
+        ship.Comp.ChargePending = false;
+    }
+
     public bool TryGetOwnership(EntityUid shuttle, [NotNullWhen(true)] out ShipOwnershipComponent? ownership)
     {
         return TryComp(shuttle, out ownership);
