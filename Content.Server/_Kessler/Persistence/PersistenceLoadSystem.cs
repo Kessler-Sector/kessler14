@@ -12,7 +12,10 @@ using Robust.Server.Player;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Map.Events;
+using System.Numerics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -127,6 +130,35 @@ public sealed class PersistenceLoadSystem : EntitySystem
         _publicTransit.RegisterLoadedStops(result);
         RestoreNpcOwners(result);
         RestorePlayerMindLinks(result);
+        return true;
+    }
+
+    /// <summary>
+    /// Loads a stored ship onto <paramref name="map"/> the same way as the sector save: no migrations for prototypes
+    /// that still exist, and the same fix-ups afterwards. Fails, deleting whatever loaded, unless the file holds exactly
+    /// one grid.
+    /// </summary>
+    public bool TryLoadStoredGrid(ResPath path, MapId map, Vector2 offset, [NotNullWhen(true)] out Entity<MapGridComponent>? grid)
+    {
+        grid = null;
+        var options = new MapLoadOptions
+        {
+            MergeMap = map,
+            Offset = offset,
+            ExpectedCategory = FileCategory.Grid,
+        };
+
+        if (!TryLoadSave(path, options, out var result))
+            return false;
+
+        if (result.Grids.Count != 1)
+        {
+            Log.Error($"Stored ship {path} held {result.Grids.Count} grids instead of one; not loaded");
+            _mapLoader.Delete(result);
+            return false;
+        }
+
+        grid = result.Grids.Single();
         return true;
     }
 

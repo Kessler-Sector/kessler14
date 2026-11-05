@@ -364,6 +364,23 @@ public sealed class PersistenceSaveSystem : EntitySystem
     }
 
     /// <summary>
+    /// Saves one grid (a ship) with the Kessler save policy to a file in the server data folder, for ship storage.
+    /// </summary>
+    public bool TrySaveGrid(EntityUid grid, ResPath path)
+    {
+        var options = SerializationOptions.Default with { Category = FileCategory.Grid };
+        var (data, category) = Serialize([grid], options, applyPolicy: true, new List<string>());
+        if (category != FileCategory.Grid)
+        {
+            Log.Error($"Failed to save {ToPrettyString(grid)} as a grid. Output: {category}");
+            return false;
+        }
+
+        Write(path, data);
+        return true;
+    }
+
+    /// <summary>
     /// Writes serialized data to a YAML file in the server data folder, the same way <see cref="MapLoaderSystem"/>
     /// does.
     /// </summary>

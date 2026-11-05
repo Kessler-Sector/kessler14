@@ -69,4 +69,28 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<float> UpkeepCheckSeconds =
         CVarDef.Create("kessler.upkeep.check_seconds", 60f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Whether impounded ships and ships of inactive owners are moved into storage automatically.
+    /// </summary>
+    public static readonly CVarDef<bool> StorageEnabled =
+        CVarDef.Create("kessler.storage.enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Real days without the owner logging in before their ships are moved into storage.
+    /// </summary>
+    public static readonly CVarDef<float> StorageInactiveDays =
+        CVarDef.Create("kessler.storage.inactive_days", 7f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// How often, in minutes, the server looks for ships to store.
+    /// </summary>
+    public static readonly CVarDef<float> StorageCheckMinutes =
+        CVarDef.Create("kessler.storage.check_minutes", 10f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Folder in the server data directory that holds stored ships.
+    /// </summary>
+    public static readonly CVarDef<string> StoragePath =
+        CVarDef.Create("kessler.storage.path", "/kessler/storage", CVar.SERVERONLY);
 }
