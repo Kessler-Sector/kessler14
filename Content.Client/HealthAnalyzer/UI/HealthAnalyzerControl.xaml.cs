@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared._Shitmed.Targeting; // Shitmed Change
 using Content.Shared.Atmos;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -33,6 +34,37 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
 
     public Action? OnPrintPatientRecord; // Frontier: Allow printing hardcopy of patient information
 
+    // Shitmed Change Start
+    /// <summary>
+    /// Raised when the user picks a body part to look at, or null for the whole body.
+    /// </summary>
+    public Action<NetEntity, TargetBodyPart?>? OnBodyPartSelected;
+
+    /// <summary>
+    /// Whether the part buttons work. The cryo pod shows the body doll but can't pick parts.
+    /// </summary>
+    public bool PartSelectionEnabled;
+
+    private static readonly (TargetBodyPart? Part, string Loc)[] PartButtonOrder =
+    {
+        (null, "health-analyzer-window-part-whole-body"),
+        (TargetBodyPart.Head, "health-analyzer-window-part-head"),
+        (TargetBodyPart.Torso, "health-analyzer-window-part-torso"),
+        (TargetBodyPart.LeftArm, "health-analyzer-window-part-left-arm"),
+        (TargetBodyPart.RightArm, "health-analyzer-window-part-right-arm"),
+        (TargetBodyPart.LeftHand, "health-analyzer-window-part-left-hand"),
+        (TargetBodyPart.RightHand, "health-analyzer-window-part-right-hand"),
+        (TargetBodyPart.LeftLeg, "health-analyzer-window-part-left-leg"),
+        (TargetBodyPart.RightLeg, "health-analyzer-window-part-right-leg"),
+        (TargetBodyPart.LeftFoot, "health-analyzer-window-part-left-foot"),
+        (TargetBodyPart.RightFoot, "health-analyzer-window-part-right-foot"),
+    };
+
+    private readonly Dictionary<TargetBodyPart, Button> _partButtons = new();
+    private Button _wholeBodyButton = default!;
+    private NetEntity? _target;
+    // Shitmed Change End
+
     public HealthAnalyzerControl()
     {
         RobustXamlLoader.Load(this);
@@ -44,19 +76,51 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         _cache = dependencies.Resolve<IResourceCache>();
 
         PrintRecordButton.OnPressed += (_) => OnPrintPatientRecord?.Invoke(); // Frontier
+
+        // Shitmed Change Start
+        foreach (var (part, loc) in PartButtonOrder)
+        {
+            var button = new Button
+            {
+                Text = Loc.GetString(loc),
+                HorizontalExpand = true,
+                StyleClasses = { "ButtonSquare" },
+                ToggleMode = true,
+            };
+            button.OnPressed += _ =>
+            {
+                if (_target is { } target)
+                    OnBodyPartSelected?.Invoke(target, part);
+            };
+            PartButtons.AddChild(button);
+
+            if (part is { } p)
+                _partButtons[p] = button;
+            else
+                _wholeBodyButton = button;
+        }
+        // Shitmed Change End
     }
 
     public void Populate(HealthAnalyzerUiState state)
     {
         var target = _entityManager.GetEntity(state.TargetEntity);
+        _target = state.TargetEntity; // Shitmed Change
+
+        // Shitmed Change: when a body part is selected, its damage is shown instead of the whole body's.
+        var part = _entityManager.GetEntity(state.Part);
+        var damageSource = part != null && _entityManager.HasComponent<DamageableComponent>(part) ? part : target;
 
         if (target == null
-            || !_entityManager.TryGetComponent<DamageableComponent>(target, out var damageable))
+            || !_entityManager.TryGetComponent<DamageableComponent>(damageSource, out var damageable))
         {
             NoPatientDataText.Visible = true;
             PrintButtonsContainer.Visible = false; // Frontier
+            BodyPartsContainer.Visible = false; // Shitmed Change
             return;
         }
+
+        UpdateBodyParts(state, part != null && damageSource == part ? part : null); // Shitmed Change
 
         NoPatientDataText.Visible = false;
 
@@ -156,6 +220,63 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
 
         DrawDiagnosticGroups(damageSortedGroups, damagePerType);
     }
+
+    // Shitmed Change Start
+    private void UpdateBodyParts(HealthAnalyzerUiState state, EntityUid? part)
+    {
+        BodyPartsContainer.Visible = state.Body != null;
+        if (state.Body == null)
+            return;
+
+        PartNameLabel.Text = part != null
+            ? Identity.Name(part.Value, _entityManager)
+            : Loc.GetString("health-analyzer-window-part-whole-body");
+
+        // The doll: one layer per body part, coloured by how hurt it is.
+        BodyDoll.RemoveAllChildren();
+        foreach (var (bodyPart, integrity) in state.Body)
+        {
+            var name = (Enum.GetName(typeof(TargetBodyPart), bodyPart) ?? "unknown").ToLowerInvariant();
+            var rsi = new SpriteSpecifier.Rsi(new ResPath($"/Textures/_Shitmed/Interface/Targeting/Status/{name}.rsi"), $"{name}_{(int) integrity}");
+            BodyDoll.AddChild(new TextureRect
+            {
+                Texture = _spriteSystem.Frame0(rsi),
+                Stretch = TextureRect.StretchMode.Scale,
+                TextureScale = new Vector2(2, 2),
+            });
+        }
+
+        PartButtons.Visible = PartSelectionEnabled;
+        _wholeBodyButton.Pressed = part == null;
+        _wholeBodyButton.Disabled = !PartSelectionEnabled;
+
+        TargetBodyPart? selected = null;
+        if (part != null && _entityManager.TryGetComponent<Content.Shared.Body.Part.BodyPartComponent>(part, out var partComp))
+            selected = _entityManager.System<Content.Shared.Body.Systems.SharedBodySystem>().GetTargetBodyPart(partComp);
+
+        foreach (var (bodyPart, button) in _partButtons)
+        {
+            var integrity = state.Body.TryGetValue(bodyPart, out var value) ? value : TargetIntegrity.Severed;
+            button.Disabled = !PartSelectionEnabled || integrity == TargetIntegrity.Severed;
+            button.Pressed = selected == bodyPart;
+            button.ModulateSelfOverride = IntegrityColor(integrity);
+        }
+    }
+
+    private static Color IntegrityColor(TargetIntegrity integrity)
+    {
+        return integrity switch
+        {
+            TargetIntegrity.Healthy => Color.White,
+            TargetIntegrity.LightlyWounded => Color.FromHex("#D0F0A0"),
+            TargetIntegrity.SomewhatWounded => Color.FromHex("#F0F080"),
+            TargetIntegrity.ModeratelyWounded => Color.FromHex("#F0C060"),
+            TargetIntegrity.HeavilyWounded => Color.FromHex("#F09050"),
+            TargetIntegrity.CriticallyWounded => Color.FromHex("#F05050"),
+            _ => Color.FromHex("#808080"),
+        };
+    }
+    // Shitmed Change End
 
     private static string GetStatus(MobState mobState)
     {

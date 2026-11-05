@@ -24,6 +24,11 @@ namespace Content.Client.HealthAnalyzer.UI
             _window.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
 
             _window.GetAnalyzerControl().OnPrintPatientRecord += () => SendMessage(new HealthAnalyzerPrintPatientRecordMessage()); // Frontier
+
+            // Shitmed Change: pick a body part to look at
+            var control = _window.GetAnalyzerControl();
+            control.PartSelectionEnabled = true;
+            control.OnBodyPartSelected += (target, part) => SendMessage(new HealthAnalyzerPartMessage(target, part));
         }
 
         protected override void ReceiveMessage(BoundUserInterfaceMessage message)

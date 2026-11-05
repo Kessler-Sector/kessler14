@@ -23,3 +23,16 @@ health-analyzer-window-scan-mode-active = Active
 health-analyzer-window-scan-mode-inactive = Inactive
 
 health-analyzer-popup-scan-target = {CAPITALIZE(THE($user))} is trying to scan you!
+
+## Shitmed: body part view
+health-analyzer-window-part-whole-body = Whole body
+health-analyzer-window-part-head = Head
+health-analyzer-window-part-torso = Torso
+health-analyzer-window-part-left-arm = L arm
+health-analyzer-window-part-right-arm = R arm
+health-analyzer-window-part-left-hand = L hand
+health-analyzer-window-part-right-hand = R hand
+health-analyzer-window-part-left-leg = L leg
+health-analyzer-window-part-right-leg = R leg
+health-analyzer-window-part-left-foot = L foot
+health-analyzer-window-part-right-foot = R foot

@@ -21,6 +21,12 @@ using Robust.Shared.Timing;
 using Content.Server._NF.Medical; // Frontier
 using Content.Server._NF.Traits.Assorted;
 using Content.Server.Body.Systems; // Frontier
+// Shitmed Change Start
+using System.Linq;
+using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
+using Content.Shared._Shitmed.Targeting;
+// Shitmed Change End
 
 namespace Content.Server.Medical;
 
@@ -36,6 +42,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly BloodstreamSystem _bloodstreamSystem = default!;
+    [Dependency] private readonly SharedBodySystem _bodySystem = default!; // Shitmed Change
 
     public override void Initialize()
     {
@@ -44,6 +51,12 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         SubscribeLocalEvent<HealthAnalyzerComponent, EntGotInsertedIntoContainerMessage>(OnInsertedIntoContainer);
         SubscribeLocalEvent<HealthAnalyzerComponent, ItemToggledEvent>(OnToggled);
         SubscribeLocalEvent<HealthAnalyzerComponent, DroppedEvent>(OnDropped);
+        // Shitmed Change Start
+        Subs.BuiEvents<HealthAnalyzerComponent>(HealthAnalyzerUiKey.Key, subs =>
+        {
+            subs.Event<HealthAnalyzerPartMessage>(OnHealthAnalyzerPartSelected);
+        });
+        // Shitmed Change End
     }
 
     public override void Update(float frameTime)
@@ -63,6 +76,16 @@ public sealed class HealthAnalyzerSystem : EntitySystem
                 StopAnalyzingEntity((uid, component), patient);
                 continue;
             }
+
+            // Shitmed Change Start: the part being looked at was removed, so go back to the whole body.
+            if (component.CurrentBodyPart is { } currentPart
+                && (Deleted(currentPart)
+                    || !TryComp(currentPart, out BodyPartComponent? bodyPart)
+                    || bodyPart.Body != patient))
+            {
+                component.CurrentBodyPart = null;
+            }
+            // Shitmed Change End
 
             component.NextUpdate = _timing.CurTime + component.UpdateInterval;
 
@@ -161,6 +184,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
     {
         //Link the health analyzer to the scanned entity
         healthAnalyzer.Comp.ScannedEntity = target;
+        healthAnalyzer.Comp.CurrentBodyPart = null; // Shitmed Change: a new scan starts on the whole body
 
         _toggle.TryActivate(healthAnalyzer.Owner);
 
@@ -176,11 +200,39 @@ public sealed class HealthAnalyzerSystem : EntitySystem
     {
         //Unlink the analyzer
         healthAnalyzer.Comp.ScannedEntity = null;
+        healthAnalyzer.Comp.CurrentBodyPart = null; // Shitmed Change
 
         _toggle.TryDeactivate(healthAnalyzer.Owner);
 
         UpdateScannedUser(healthAnalyzer, target, false);
     }
+    // Shitmed Change Start
+    /// <summary>
+    /// Look at one body part of the patient, or the whole body when no part is given.
+    /// </summary>
+    private void OnHealthAnalyzerPartSelected(Entity<HealthAnalyzerComponent> healthAnalyzer, ref HealthAnalyzerPartMessage args)
+    {
+        if (!TryGetEntity(args.Owner, out var patient) || healthAnalyzer.Comp.ScannedEntity != patient)
+            return;
+
+        EntityUid? part = null;
+        if (args.BodyPart is { } targetPart)
+        {
+            var (type, symmetry) = _bodySystem.ConvertTargetBodyPart(targetPart);
+            part = _bodySystem.GetBodyChildrenOfType(patient.Value, type, symmetry: symmetry)
+                .Select(p => (EntityUid?) p.Id)
+                .FirstOrDefault();
+
+            // That part is missing; nothing to show.
+            if (part == null)
+                return;
+        }
+
+        healthAnalyzer.Comp.CurrentBodyPart = part;
+        UpdateScannedUser(healthAnalyzer, patient.Value, true);
+    }
+    // Shitmed Change End
+
     /// <summary>
     /// DeltaV - If the scanner is active, sends one last update and sets it to inactive.
     /// </summary>
@@ -255,6 +307,21 @@ public sealed class HealthAnalyzerSystem : EntitySystem
 
         var printable = HasComp<HealthAnalyzerPrinterComponent>(healthAnalyzer); // Frontier
 
+        // Shitmed Change Start
+        Dictionary<TargetBodyPart, TargetIntegrity>? body = null;
+        if (HasComp<TargetingComponent>(entity))
+            body = _bodySystem.GetBodyPartStatus(entity);
+
+        NetEntity? part = null;
+        if (TryComp<HealthAnalyzerComponent>(healthAnalyzer, out var analyzer)
+            && analyzer.ScannedEntity == entity
+            && analyzer.CurrentBodyPart is { } currentPart
+            && !Deleted(currentPart))
+        {
+            part = GetNetEntity(currentPart);
+        }
+        // Shitmed Change End
+
         var state = new HealthAnalyzerUiState(
             GetNetEntity(entity),
             bodyTemperature,
@@ -264,7 +331,11 @@ public sealed class HealthAnalyzerSystem : EntitySystem
             unrevivable,
             unclonable, // Frontier
             printable // Frontier
-        );
+        )
+        {
+            Body = body, // Shitmed Change
+            Part = part, // Shitmed Change
+        };
 
         _uiSystem.ServerSendUiMessage(healthAnalyzer, HealthAnalyzerUiKey.Key, new HealthAnalyzerScannedUserMessage(state));
 
