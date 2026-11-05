@@ -45,6 +45,19 @@
         </GridContainer>
     </BoxContainer>
 
+    <!-- Shitmed Change Start: per body part view -->
+    <BoxContainer Name="BodyPartsContainer" Visible="False" Orientation="Vertical">
+        <PanelContainer StyleClasses="LowDivider" />
+        <BoxContainer Orientation="Horizontal" Margin="0 5 0 5">
+            <PanelContainer Name="BodyDoll" SetSize="64 64" VerticalAlignment="Top" />
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="5 0 0 0">
+                <Label Name="PartNameLabel" Text="{Loc 'health-analyzer-window-part-whole-body'}" />
+                <GridContainer Name="PartButtons" Columns="3" HorizontalExpand="True" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+    <!-- Shitmed Change End -->
+
     <PanelContainer Name="AlertsDivider" Visible="False" StyleClasses="LowDivider" />
 
     <BoxContainer Name="AlertsContainer" Visible="False" Margin="0 5" Orientation="Vertical" HorizontalAlignment="Center">
