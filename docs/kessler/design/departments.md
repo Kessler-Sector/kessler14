@@ -2,7 +2,7 @@
 
 Design document. Nothing here is built yet. It sits next to two sibling documents written at the same time:
 
-- `docs/kessler/design/progression.md`: the general progression framework (stages, reputation and licences, item rarity tiers, economy rates). This document assumes it exists and says in section 8 what it needs from it.
+- `docs/kessler/design/progression.md`: the general progression framework (stages S0–S4, reputation tracks, licences, item rarity tiers, money bands, the `WorkOrders` sector account). This document uses its IDs and numbers; section 8 maps each proposal onto it.
 - The medical, chemistry and science design, which covers those departments. They appear here only where other loops feed them.
 
 Scope here: atmospherics and gas mining, cargo and trade, security, salvage and mining, engineering, and the station and service jobs (janitor, chef, bartender, botany, librarian, mail carrier, station staff, station representative).
@@ -18,7 +18,7 @@ Top recommendations, in build order:
    - **Sector market ledger**: sale prices fall as a station is flooded with one commodity and recover over real time. This is the fix for gas and it is also what makes trade routes interesting.
    - **Contract board**: NPC-issued work orders and contracts with requirements, a real-time deadline, a payout to the player, and reputation. It gives every department work when nobody else is online, and it is the backbone for station jobs at lowpop.
    - **Station needs and the sector threat level**: stations consume things over real time (food, air, medicine, power, cleanliness) and post contracts to restock them. NPC pirates and smugglers grow in strength when nobody deals with them, which gives security PvE work and gives haulers and miners a reason to want security.
-3. **Pay the worker, not the account.** Mail, power sales and dead-drop scans pay into station bank accounts today, and those accounts also tick up on a timer whether anyone works or not. Contracts should pay the player who did the work, with a smaller cut to the department account.
+3. **Pay the worker, not the account.** Mail, power sales and dead-drop scans pay into station bank accounts today, and those accounts also tick up on a timer whether anyone works or not. Contracts should pay the player who did the work from the framework's population-scaled `WorkOrders` account, with a smaller cut to the department account.
 4. **Gas mining: from "find rock, drain rock" to an atmos trade.** Raw gas cheap and saturating, refined gas (tritium, frezon, pure canisters to spec) valuable, rich deposits in hazardous fields, deposits that run out for good while new fields appear over time.
 5. **Cargo: routes that change.** Each station has supply and demand that drifts over days. Supply chains link departments (botany → kitchen → remote outposts, gas → stations, ore → Theseus). Courier contracts carry collateral, and valuable cargo draws NPC pirates.
 6. **Security: PvE first, PvP when it comes.** An NPC crime director scaled to how many security players are online: smuggler ships to intercept, pirate raids on haulers, patrol and escort contracts, generated investigations that use the existing forensics, and licence and customs checks. The current combat events need 15 players, so lowpop security has no NPC content at all today.
@@ -219,14 +219,18 @@ Contract types (each department section below lists its own):
 | Investigation | Correct suspect named and arrested, evidence delivered | Forensics, station and criminal records |
 | Station work order | A tile cleaned, a dish delivered, a machine repaired | Puddles, food, construction |
 
-Payment goes **to the holder's bank** via `BankSystem`, with a cut (for example 10–20%) to the issuing department's sector account. The account's ticking income is reduced or capped, so its balance reflects work done.
+Payment goes **to the holder's bank** via `BankSystem`, from the framework's `WorkOrders` sector account (its tick rate scales with online players, which bounds the faucet), with a cut (for example 10–20%) to the issuing department's sector account. The departments' own flat ticking income is reduced or capped, so their balances reflect work done. The ledger type `StationWithdrawalWorkOrder` already exists in the bank code and is unused; contract payouts can use it or a new `ContractPayout` type.
 
-Caps keep it from becoming the new gas mining: each issuer has a budget per real day per category, and per-character limits on how many of one type can be done per day, tuned by stage.
+Sizing follows the framework: payout = expected minutes × the holder's stage band rate (S0 about 150/min, S2 about 500/min), and reputation = about 1 point per expected minute on the issuer's track, awarded to every participant (the whole crew for ship jobs).
+
+Caps keep it from becoming the new gas mining: each issuer has a budget per real day per category, and per-character limits on how many of one type can be done per day, tuned by stage. The framework's daily reputation soft cap (180 per track per real day) applies on top.
+
+Other designs plug in as contract types rather than separate boards: the medical-science design's pharmacy contract board is the "procurement" type with a reagent check and the `Medical` track.
 
 UI: a PDA cartridge (`Content.Client/_Kessler/Contracts/`) plus a console at each station. The bounty contract cartridge (`Content.Server/_NF/BountyContracts/`) already has a contract list UI to copy from.
 
 - Effort: **large** (the board itself is medium; each contract type is small to medium on top).
-- Depends on: reputation and licence API from the progression framework, for gating and rewards. Can ship with a stub (no gating) first.
+- Depends on: the framework's `KesslerReputationSystem.TryAward`, licence checks and `WorkOrders` account. Can ship with a stub (no gating, no reputation) first.
 - Persistence: contracts are `[DataDefinition]` records in a list on the sector service entity, with `DateTime` deadlines. Tagged entities (a delivery crate, an NPC target) carry a small component with the contract id. Deadlines that pass while the server is down resolve at load. A held contract whose holder is offline pauses or quietly expires without penalty (principle 5).
 
 ### 5.3 Station needs
@@ -261,10 +265,10 @@ Each proposal has an effort (small: days; medium: one to two weeks; large: more)
 
 Goal: gas mining stays the high-reward, skill-heavy job, but the money comes from atmos knowledge and logistics, not from finding a rock.
 
-**A1. Rebalance raw gas now.** Cut `pricePerMole` for raw gases that deposits produce in bulk (plasma 1 → about 0.4; oxygen and nitrogen 0.2 → 0.1; water vapour, CO2, N2O lower), keep refined gases (tritium, frezon) high, and lower `GasSaleConsoleHigh` from 1.25 to 1.0 everywhere except where a station needs gas. Target: a very large deposit worth roughly two to three days of Gaslight upkeep plus a good evening's pay, not the ship's price.
+**A1. Rebalance raw gas now.** Cut `pricePerMole` for raw gases that deposits produce in bulk (plasma 1 → about 0.4; oxygen and nitrogen 0.2 → 0.1; water vapour, CO2, N2O lower), keep refined gases (tritium, frezon) high, and lower `GasSaleConsoleHigh` from 1.25 to 1.0 everywhere except where a station needs gas. Target, against the framework's money bands: the Gaslight is a Medium ship (stage S2, 25–40k per hour). With plasma at 0.4 a very large plasma deposit is worth about 20–22k; counting search, travel and drilling at roughly one deposit an hour, raw mining lands at the bottom of the S2 band. Refining and gas contracts (A4, A5) reach the top of S2 and into S3. Today's 65k per deposit is above the S4 band.
 - Effort: **small** (YAML with `# Kessler` markers).
 - Code: `Resources/Prototypes/Atmospherics/gases.yml`, `Resources/Prototypes/_NF/Atmospherics/gases.yml`, `Resources/Prototypes/_NF/Entities/Structures/Machines/Computers/computers.yml`.
-- Depends on: the framework's target income per stage.
+- Depends on: the framework's money bands (S2: 25–40k/h).
 - Persistence: none.
 
 **A2. Saturation on gas sales.** Gas sale consoles use the market ledger (5.1), one category per gas, per station. Selling a whole deposit at one station drops its price there; other stations still pay full. This alone ends the "drain and sell at Dusk forever" loop and creates hauling work.
@@ -303,7 +307,7 @@ Gas deposit scanners (`GasDepositScannerSystem`) become a scouting skill: find t
 - Depends on: 5.4 for pirates; framework rarity tiers for which gases count as rare.
 - Persistence: the field is an entity with a `DateTime` expiry; deposits are already saved. Expired fields are deleted at load or at their expiry. Never delete a field while a ship is docked to it; mark it "depleted" instead.
 
-**A7. Extraction licence (framework).** Commercial gas sales above a daily volume need a licence; higher tiers open rich fields and better contracts. Unlicensed sales still work but at a black-market discount and with a chance to flag the ship for CGP inspection (6.3, S4), which gives security a regulatory job.
+**A7. Extraction licence (framework).** Commercial gas sales above a daily volume need a licence (`GasExtractionI`: `Freight` L1; `GasExtractionII`: `Freight` L2 and `Engineering` L1, section 8); higher tiers open rich fields and better contracts. Unlicensed sales still work but at a black-market discount and with a chance to flag the ship for CGP inspection (6.3, S4), which gives security a regulatory job.
 - Effort: **small** once the framework has licences.
 - Code: check in `OnConsoleSell`.
 - Depends on: framework licences.
@@ -413,7 +417,7 @@ Inspections give security a regulatory role between fights and use the framework
 
 ### 6.4 Salvage, mining and expeditions
 
-**M1. Expedition tiers by stage and licence.** Gate Hazardous and Extreme expeditions behind framework stages or licences, and make rare materials (framework rarity tiers) drop only from the higher tiers. Expeditions become the progression path for combat salvagers.
+**M1. Expedition tiers by stage and licence.** Gate Hazardous and Extreme expeditions behind `Expedition` L2 and L3 (as the framework specifies), and make Superior and Rare items drop only from the higher tiers (8.3). Expeditions become the progression path for combat salvagers.
 - Effort: **small** to **medium**.
 - Code: `Content.Server/Salvage/` expedition console (upstream; Frontier changes in `Content.Server/_NF/Salvage/`).
 - Depends on: framework stages and rarity tiers.
@@ -447,9 +451,9 @@ Inspections give security a regulatory role between fights and use the framework
 
 ### 6.6 Service and station jobs
 
-Goal: a new player who joins Dusk as station staff, janitor, mail carrier or chef on an empty server can earn a starter income alone, learn the game, and build Dusk reputation towards their first ship within a few days. The framework sets the target (for example "first small ship after two to four days of station work"); the work-order board delivers it.
+Goal: a new player who joins Dusk as station staff, janitor, mail carrier or chef on an empty server can earn a starter income alone, learn the game, and build `Station` reputation towards their first ship. In framework terms this is stage S0: 6–10k per hour, and `Station` L1 (120 reputation, about two hours of work) unlocks `PilotI` for Small ships.
 
-**V1. The Dusk work-order board.** A console at Dusk and a PDA cartridge, fed by station needs (5.3) and NPC traffic, paid from the Frontier account per completed order to the worker. Orders are small (a few minutes each), plentiful, and capped per character per real day so ship owners do not farm them; low stages get the best rates. Each order also gives Dusk reputation. Job-specific order types:
+**V1. The Dusk work-order board.** A console at Dusk and a PDA cartridge, fed by station needs (5.3) and NPC traffic, paid from the `WorkOrders` account per completed order to the worker at about 150 credits per expected minute. Orders are small (a few minutes each), plentiful, and capped per character per real day so ship owners do not farm them; low stages get the best rates. Each order gives about 1 `Station` reputation per expected minute. Job-specific order types:
 
 | Job | Work orders | Mechanic |
 |---|---|---|
@@ -459,14 +463,14 @@ Goal: a new player who joins Dusk as station staff, janitor, mail carrier or che
 | Botany (Theseus) | Produce orders for the kitchen and chemistry, seed requests | Procurement contracts; see V2 |
 | Mail carrier | Parcels for players, NPC parcels for POIs, mail routes | C5 |
 | Station staff | Any of the above, plus guest services (escorting new arrivals, cleaning cabins) | Umbrella role |
-| Station representative | Sets the bonus on work orders from the Frontier account; approves large contracts; runs Dusk's budget | Gives the SR a management game |
+| Station representative | Adds bonuses to work orders from the Frontier account (replacing hand payroll through `StationWithdrawalPayroll`); approves large contracts; runs Dusk's budget | Gives the SR a management game |
 | Librarian / archivist | Catalogue salvage data disks and logs into the library, write guides that the server rewards when approved, run the sector newsletter | Data disks from expeditions sold to the archive; book approvals by staff |
 
 NPC "customers" do not need to be visible mobs. A printed ticket and a delivery pad are enough and cost nothing per tick. Visible NPC diners are a later polish.
 
 - Effort: **medium** (board and order types on top of 5.2 and 5.3; each order type is small).
 - Code: `Content.Server/_Kessler/StationWork/`; uses `Content.Server/Fluids/` for puddles, `Content.Server/Nutrition/` and kitchen systems for dishes, `Content.Server/_NF/Library/` for the archive.
-- Depends on: 5.2, 5.3; framework stages for the per-stage rates and caps.
+- Depends on: 5.2, 5.3; framework `WorkOrders` account, S0 band and `Station` track.
 - Persistence: orders in 5.2; messes and tickets are saved entities.
 
 **V2. Botany genetics as long-term progression.** On a persistent server, plant genetics finally matter: seed traits (yield, potency, mutations) are stored on the seed and survive restarts, so a botanist can breed a strain over weeks. Add a seed bank at Theseus, rare seeds as framework rarity-tier loot from salvage, and contracts that ask for specific traits ("tomatoes with potency above 60"). Produce feeds the kitchen (V1), chemistry and medicine (med-sci doc).
@@ -496,7 +500,7 @@ Who produces what for whom, once the proposals are in:
 |---|---|---|
 | Gas mining / atmos | Raw and refined gas, canisters to spec | Stations' life support (needs), medical (frezon, cryo gases), engineering (reactor fuel, TEG), cargo (hauling to unsaturated stations) |
 | Salvage / mining | Ore, rare materials, wrecks, data disks | Theseus fabrication, engineering repairs, science (via archive), cargo |
-| Botany | Produce, seeds, plant reagents | Kitchen, bar, chemistry, medical |
+| Botany | Produce, seeds, plant reagents | Kitchen, bar, chemistry, medical (rare chemistry inputs from bred strains) |
 | Kitchen and bar | Meals, drinks | Station needs at Dusk, remote POIs, CGP outpost, ship crews |
 | Engineering | Repairs, power, ship refits | Stations (maintenance), ship owners (after raids), cargo (power sales) |
 | Cargo | Movement of everything, price information | Every department's contracts |
@@ -506,17 +510,71 @@ Who produces what for whom, once the proposals are in:
 
 The loop that matters most for long-term play: **risky, valuable work (rich gas fields, far trade routes) attracts NPC pirates → needs security and escorts → produces damaged ships and injured crew → needs engineering and medical → which need materials and gas → which come from the risky places.** Station needs keep the bottom of the chain (service, cargo, maintenance) busy every day regardless of how many players are on.
 
-## 8. What this needs from the progression framework
+## 8. How this plugs into the progression framework
 
-These are requests to `progression.md`. If the framework settles them differently, adjust this document, not the other way round.
+`progression.md` defines stages S0–S4, eight reputation tracks, a licence schema, rarity tiers, money bands and the `WorkOrders` account. Where the framework settles something, this document follows it.
 
-1. **Income bands per stage**: target credits per real hour for a new station worker, an early ship owner, and a veteran. Every price and payout above is tuned against these.
-2. **Reputation API**: per character profile, per faction (Dusk / Frontier administration, CGP, Theseus, cargo depots / merchant guild, medical service, pirate clans), stored in the database like the bank balance, with events for gain and loss. Contracts give and require reputation.
-3. **Licences**: at least gas extraction, hazardous cargo, bonded courier, salvage claim, bounty hunting, weapons. What they cost, whether they renew, and whether they can be revoked (by CGP after an inspection).
-4. **Rarity tiers**: which gases, materials, seeds and salvage are rare, and where each tier may drop.
-5. **Stage gates**: which contracts, expedition tiers, gas fields and ship classes each stage can access, and the "station work before first ship" path for new players.
-6. **Sinks**: confirm that licence fees, collateral losses, repairs after raids, and upkeep are the intended sinks, and how they compare to the faucets above.
-7. **Activity caps**: how daily caps on contracts and work orders scale with stage, so veterans move up rather than farm the bottom.
+### 8.1 Reputation tracks per proposal
+
+Reputation is about 1 point per expected minute of useful work, with a soft cap of 180 per track per real day, awarded through `KesslerReputationSystem.TryAward` to every participant.
+
+| Proposal | Track | Notes |
+|---|---|---|
+| Dusk work orders (V1), mail (C5), food value (V3), ship-side service (V4) | `Station` | The S0 path to `PilotI` |
+| Botany produce and seed contracts (V2) | `Station` | Medical-plant contracts may award `Medical` instead |
+| Gas sales, raw gas contracts (A2, A4) | `Freight` | |
+| Refined gas, reactions, gas to spec (A3, A5) | `Engineering` | Atmos skill, not volume |
+| Trade, courier, supply-chain contracts, ore (C1–C4, M2) | `Freight` | |
+| Station maintenance, power, refits (E1–E3) | `Engineering` | |
+| Expeditions, wrecks, salvage claims, gas field scouting (M1, M3, A6) | `Expedition` | |
+| Patrols, escorts, inspections, NPC pirate and smuggler kills, investigations (S1–S5) | `Security` | Open to any licensed armed player (decision 10) |
+| PvE outlaw work: raiding NPC freighters, smuggling runs, pirate bounties (6.7) | `Outlaw` | Gaining it lowers `Security`, as the framework specifies |
+
+### 8.2 Department licences
+
+Same schema as the framework's licences (track levels, a previous licence held for N real days, a fee as a sink). Proposed:
+
+| Licence | Requirements | Fee (suggested) | Opens |
+|---|---|---|---|
+| `GasExtractionI` | `Freight` L1 | 5,000 | Commercial gas sales above a small daily volume; standard gas contracts |
+| `GasExtractionII` | `Freight` L2, `Engineering` L1, `GasExtractionI` held 3 days | 25,000 | Rich and hazardous gas fields (A6); refined-gas contracts |
+| `HazardousCargo` | `Freight` L2 | 15,000 | Canister, explosive and live-cargo contracts |
+| `BondedCourier` | `Freight` L3, `HazardousCargo` held 7 days | 40,000 | High-value courier contracts with lower collateral (C3) |
+| `SalvageClaim` | `Expedition` L2 | 10,000 | Filing wreck claims (M3) |
+| `BountyHunter` | `Security` L1, no `Outlaw` above L0 | 5,000 | Security contracts for players outside CGP jobs (S3, S4) |
+| `WeaponsPermit` | `Security` L1 or `Expedition` L1 | 2,000 | Carrying restricted weapons without a CGP flag; checked in inspections (S4) |
+
+Revocation: CGP may suspend a licence for a number of real days after an inspection finds a violation. That needs a revoke API in the framework (see 8.6).
+
+### 8.3 Rarity tiers in these proposals
+
+- **Common / Standard**: everything from work orders, mail, station needs, raw gas and ore, normal trade.
+- **Superior**: Hazardous expeditions, rich gas-field loot, bred botany strains with top traits, refined-gas contract bonuses.
+- **Rare**: Extreme expeditions, named pirate captains' loot, named derelicts (M3). Never from contracts' fixed rewards, mail, work orders or station needs; a contract may offer a limited-run blueprint instead (framework rule).
+- **Exotic**: named derelicts only, under the framework's sector governor.
+- Rare chemistry inputs, material data and field data that the medical-science design expects come from these same sources: hazardous gas fields, Extreme expeditions, named derelicts and bred botany strains.
+
+### 8.4 Money bands, checked against current numbers
+
+| Activity | Today | Framework band | Change |
+|---|---|---|---|
+| Gas mining, Medium ship | ~65k per deposit, well above S4 | S2: 25–40k/h | A1, A2, A3 |
+| Trade crates, Small hauler, about 10 crates per 20-minute run | ~18k/h | S1: 12–20k/h | Fine as is; C1 adds variety, not income |
+| Station jobs | 0 unless the SR pays by hand | S0: 6–10k/h | V1, C5 |
+| Food and drink at cargo | ~30 per meal | S0 | V1, V3 |
+| CGP account | 72k/h flat | Security contracts at the officer's stage band | S7 |
+| Outlaw objectives | 100–400k per objective | S2–S3 per hour of effort | S6 and decision 7 |
+
+### 8.5 Work orders and the `WorkOrders` account
+
+All contracts in 5.2 and the Dusk board in V1 pay from `WorkOrders`. Payout = expected minutes × the holder's band rate (S0 about 150/min, S2 about 500/min). Department accounts receive a 10–20% cut instead of most of their flat tick, and heads spend them on equipment and bonuses.
+
+### 8.6 Still open with the framework
+
+1. **Starting balance against `PilotI`.** Players start with 30,000 (`HumanoidCharacterProfile.DefaultBalance`) and Small ships cost 20–50k, so money is not what holds a new player at Dusk; the `Station` L1 requirement (about two hours) is. If the owner wants "first days on station jobs", either lower the starting balance or raise `PilotI` to more than L1.
+2. **Licence revocation**: an API to suspend a licence for N real days, used by CGP inspections.
+3. **Track per contract, or per issuer**: this document assigns tracks per kind of work (8.1). If the framework prefers per issuing faction, a few rows move (gas to spec issued by Dusk would award `Station`).
+4. **Ship-level reputation**: the medical-science design asks for reputation per ship or organisation. Escort and courier contracts would use it too (a trusted hauler company), so it should be one mechanism.
 
 ## 9. Build order
 
@@ -562,8 +620,8 @@ Each phase is usable on its own.
    Recommendation: per station, with a slow half-life (about a day). Per-station saturation creates hauling and trade routes; sector-wide saturation only lowers income.
 
 3. **Where does contract money come from?**
-   Options: pay from the existing sector accounts (closed budget), or mint it (open faucet tuned by caps).
-   Recommendation: pay from sector accounts, and replace most of their flat ticking income with income proportional to activity (cargo taxes, vendor taxes, upkeep paid to the station). Money then flows from players' fees to players' work, and the economy can be read from the ledger.
+   The framework settles the main part: a `WorkOrders` sector account whose tick scales with online players.
+   Remaining decision: what happens to the existing flat department ticks (CGP 72k/h and the rest). Recommendation: cut them to a small base and give departments a 10–20% cut of contract payouts plus their existing taxes, so department money follows work done.
 
 4. **Pay the worker or the department?**
    Recommendation: the worker, with a 10–20% cut to the department account for heads to spend on equipment and staff bonuses. Today's model (everything to the account, heads pay by hand) fails whenever no head is online, which at lowpop is most of the time.
