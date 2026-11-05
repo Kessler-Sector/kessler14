@@ -43,6 +43,8 @@ Decisions made so far:
   - Owners who haven't logged in for **7 days** have their ships moved into storage (their SSD body to cryo storage). **Storage is free.** Ships are recalled at any shipyard console.
   - Only the owner logging in counts as activity; crew using the ship do not.
   - Build order: owner records, then billing and debt, then storage. POI shops later reuse all three.
+  - Storage as built: ships are saved to `kessler.storage.path` and listed on the sector map (`ShipStorageRegistryComponent`), so the list always matches the world. Stored files are never deleted, so restoring an older backup still works. A ship is only stored when nobody who might come back is aboard, the same rule as selling. Recall is a right-click option on any shipyard console with the owner's ID inserted.
+  - Not done yet: moving inactive owners' SSD bodies into cryo (until then, a ship with its owner's body aboard isn't stored), and dealing with crew who stay aboard an impounded ship.
 - **Target population about 50.** Staff-run story arcs are a later addition, not part of the core loop.
 
 ## Persistence technical notes
