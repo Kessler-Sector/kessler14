@@ -297,6 +297,11 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
         // Ensure cleanup on ship sale
         EnsureComp<LinkedLifecycleGridParentComponent>(shuttleUid);
 
+        // Kessler: record the owner for upkeep and storage
+        var purchasedEv = new Content.Server._Kessler.Ownership.ShipPurchasedEvent(shuttleUid, player, vessel.Price, voucherUsed);
+        RaiseLocalEvent(ref purchasedEv);
+        // End Kessler
+
         var sellValue = 0;
         if (!voucherUsed)
         {

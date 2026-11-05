@@ -35,6 +35,14 @@ Decisions made so far:
 - **Offline players stay in the world** as SSD bodies. Cryo is optional. SSD bodies need stasis (no hunger or thirst while SSD). Start with a server rule against robbing SSD players; add a mechanic only if it's abused.
 - **Inactive property is unloaded, never deleted.** Owners who haven't logged in for some days have their ships and bodies moved into storage and get them back on return. Scarce things (POI claims, docking spots) are released after a longer time, with contents returned to the owner's storage.
 - **Upkeep fees: yes.** Insurance: undecided. Player-run shops on POIs with offline trading: planned for later.
+- **Ownership and upkeep** (decided):
+  - Every bought ship records its owner by account ID and the character's database profile ID, not by name. The deed stays the in-game key for selling and renaming.
+  - Upkeep is **1% of the purchase price per real day**, billed straight to the owner's bank in the database, so it works while they're offline. Billing runs on real time, so restarts neither skip nor double-charge a day.
+  - **Voucher (starter) ships pay no upkeep.**
+  - Balances never go negative. Unpaid upkeep becomes debt on the ship; after **3 days** of debt the ship is impounded into storage until the debt is paid at a shipyard console.
+  - Owners who haven't logged in for **7 days** have their ships moved into storage (their SSD body to cryo storage). **Storage is free.** Ships are recalled at any shipyard console.
+  - Only the owner logging in counts as activity; crew using the ship do not.
+  - Build order: owner records, then billing and debt, then storage. POI shops later reuse all three.
 - **Target population about 50.** Staff-run story arcs are a later addition, not part of the core loop.
 
 ## Persistence technical notes

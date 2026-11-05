@@ -16,5 +16,6 @@ public sealed partial class BankAccountComponent : Component
     // Set at spawn time so bank operations target the correct character's account
     // regardless of which character is currently selected in the lobby.
     // -1 means unset; fall back to prefs.SelectedCharacter.
+    [DataField] // Kessler: saved, so a body loaded from a persistent save still pays from the right character
     public int CharacterSlot = -1;
 }
