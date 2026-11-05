@@ -9,6 +9,9 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using Content.Shared._Shitmed.Targeting; // Shitmed Change
+using Content.Shared.Hands.Components; // Shitmed Change
+using Content.Shared.Hands.EntitySystems; // Shitmed Change
 using Content.Shared.Random;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Effects;
@@ -27,6 +30,7 @@ public sealed class DamageOnInteractSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!; // Shitmed Change
 
     public override void Initialize()
     {
@@ -75,7 +79,20 @@ public sealed class DamageOnInteractSystem : EntitySystem
             }
         }
 
-        totalDamage = _damageableSystem.TryChangeDamage(args.User, totalDamage, origin: args.Target);
+        // Shitmed Change Start
+        TargetBodyPart? targetPart = null;
+        if (_hands.TryGetHand(args.User, _hands.GetActiveHand(args.User), out var hand))
+        {
+            targetPart = hand.Value.Location switch
+            {
+                HandLocation.Left => TargetBodyPart.LeftHand,
+                HandLocation.Right => TargetBodyPart.RightHand,
+                _ => (TargetBodyPart?) null
+            };
+        }
+
+        totalDamage = _damageableSystem.TryChangeDamage(args.User, totalDamage, origin: args.Target, targetPart: targetPart);
+        // Shitmed Change End
 
         if (totalDamage != null && totalDamage.AnyPositive())
         {

@@ -6,6 +6,7 @@ using Content.Shared.Storage;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.Random; // Shitmed Change
 
 namespace Content.Shared.Inventory;
 
@@ -13,6 +14,7 @@ public partial class InventorySystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IViewVariablesManager _vvm = default!;
+    [Dependency] private readonly RandomHelperSystem _randomHelper = default!; // Shitmed Change
 
     private void InitializeSlots()
     {
@@ -227,6 +229,33 @@ public partial class InventorySystem : EntitySystem
     /// </remarks>
     /// <param name="ent">The entity to update.</param>
     /// <param name="newTemplate">The ID of the new inventory template prototype.</param>
+    // Shitmed Change Start
+    public void DropSlotContents(EntityUid uid, string slotName, InventoryComponent? inventory = null)
+    {
+        if (!Resolve(uid, ref inventory))
+            return;
+
+        foreach (var slot in inventory.Slots)
+        {
+            if (slot.Name != slotName)
+                continue;
+
+            if (!TryGetSlotContainer(uid, slotName, out var container, out _, inventory))
+                break;
+
+            if (container.ContainedEntity is { } entityUid && TryComp(entityUid, out TransformComponent? transform) && _gameTiming.IsFirstTimePredicted)
+            {
+                _transform.AttachToGridOrMap(entityUid, transform);
+                _randomHelper.RandomOffset(entityUid, 0.5f);
+            }
+
+            break;
+        }
+
+        Dirty(uid, inventory);
+    }
+    // Shitmed Change End
+
     public void SetTemplateId(Entity<InventoryComponent> ent, ProtoId<InventoryTemplatePrototype> newTemplate)
     {
         if (ent.Comp.TemplateId == newTemplate)

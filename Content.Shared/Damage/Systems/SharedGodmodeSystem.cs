@@ -9,6 +9,7 @@ using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Prototypes;
+using Content.Shared.Body.Systems; // Shitmed Change
 
 namespace Content.Shared.Damage.Systems;
 
@@ -16,6 +17,7 @@ public abstract class SharedGodmodeSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _protoMan = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedBodySystem _bodySystem = default!; // Shitmed Change
 
     public override void Initialize()
     {
@@ -78,6 +80,9 @@ public abstract class SharedGodmodeSystem : EntitySystem
 
         // Rejuv to cover other stuff
         RaiseLocalEvent(uid, new RejuvenateEvent());
+
+        foreach (var (id, _) in _bodySystem.GetBodyChildren(uid)) // Shitmed Change
+            EnableGodmode(id);
     }
 
     public virtual void DisableGodmode(EntityUid uid, GodmodeComponent? godmode = null)
@@ -91,6 +96,9 @@ public abstract class SharedGodmodeSystem : EntitySystem
         }
 
         RemComp<GodmodeComponent>(uid);
+
+        foreach (var (id, _) in _bodySystem.GetBodyChildren(uid)) // Shitmed Change
+            DisableGodmode(id);
     }
 
     /// <summary>

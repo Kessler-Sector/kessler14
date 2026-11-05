@@ -5,6 +5,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Decals;
 using Content.Shared.Examine;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared._Shitmed.Humanoid.Events; // Shitmed Change
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Inventory;
@@ -588,6 +589,7 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
         humanoid.BaseWidth = humanoid.Width;
         // End Wayfarer
 
+        RaiseLocalEvent(uid, new ProfileLoadFinishedEvent()); // Shitmed Change
         Dirty(uid, humanoid);
     }
 

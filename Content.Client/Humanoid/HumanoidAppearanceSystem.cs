@@ -99,7 +99,8 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         foreach (var (key, info) in component.CustomBaseLayers)
         {
             oldLayers.Remove(key);
-            SetLayerData(entity, key, info.Id, sexMorph: false, color: info.Color);
+            // Shitmed Change: For whatever reason these weren't actually ignoring the skin color as advertised.
+            SetLayerData(entity, key, info.Id, sexMorph: false, color: info.Color, overrideSkin: true);
         }
 
         // hide old layers
@@ -116,7 +117,8 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         HumanoidVisualLayers key,
         string? protoId,
         bool sexMorph = false,
-        Color? color = null)
+        Color? color = null,
+        bool overrideSkin = false) // Shitmed Change
     {
         var component = entity.Comp1;
         var sprite = entity.Comp2;
@@ -137,7 +139,7 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         var proto = _prototypeManager.Index<HumanoidSpeciesSpriteLayer>(protoId);
         component.BaseLayers[key] = proto;
 
-        if (proto.MatchSkin)
+        if (proto.MatchSkin && !overrideSkin) // Shitmed Change
             layer.Color = component.SkinColor.WithAlpha(proto.LayerAlpha);
 
         if (proto.BaseSprite != null)
