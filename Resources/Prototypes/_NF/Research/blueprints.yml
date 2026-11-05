@@ -40,6 +40,7 @@
   blueprint: NFBlueprintMedical
   packs:
   - NFBlueprintsMedical
+  - ShitmedBlueprintsMedical # Shitmed
   - NFBlueprintsCommon
 
 - type: blueprint

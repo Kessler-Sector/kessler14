@@ -84,9 +84,9 @@
   id: CyberneticEnhancements
   name: research-technology-cybernetic-enhancements
   entityIcon: SecurityCyberneticEyes
-  discipline: CivilianServices
-  tier: 2
-  cost: 20000
+  discipline: NFMedical # Kessler: Frontier's medical tree
+  tier: 1
+  cost: 10000
   recipeUnlocks:
   - JawsOfLifeLeftArm
   - JawsOfLifeRightArm
@@ -98,8 +98,8 @@
   - SecurityCyberneticEyes
   - MedicalCyberneticEyes
   technologyPrerequisites:
-  - MechanizedTreatment # Kessler: our closest medical tech
-  position: -2, 12
+  - NFMechanizedTreatment # Kessler: our closest medical tech
+  position: 3, 12
 
 
 - type: entity
@@ -311,4 +311,12 @@
     Plastic: 500
     Gold: 300
     Silver: 300
+
+- type: latheRecipe
+  id: BoneGel
+  result: BoneGel
+  completetime: 2
+  materials:
+    Plastic: 200
+    Plasma: 200
 
