@@ -30,11 +30,17 @@ public sealed class MarketBoardStation
     public readonly string Name;
     public readonly List<MarketBoardRate> Rates;
 
-    public MarketBoardStation(NetEntity market, string name, List<MarketBoardRate> rates)
+    /// <summary>
+    /// The station's stocks, as a percentage of full (station needs).
+    /// </summary>
+    public readonly List<MarketBoardRate> Needs;
+
+    public MarketBoardStation(NetEntity market, string name, List<MarketBoardRate> rates, List<MarketBoardRate>? needs = null)
     {
         Market = market;
         Name = name;
         Rates = rates;
+        Needs = needs ?? new();
     }
 }
 

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._Kessler.Economy;
 using Content.Server._Kessler.Reputation;
 using Content.Server._NF.Bank;
 using Content.Server._NF.Cargo.Components;
@@ -38,6 +39,7 @@ public sealed class ContractSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly StationNeedsSystem _needs = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
 
@@ -96,11 +98,31 @@ public sealed class ContractSystem : EntitySystem
             var board = EnsureComp<StationContractsComponent>(station);
             board.Contracts.RemoveAll(c => c.Expires <= now);
 
+            PostForLowNeeds((station, board), now);
+
             if (now < board.NextPost || board.Contracts.Count(c => !c.Held) >= target)
                 continue;
 
             Post((station, board), now);
             board.NextPost = now + PostInterval;
+        }
+    }
+
+    /// <summary>
+    /// A station short of a stock posts a contract for it straight away, if it has none out for it already.
+    /// </summary>
+    private void PostForLowNeeds(Entity<StationContractsComponent> station, DateTime now)
+    {
+        foreach (var need in _needs.LowNeeds(station, now))
+        {
+            if (need.Contracts.Count == 0
+                || station.Comp.Contracts.Count(c => !c.Held) >= MaxOpen
+                || station.Comp.Contracts.Any(c => need.Contracts.Contains(c.Template)))
+            {
+                continue;
+            }
+
+            Post(station, now, _random.Pick(need.Contracts));
         }
     }
 
@@ -293,10 +315,7 @@ public sealed class ContractSystem : EntitySystem
 
     public bool Matches(EntityUid uid, ProcurementContractPrototype proto)
     {
-        if (proto.Stack != null)
-            return TryComp<StackComponent>(uid, out var stack) && stack.StackTypeId == proto.Stack;
-
-        return _whitelist.IsWhitelistPass(proto.Whitelist, uid) && !_whitelist.IsWhitelistPass(proto.Blacklist, uid);
+        return proto.Matches(uid, EntityManager, _whitelist);
     }
 
     /// <summary>

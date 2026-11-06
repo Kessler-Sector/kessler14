@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._Kessler.Economy;
 using Content.Server._NF.Cargo.Components;
 using Content.Server.Cargo.Systems;
 using Content.Server.Station.Systems;
@@ -26,6 +27,7 @@ public sealed class MarketLedgerSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly PricingSystem _pricing = default!;
+    [Dependency] private readonly StationNeedsSystem _needs = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly TagSystem _tag = default!;
 
@@ -165,7 +167,7 @@ public sealed class MarketLedgerSystem : EntitySystem
             return basePrice;
 
         var saturation = GetSaturation(market, category, quote.Now) + quote.Pending.GetValueOrDefault(category.ID);
-        var demand = GetDemand(market, category.ID, quote.Now);
+        var demand = GetDemand(market, category.ID, quote.Now) * _needs.DemandBoost(market, category.ID, quote.Now);
         var depth = Math.Max(1f, category.Depth);
 
         var value = depth * (Math.Log(1 + (saturation + basePrice) / depth) - Math.Log(1 + saturation / depth));
@@ -227,7 +229,7 @@ public sealed class MarketLedgerSystem : EntitySystem
     {
         var saturation = GetSaturation(market, category, now);
         var multiplier = Math.Max(category.Floor, 1f / (1f + saturation / Math.Max(1f, category.Depth)));
-        return multiplier * GetDemand(market, category.ID, now);
+        return multiplier * GetDemand(market, category.ID, now) * _needs.DemandBoost(market, category.ID, now);
     }
 
     public float GetSaturation(Entity<StationMarketComponent> market, MarketCategoryPrototype category, DateTime now)
