@@ -145,6 +145,11 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - pay is expected minutes × `kessler.workorders.rate` (150), straight to the worker, plus Station reputation;
   - orders expire after an hour in real time and are saved with the sector;
   - the board isn't placed on Dusk's map yet.
+- **Gas market saturation:**
+  - each station tracks the moles of each gas it has bought (`StationGasMarketComponent`, saved), decaying with a 24-hour half-life in real time;
+  - the next mole sells for price / (1 + saturation / 50,000), so a whole very large plasma deposit sold at once pays about 70%, and a second one the same day pays less;
+  - other stations pay full price, so hauling gas elsewhere pays;
+  - cvars `kessler.market.gas_enabled`, `kessler.market.gas_depth` and `kessler.market.gas_half_life_hours`.
 - **Not yet:**
   - expedition T4 blueprints are still permanent (limited-run blueprints come in phase 3);
   - the loaner is given on every spawn under 10 hours of playtime, not once per account;

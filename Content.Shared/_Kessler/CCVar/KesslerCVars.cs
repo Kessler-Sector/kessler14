@@ -113,4 +113,22 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<int> WorkOrderRate =
         CVarDef.Create("kessler.workorders.rate", 150, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Whether gas sale prices fall as a station is flooded with one gas.
+    /// </summary>
+    public static readonly CVarDef<bool> GasMarketEnabled =
+        CVarDef.Create("kessler.market.gas_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Moles of one gas a station can take before its price has halved.
+    /// </summary>
+    public static readonly CVarDef<float> GasMarketDepth =
+        CVarDef.Create("kessler.market.gas_depth", 50000f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Real hours for a station's gas saturation to halve.
+    /// </summary>
+    public static readonly CVarDef<float> GasMarketHalfLifeHours =
+        CVarDef.Create("kessler.market.gas_half_life_hours", 24f, CVar.SERVERONLY);
 }
