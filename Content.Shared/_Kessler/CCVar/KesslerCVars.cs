@@ -157,6 +157,18 @@ public sealed class KesslerCVars
         CVarDef.Create("kessler.medbounty.limb_bonus", 6000, CVar.SERVERONLY);
 
     /// <summary>
+    /// Whether cargo pallet prices fall as a station is flooded with one category of goods, and drift with demand.
+    /// </summary>
+    public static readonly CVarDef<bool> CargoMarketEnabled =
+        CVarDef.Create("kessler.market.cargo_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Real hours for a station's saturation in a category of goods to halve.
+    /// </summary>
+    public static readonly CVarDef<float> CargoMarketHalfLifeHours =
+        CVarDef.Create("kessler.market.cargo_half_life_hours", 24f, CVar.SERVERONLY);
+
+    /// <summary>
     /// Multiplier on what discharging a cured NPC patient pays.
     /// </summary>
     public static readonly CVarDef<float> PatientPayMultiplier =

@@ -1,0 +1,38 @@
+# Categories of goods for the market ledger (docs/kessler/design/departments.md, 5.1). Each station's price for a
+# category falls as it buys more of it (halving after `depth` spesos of base value) and recovers with a real-time
+# half-life (`kessler.market.cargo_half_life_hours`). Demand per station drifts between 70% and 130% over days.
+# Goods in no category (trade crates, salvage, machines...) sell at their normal price.
+
+- type: marketCategory
+  id: Ore
+  name: kessler-market-category-ore
+  priority: 10
+  tags:
+  - Ore
+  depth: 30000
+
+- type: marketCategory
+  id: Materials
+  name: kessler-market-category-materials
+  priority: 5
+  components:
+  - Material
+  depth: 40000
+
+- type: marketCategory
+  id: Produce
+  name: kessler-market-category-produce
+  priority: 5
+  components:
+  - Produce
+  depth: 15000
+
+- type: marketCategory
+  id: FoodAndDrink
+  name: kessler-market-category-food
+  priority: 4
+  components:
+  - Edible
+  - Food
+  - Drink
+  depth: 30000
