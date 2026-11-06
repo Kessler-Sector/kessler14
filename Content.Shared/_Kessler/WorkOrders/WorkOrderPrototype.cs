@@ -15,6 +15,11 @@ public enum WorkOrderKind : byte
     /// A dish or drink is wanted; whoever hands it in at the board is paid.
     /// </summary>
     Deliver,
+
+    /// <summary>
+    /// Light bulbs around the station have blown; whoever puts a working bulb back in each light is paid for it.
+    /// </summary>
+    RepairLights,
 }
 
 /// <summary>
@@ -57,6 +62,9 @@ public sealed partial class WorkOrderPrototype : IPrototype
     [DataField]
     public List<string> MessReagents = new();
 
+    /// <summary>
+    /// Clean: how many messes. RepairLights: how many lights.
+    /// </summary>
     [DataField]
     public int MessMin = 3;
 

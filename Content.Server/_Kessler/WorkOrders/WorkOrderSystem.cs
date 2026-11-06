@@ -10,11 +10,14 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Interaction;
+using Content.Shared.Light.Components;
+using Content.Shared.Light.EntitySystems;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
@@ -39,6 +42,7 @@ public sealed class WorkOrderSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly SharedPoweredLightSystem _lights = default!;
     [Dependency] private readonly PuddleSystem _puddle = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
@@ -59,6 +63,7 @@ public sealed class WorkOrderSystem : EntitySystem
         SubscribeLocalEvent<WorkOrderBoardComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<WorkOrderBoardComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<WorkOrderMessComponent, EntityTerminatingEvent>(OnMessTerminating);
+        SubscribeLocalEvent<WorkOrderRepairComponent, EntInsertedIntoContainerMessage>(OnBulbInserted);
     }
 
     public override void Update(float frameTime)
@@ -120,6 +125,10 @@ public sealed class WorkOrderSystem : EntitySystem
         {
             case WorkOrderKind.Clean:
                 if (!TryMakeMesses(board, proto, order))
+                    return false;
+                break;
+            case WorkOrderKind.RepairLights:
+                if (!TryBreakLights(board, proto, order))
                     return false;
                 break;
             case WorkOrderKind.Deliver:
@@ -186,6 +195,82 @@ public sealed class WorkOrderSystem : EntitySystem
 
         order.MessesLeft = order.MessesTotal;
         return order.MessesTotal > 0;
+    }
+
+    private bool TryBreakLights(Entity<WorkOrderBoardComponent> board, WorkOrderPrototype proto, WorkOrder order)
+    {
+        if (Transform(board).GridUid is not { } gridUid)
+            return false;
+
+        // Lights on the board's station that work now and aren't already part of an order.
+        var candidates = new List<EntityUid>();
+        var query = EntityQueryEnumerator<PoweredLightComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var light, out var xform))
+        {
+            if (xform.GridUid != gridUid
+                || HasComp<WorkOrderRepairComponent>(uid)
+                || _lights.GetBulb(uid, light) is not { } bulb
+                || !TryComp<LightBulbComponent>(bulb, out var bulbComp)
+                || bulbComp.State != LightBulbState.Normal)
+            {
+                continue;
+            }
+
+            candidates.Add(uid);
+        }
+
+        _random.Shuffle(candidates);
+        var count = Math.Min(candidates.Count, _random.Next(proto.MessMin, proto.MessMax + 1));
+        foreach (var light in candidates.Take(count))
+        {
+            if (!_lights.TryDestroyBulb(light))
+                continue;
+
+            var repair = EnsureComp<WorkOrderRepairComponent>(light);
+            repair.Board = board;
+            repair.OrderId = order.Id;
+            order.MessesTotal++;
+        }
+
+        order.MessesLeft = order.MessesTotal;
+        return order.MessesTotal > 0;
+    }
+
+    private void OnBulbInserted(Entity<WorkOrderRepairComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        if (args.Container.ID != SharedPoweredLightSystem.LightBulbContainer
+            || !TryComp<LightBulbComponent>(args.Entity, out var bulb)
+            || bulb.State != LightBulbState.Normal)
+        {
+            return;
+        }
+
+        var boardUid = ent.Comp.Board;
+        var orderId = ent.Comp.OrderId;
+        RemCompDeferred<WorkOrderRepairComponent>(ent);
+
+        if (boardUid is not { } boardEnt
+            || TerminatingOrDeleted(boardEnt)
+            || !TryComp<WorkOrderBoardComponent>(boardEnt, out var board))
+        {
+            return;
+        }
+
+        var order = board.Orders.FirstOrDefault(o => o.Id == orderId);
+        if (order == null)
+            return;
+
+        order.MessesLeft--;
+        if (order.MessesLeft <= 0)
+            board.Orders.Remove(order);
+
+        if (FindCleaner(ent) is { } fixer && _proto.TryIndex(order.Prototype, out var proto))
+        {
+            var total = Math.Max(1, order.MessesTotal);
+            Pay(fixer, proto, GetPayout(proto) / total, Math.Max(1, proto.Minutes / total));
+        }
+
+        UpdateUi((boardEnt, board));
     }
 
     private void OnMessTerminating(Entity<WorkOrderMessComponent> ent, ref EntityTerminatingEvent args)

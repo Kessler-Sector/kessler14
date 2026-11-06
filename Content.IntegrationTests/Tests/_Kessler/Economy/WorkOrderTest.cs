@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 #pragma warning disable RA0002 // Tests set component state directly.
 using System.Linq;
 using Content.Server._Kessler.Persistence;
 using Content.Server._Kessler.WorkOrders;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Interaction;
+using Content.Shared.Light.Components;
+using Content.Shared.Light.EntitySystems;
 using Content.Shared.Maps;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -71,6 +74,56 @@ public sealed class WorkOrderTest
             // Orders expire in real time.
             workOrders.UpdateBoard((boardUid, board), now + board.Lifetime + TimeSpan.FromMinutes(1));
             Assert.That(board.Orders.All(o => o.Expires > now + board.Lifetime), "expired orders are dropped");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task BlownLightsCountDownAsTheyAreFixed()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var workOrders = entMan.System<WorkOrderSystem>();
+        var lights = entMan.System<SharedPoweredLightSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        var lightUids = new List<EntityUid>();
+        await server.WaitPost(() =>
+        {
+            Floor(pair, testMap.Grid, 5);
+            for (var i = 0; i < 5; i++)
+                lightUids.Add(entMan.SpawnEntity("Poweredlight", new EntityCoordinates(testMap.Grid, i - 2, 0)));
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var boardUid = entMan.SpawnEntity("ComputerWorkOrderBoard", testMap.GridCoords);
+            var board = entMan.GetComponent<WorkOrderBoardComponent>(boardUid);
+            board.Allowed.Add("RepairLights");
+            workOrders.UpdateBoard((boardUid, board), DateTime.UtcNow);
+
+            var order = board.Orders.Single();
+            var broken = lightUids.Where(entMan.HasComponent<WorkOrderRepairComponent>).ToList();
+            Assert.That(broken, Has.Count.EqualTo(order.MessesTotal));
+            Assert.That(broken, Has.Count.GreaterThanOrEqualTo(3));
+            Assert.That(broken.All(l => entMan.GetComponent<LightBulbComponent>(lights.GetBulb(l)!.Value).State == LightBulbState.Broken),
+                "the order's lights are blown");
+
+            // Fix one: swap the broken bulb for a new one.
+            var first = broken[0];
+            lights.EjectBulb(first);
+            var tube = entMan.SpawnEntity("LightTube", testMap.GridCoords);
+            Assert.That(lights.InsertBulb(first, tube));
+            Assert.That(order.MessesLeft, Is.EqualTo(order.MessesTotal - 1), "fixing a light counts down");
+
+            // A broken bulb doesn't count.
+            var second = broken[1];
+            var dud = lights.EjectBulb(second)!.Value;
+            lights.InsertBulb(second, dud);
+            Assert.That(order.MessesLeft, Is.EqualTo(order.MessesTotal - 1), "putting a broken bulb back doesn't count");
         });
 
         await pair.CleanReturnAsync();
