@@ -1,3 +1,4 @@
+using Content.Server._Kessler.Economy; // Kessler
 using Content.Server.Access.Systems;
 using Content.Server.Damage.Components;
 using Content.Server._DV.Cargo.Components;
@@ -58,6 +59,7 @@ namespace Content.Server._DV.Mail.EntitySystems
     public sealed class MailSystem : EntitySystem
     {
         [Dependency] private readonly AccessReaderSystem _accessSystem = default!;
+        [Dependency] private readonly MailCarrierSystem _mailCarrier = default!; // Kessler
         [Dependency] private readonly DamageableSystem _damageableSystem = default!;
         [Dependency] private readonly EntityLookupSystem _lookup = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
@@ -242,7 +244,8 @@ namespace Content.Server._DV.Mail.EntitySystems
             _popupSystem.PopupEntity(Loc.GetString("mail-unlocked-reward", ("bounty", component.Bounty)), uid, args.User); // Frontier - Remove the mention of station income
             component.IsProfitable = false;
 
-            _bank.TrySectorDeposit(SectorBankAccount.Frontier, component.Bounty, LedgerEntryType.MailDelivered);
+            var carrierShare = _mailCarrier.PayCarrier(uid, component.Bounty, args.User); // Kessler: the carrier gets a share
+            _bank.TrySectorDeposit(SectorBankAccount.Frontier, component.Bounty - carrierShare, LedgerEntryType.MailDelivered); // Kessler: minus the carrier's share
         }
 
         private void OnExamined(EntityUid uid, MailComponent component, ExaminedEvent args)
