@@ -1,0 +1,19 @@
+# Kessler: new players get a slow, cheap loaner from the scrapyard instead of Wayfarer's free 50,000 ship. Voucher
+# ships pay no upkeep and sell for nothing. A few redemptions so a player can swap if they pick the wrong one.
+- type: entity
+  parent: ShipVoucherRookie
+  id: ShipVoucherKesslerLoaner
+  name: loaner ship voucher
+  description: Redeem it at a scrapyard shipyard console for one free, well-worn micro ship. Hold onto it after you redeem your ship; you'll need it to manage the ship.
+  components:
+  - type: ShipyardVoucher
+    destroyOnEmpty: true
+    consoleType: Scrap
+    redemptionsLeft: 3
+    maxValue: 12000
+    shipWhitelist:
+    - Zipper
+    - Ratrod
+    - Canister
+    - Rusty
+    - Construct

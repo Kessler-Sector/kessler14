@@ -6,7 +6,7 @@
   molarMass: 30
   color: ed4ddc
   reagent: Respiron
-  pricePerMole: 0.2
+  pricePerMole: 0.1 # Kessler: 0.2<0.1, raw gas is cheap
 
 - type: gas
   id: 10

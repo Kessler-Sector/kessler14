@@ -100,4 +100,11 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<bool> CryoExpire =
         CVarDef.Create("kessler.cryo.expire", false, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Share of an opened parcel's value paid to whoever carried it to the recipient. The rest goes to the Frontier
+    /// sector account as before.
+    /// </summary>
+    public static readonly CVarDef<float> MailCarrierShare =
+        CVarDef.Create("kessler.mail.carrier_share", 0.3f, CVar.SERVERONLY);
 }

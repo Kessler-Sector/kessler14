@@ -62,7 +62,7 @@
 - type: outlawObjective
   id: WFOutlawObjectiveKill
   rewardDC: 15
-  rewardSpesos: 100000
+  rewardSpesos: 20000 # Kessler: 100000<20000, PvP payouts were far above any honest income
   trigger: Killed
   trait: WFTraitOutlawKill
   title: outlaw-objectives-kill-title
@@ -71,7 +71,7 @@
 - type: outlawObjective
   id: WFOutlawObjectiveRoundRemoval
   rewardDC: 30
-  rewardSpesos: 250000
+  rewardSpesos: 40000 # Kessler: 250000<40000, PvP payouts were far above any honest income
   trigger: Gibbed
   trait: WFTraitOutlawRoundRemoval
   title: outlaw-objectives-round-removal-title
@@ -80,7 +80,7 @@
 - type: outlawObjective
   id: WFOutlawObjectiveTheft
   rewardDC: 20
-  rewardSpesos: 150000
+  rewardSpesos: 30000 # Kessler: 150000<30000, PvP payouts were far above any honest income
   trigger: ItemSold
   trait: WFTraitOutlawTheft
   item: WFOutlawObjectiveDataDrive
@@ -90,7 +90,7 @@
 - type: outlawObjective
   id: WFOutlawObjectiveShipTheft
   rewardDC: 40
-  rewardSpesos: 400000
+  rewardSpesos: 60000 # Kessler: 400000<60000, PvP payouts were far above any honest income
   trigger: ShipSold
   trait: WFTraitOutlawShipTheft
   title: outlaw-objectives-ship-theft-title
@@ -99,7 +99,7 @@
 - type: outlawObjective
   id: WFOutlawObjectiveShipDamage
   rewardDC: 25
-  rewardSpesos: 200000
+  rewardSpesos: 40000 # Kessler: 200000<40000, PvP payouts were far above any honest income
   trigger: ShipDamaged
   trait: WFTraitOutlawShipDamage
   title: outlaw-objectives-ship-damage-title
