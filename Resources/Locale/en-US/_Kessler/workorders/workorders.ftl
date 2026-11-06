@@ -12,3 +12,5 @@ kessler-work-order-clean-desc = Spills have been reported around the station. Mo
 kessler-work-order-deliver-title = Deliver {$item}
 kessler-work-order-meal-desc = A guest wants {$item}. Cook it and hand it in here.
 kessler-work-order-drink-desc = A guest wants a glass of {$item} (at least {$amount}u). Mix it and hand it in here.
+kessler-work-order-lights-title = Replace blown lights
+kessler-work-order-lights-desc = Some light bulbs around the station have blown. Put working bulbs back in; each light pays when it's fixed.
