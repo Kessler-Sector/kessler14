@@ -60,3 +60,14 @@ guide-entry-kessler-patients = Living Patients
 
 kessler-distress-beacon-name = Distress beacon {$code}
 kessler-distress-announcement = Distress call received from {$name} at ({$x}, {$y}). One survivor in a stasis pod. A rescue bonus is paid on discharge.
+
+## Foreign body
+
+kessler-condition-foreign-body = Foreign body
+kessler-condition-foreign-body-examine-1 = [color=yellow]{CAPITALIZE(SUBJECT($patient))} {CONJUGATE-BASIC($patient, "hold", "holds")} {POSS-ADJ($patient)} side stiffly, wincing at every move.[/color]
+kessler-condition-foreign-body-examine-2 = [color=orange]{CAPITALIZE(SUBJECT($patient))} {CONJUGATE-BE($patient)} hunched over, breathing in short, careful gasps.[/color]
+kessler-condition-foreign-body-examine-3 = [color=red]{CAPITALIZE(SUBJECT($patient))} {CONJUGATE-BE($patient)} grey with pain, coughing up flecks of blood.[/color]
+kessler-condition-foreign-body-symptom-wince = {CAPITALIZE(THE($patient))} winces and clutches {POSS-ADJ($patient)} chest.
+kessler-condition-foreign-body-symptom-breath = {CAPITALIZE(THE($patient))} takes a sharp breath, as if something is stabbing {OBJECT($patient)}.
+kessler-condition-foreign-body-symptom-cough = {CAPITALIZE(THE($patient))} coughs painfully.
+kessler-condition-foreign-body-symptom-collapse = {CAPITALIZE(THE($patient))} doubles over, unable to straighten up.
