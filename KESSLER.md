@@ -192,10 +192,10 @@ Surgery comes from **Monolith's Shitmed** (`_Shitmed` folders), ported onto our 
   - base rewards are halved from Coyote's tripled values;
   - redeeming a bounty gives 20 Medical reputation.
 - **Living NPC patients (first slice of M1 and M2):**
-  - some wreck emergency medical pods (`MedicalPodPatient`) hold a living patient with a condition: poisoning, internal bleeding or liver failure (`Resources/Prototypes/_Kessler/Medical/conditions.yml`);
+  - some wreck emergency medical pods (`MedicalPodPatient`) hold a living patient with a condition: poisoning, internal bleeding, liver failure or a foreign body (`Resources/Prototypes/_Kessler/Medical/conditions.yml`);
   - the pod is a stasis container (`PatientStasis`): nothing progresses and the patient doesn't need air until it's opened; a stasis bed slows conditions to a tenth;
   - each condition has stages that only run down while the server runs, stored as time left in the stage (no game time);
-  - cures: poisoning needs the toxin's specific antidote (the toxins are inert marker reagents, so a blood sample names them); internal bleeding needs the new `Repair Internal Bleeding` surgery (clamp internal bleeders); liver failure needs a new liver (biofabricator BioSynth or a donor);
+  - cures: poisoning needs the toxin's specific antidote (the toxins are inert marker reagents, so a blood sample names them); internal bleeding needs the new `Repair Internal Bleeding` surgery (clamp internal bleeders); liver failure needs a new liver (biofabricator BioSynth or a donor); a foreign body (a glass shard in the torso cavity) needs Cavity Implant surgery to take it out;
   - a cured patient is discharged at the medical bounty redemption machine for minutes x rate (less for damage left), plus one Medical reputation per minute;
   - admins can test with `spawnpatient [condition]`; guidebook page under Medical, "Living Patients".
   - **distress beacons** (station event `PatientDistressBeacon`, every 45 minutes at most, 1+ player): a scrap of wreck 800 to 2,500 tiles out with a patient's stasis pod, shown on radar in orange; medical radio gets its coordinates; the patient pays a 3,000 rescue bonus on discharge; the wreck is deleted after 90 real minutes unless someone is aboard.

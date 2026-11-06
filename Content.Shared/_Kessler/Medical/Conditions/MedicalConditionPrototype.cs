@@ -24,6 +24,12 @@ public enum MedicalConditionKind : byte
     /// replaced by another working organ of the same kind.
     /// </summary>
     OrganFailure,
+
+    /// <summary>
+    /// Something from <see cref="MedicalConditionPrototype.ForeignObjects"/> is lodged in the torso cavity; the patient is
+    /// cured once it has been taken out by surgery (Cavity Implant, remove item).
+    /// </summary>
+    ForeignBody,
 }
 
 /// <summary>
@@ -81,6 +87,12 @@ public sealed partial class MedicalConditionPrototype : IPrototype
     /// </summary>
     [DataField]
     public string? Organ;
+
+    /// <summary>
+    /// ForeignBody: what can be lodged in the patient. Must fit the torso cavity (tiny or small).
+    /// </summary>
+    [DataField]
+    public List<EntProtoId> ForeignObjects = new();
 
     /// <summary>
     /// What the patient says or does now and then once cured, shown when examined.

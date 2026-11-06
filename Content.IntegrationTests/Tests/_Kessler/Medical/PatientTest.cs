@@ -11,6 +11,7 @@ using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.Stacks;
 using Robust.Shared.Containers;
@@ -163,6 +164,38 @@ public sealed class PatientTest
             Assert.That(body.InsertOrgan(torso, donor, slot), "the donor liver goes in");
             patients.Tick(patient, 1f);
             Assert.That(patient.Comp.Cured, "a working liver cures it");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ForeignBodyCuredByRemovingIt()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var patients = entMan.System<PatientSystem>();
+        var body = entMan.System<SharedBodySystem>();
+        var itemSlots = entMan.System<ItemSlotsSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var patient = SpawnPatient(entMan, patients, testMap.GridCoords, "PatientForeignBody");
+            Assert.That(patient.Comp.ForeignBody, Is.Not.Null, "something is lodged in the patient");
+
+            var torso = body.GetBodyChildrenOfType(patient, BodyPartType.Torso).First();
+            Assert.That(itemSlots.TryGetSlot(torso.Id, torso.Component.ContainerName, out var slot));
+            Assert.That(slot!.Item, Is.EqualTo(patient.Comp.ForeignBody), "it's in the torso cavity");
+
+            patients.Tick(patient, 60f);
+            Assert.That(patient.Comp.Cured, Is.False);
+            Assert.That(entMan.GetComponent<DamageableComponent>(patient).TotalDamage.Float(), Is.GreaterThan(0), "it hurts");
+
+            Assert.That(itemSlots.TryEject(torso.Id, slot, null, out _));
+            patients.Tick(patient, 1f);
+            Assert.That(patient.Comp.Cured, "taking it out cures the patient");
         });
 
         await pair.CleanReturnAsync();
