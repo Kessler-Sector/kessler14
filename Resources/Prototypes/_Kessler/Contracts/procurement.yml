@@ -1,0 +1,109 @@
+# Procurement contracts for the contract board (docs/kessler/design/departments.md, 5.2). Any station with a pallet
+# console posts these; the holder completes one by selling the goods on that station's pallets. Pay is
+# round(amount x minutesPerUnit) minutes x kessler.contracts.rate (150), on top of the pallet price; reputation is a
+# point a minute on the track.
+
+- type: procurementContract
+  id: ContractSteel
+  item: kessler-contract-item-steel
+  stack: Steel
+  minAmount: 60
+  maxAmount: 150
+  minutesPerUnit: 0.1
+  track: Freight
+
+- type: procurementContract
+  id: ContractGlass
+  item: kessler-contract-item-glass
+  stack: Glass
+  minAmount: 60
+  maxAmount: 150
+  minutesPerUnit: 0.1
+  track: Freight
+
+- type: procurementContract
+  id: ContractPlastic
+  item: kessler-contract-item-plastic
+  stack: Plastic
+  minAmount: 30
+  maxAmount: 90
+  minutesPerUnit: 0.12
+  track: Freight
+
+- type: procurementContract
+  id: ContractPlasteel
+  item: kessler-contract-item-plasteel
+  stack: Plasteel
+  minAmount: 20
+  maxAmount: 60
+  minutesPerUnit: 0.3
+  track: Engineering
+
+- type: procurementContract
+  id: ContractGold
+  item: kessler-contract-item-gold
+  stack: Gold
+  minAmount: 10
+  maxAmount: 30
+  minutesPerUnit: 0.5
+  track: Freight
+  weight: 0.6
+
+- type: procurementContract
+  id: ContractUranium
+  item: kessler-contract-item-uranium
+  stack: Uranium
+  minAmount: 10
+  maxAmount: 30
+  minutesPerUnit: 0.5
+  track: Engineering
+  weight: 0.6
+
+- type: procurementContract
+  id: ContractCableHV
+  item: kessler-contract-item-cable-hv
+  stack: CableHV
+  minAmount: 30
+  maxAmount: 90
+  minutesPerUnit: 0.1
+  track: Engineering
+
+- type: procurementContract
+  id: ContractOre
+  item: kessler-contract-item-ore
+  whitelist:
+    tags:
+    - Ore
+  minAmount: 60
+  maxAmount: 200
+  minutesPerUnit: 0.06
+  track: Freight
+
+- type: procurementContract
+  id: ContractProduce
+  item: kessler-contract-item-produce
+  whitelist:
+    components:
+    - Produce
+  minAmount: 20
+  maxAmount: 40
+  minutesPerUnit: 0.3
+  track: Station
+
+- type: procurementContract
+  id: ContractBrutepack
+  item: kessler-contract-item-brutepack
+  stack: Brutepack
+  minAmount: 10
+  maxAmount: 30
+  minutesPerUnit: 0.4
+  track: Medical
+
+- type: procurementContract
+  id: ContractOintment
+  item: kessler-contract-item-ointment
+  stack: Ointment
+  minAmount: 10
+  maxAmount: 30
+  minutesPerUnit: 0.4
+  track: Medical

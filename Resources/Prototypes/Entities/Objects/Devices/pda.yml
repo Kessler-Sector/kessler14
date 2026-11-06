@@ -96,6 +96,7 @@
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MarketBoardCartridge # Kessler
+      - ContractsCartridge # Kessler
       - BountyContractsCartridge # Frontier
       - AstroNavCartridge # Frontier
       - NanoChatCartridge # DeltaV
@@ -184,6 +185,7 @@
     - NanoTaskCartridge
     - NewsReaderCartridge
     - MarketBoardCartridge # Kessler
+    - ContractsCartridge # Kessler
     - BountyContractsCartridge # Frontier
     - AstroNavCartridge # Frontier
     - WantedListCartridge
@@ -958,6 +960,7 @@
     - NanoTaskCartridge
     - NewsReaderCartridge
     - MarketBoardCartridge # Kessler
+    - ContractsCartridge # Kessler
     - WantedListCartridge
     - LogProbeCartridge
     - NanoChatCartridge # DeltaV
@@ -1032,6 +1035,7 @@
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MarketBoardCartridge # Kessler
+      - ContractsCartridge # Kessler
       - MedTekCartridge
       - WantedListCartridge
       - LogProbeCartridge
@@ -1063,6 +1067,7 @@
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MarketBoardCartridge # Kessler
+      - ContractsCartridge # Kessler
       - LogProbeCartridge
       - WantedListCartridge
       - MedTekCartridge
@@ -1196,6 +1201,7 @@
       - NanoTaskCartridge
       - NewsReaderCartridge # Wayfarer
       - MarketBoardCartridge # Kessler
+      - ContractsCartridge # Kessler
       - BountyContractsCartridge # Wayfarer
       - AstroNavCartridge # Frontier
       - BlipCartridge # Frontier
@@ -1230,6 +1236,7 @@
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MarketBoardCartridge # Kessler
+      - ContractsCartridge # Kessler
       - MedTekCartridge
       - WantedListCartridge
       - LogProbeCartridge
@@ -1595,6 +1602,7 @@
       - NanoTaskCartridge
       - NewsReaderCartridge # Wayfarer
       - MarketBoardCartridge # Kessler
+      - ContractsCartridge # Kessler
       - BountyContractsCartridge # Wayfarer
       - AstroNavCartridge # Frontier
       - BlipCartridge # Frontier

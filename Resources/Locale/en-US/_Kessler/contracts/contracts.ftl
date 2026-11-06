@@ -1,0 +1,34 @@
+kessler-contract-item-steel = steel sheets
+kessler-contract-item-glass = glass sheets
+kessler-contract-item-plastic = plastic sheets
+kessler-contract-item-plasteel = plasteel sheets
+kessler-contract-item-gold = gold bars
+kessler-contract-item-uranium = uranium bars
+kessler-contract-item-cable-hv = HV cable
+kessler-contract-item-ore = ore of any kind
+kessler-contract-item-produce = fresh produce
+kessler-contract-item-brutepack = bruise packs
+kessler-contract-item-ointment = ointment
+
+kessler-contracts-no-character = Contracts need a character with a bank account.
+kessler-contracts-too-many = You already hold as many contracts as you can.
+kessler-contracts-gone = That contract is no longer available.
+kessler-contracts-progress = Contract: {$delivered} of {$amount} {$item} delivered.
+kessler-contracts-complete = Contract complete: {$item}. {$reward} spesos paid to your bank.
+kessler-reputation-reason-contract = completed a contract
+
+kessler-contracts-program-name = Contracts
+kessler-contracts-title = Contracts
+kessler-contracts-refresh = Refresh
+kessler-contracts-hint = Accept a contract, then sell the goods on a pallet at that station. You're paid on top of the pallet price.
+kessler-contracts-held-header = Your contracts ({$count}/{$max})
+kessler-contracts-open-header = Open contracts
+kessler-contracts-none-held = You hold no contracts.
+kessler-contracts-none-open = No open contracts right now.
+kessler-contracts-entry = {$amount} {$item} for {$station}
+kessler-contracts-entry-progress = {$delivered}/{$amount} {$item} to {$station}
+kessler-contracts-reward = {$reward} spesos, {$rep} {$track} reputation
+kessler-contracts-time-held = {$minutes} min left to deliver
+kessler-contracts-time-open = {$hours} h to deliver, open for {$minutes} min more
+kessler-contracts-accept = Accept
+kessler-contracts-abandon = Abandon

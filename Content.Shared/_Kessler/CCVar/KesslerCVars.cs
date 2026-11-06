@@ -173,4 +173,16 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<float> PatientPayMultiplier =
         CVarDef.Create("kessler.patients.pay_multiplier", 1f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Whether stations post procurement contracts on the contract board.
+    /// </summary>
+    public static readonly CVarDef<bool> ContractsEnabled =
+        CVarDef.Create("kessler.contracts.enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Spesos a contract pays per expected minute of work, on top of what the goods sell for.
+    /// </summary>
+    public static readonly CVarDef<int> ContractRate =
+        CVarDef.Create("kessler.contracts.rate", 150, CVar.SERVERONLY);
 }
