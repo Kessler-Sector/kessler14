@@ -20,6 +20,7 @@ public sealed partial class NFCargoSystem
     {
         SubscribeLocalEvent<TradeCrateComponent, PriceCalculationEvent>(OnTradeCrateGetPriceEvent);
         SubscribeLocalEvent<TradeCrateComponent, ComponentInit>(OnTradeCrateInit);
+        SubscribeLocalEvent<TradeCrateComponent, MapInitEvent>(OnTradeCrateMapInit); // Kessler
         SubscribeLocalEvent<TradeCrateComponent, ComponentRemove>(OnTradeCrateRemove);
         SubscribeLocalEvent<TradeCrateComponent, ExaminedEvent>(OnTradeCrateExamined);
         SubscribeLocalEvent<TradeCrateComponent, ThrowItemAttemptEvent>(OnTradeCrateThrow);
@@ -45,17 +46,15 @@ public sealed partial class NFCargoSystem
         ev.Price = double.Max(0.0, ev.Price); // Ensure non-negative values.
     }
 
+    // Kessler: a loaded crate keeps its destination and deadline; only its looks and timer need restoring. Map init
+    // doesn't run again on load, so the destination is rolled there instead of here.
     private void OnTradeCrateInit(Entity<TradeCrateComponent> ent, ref ComponentInit ev)
     {
-        // Kessler: a loaded crate keeps its destination and deadline; only its looks and timer need restoring.
-        if (ent.Comp.Initialized)
-        {
-            RestoreTradeCrate(ent);
-            return;
-        }
+        RestoreTradeCrate(ent);
+    }
 
-        ent.Comp.Initialized = true;
-
+    private void OnTradeCrateMapInit(Entity<TradeCrateComponent> ent, ref MapInitEvent ev) // Kessler: was component init
+    {
         // If there are no available destinations, tough luck.
         if (_destinations.Count > 0)
         {

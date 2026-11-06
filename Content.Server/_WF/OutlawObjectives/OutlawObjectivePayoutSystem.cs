@@ -632,13 +632,16 @@ public sealed class OutlawObjectivePayoutSystem : EntitySystem
         }
 
         if (_activeShipTheft == 0
-            || TerminatingOrDeleted(forged.Forger)
-            || !TryComp<OutlawObjectiveComponent>(forged.Target, out var comp))
+            || forged.Forger is not { } forger // Kessler: nullable
+            || forged.Target is not { } target
+            || forged.Objective is not { } objective
+            || TerminatingOrDeleted(forger)
+            || !TryComp<OutlawObjectiveComponent>(target, out var comp))
         {
             return;
         }
 
-        Complete(forged.Target, comp, forged.Objective, forged.Forger);
+        Complete(target, comp, objective, forger);
         QueueDel(ent);
     }
 
