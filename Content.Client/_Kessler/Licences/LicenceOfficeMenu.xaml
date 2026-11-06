@@ -1,0 +1,17 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      SetSize="560 680"
+                      MinSize="420 360"
+                      Title="{Loc 'kessler-licence-office-title'}">
+    <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="10 8 10 6">
+            <Label Name="CharacterLabel" StyleClasses="LabelHeading" />
+            <RichTextLabel Name="Hint" />
+            <RichTextLabel Name="NoticeLabel" Visible="False" Margin="0 4 0 0" />
+        </BoxContainer>
+        <PanelContainer StyleClasses="LowDivider" />
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Name="SectionList" Orientation="Vertical" HorizontalExpand="True" Margin="10 6 10 6" />
+        </ScrollContainer>
+    </BoxContainer>
+</controls:FancyWindow>

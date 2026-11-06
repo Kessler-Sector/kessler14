@@ -154,7 +154,9 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - Pilot III (level 3, Pilot II held 7 days, 50,000) allows Large;
   - Capital (level 4, Pilot III held 14 days, 200,000) is needed for ships of 300,000 and more;
   - Micro ships need none; vouchers and the CGP, staff, Centcomm, Syndicate and custom shipyards are exempt;
-  - `licence` lists them with what's missing, and `licence buy <id>` buys one;
+  - **licensing terminals** (`ComputerLicenceOffice`) at the entrance of both Dusk shipyards show the character using them their licences (held, ready to buy with a button, or what's still missing) and their standing with every reputation track; each viewer sees their own records;
+  - placed in `Resources/Maps/_WF/Outpost/dusk.yml` with uids 900001 and 900002 (high, so Wayfarer's map changes don't collide); `LicenceOfficeTest` checks they load anchored and powered. A sector already saved before this has none: an admin spawns them in place;
+  - `licence` lists them with what's missing, and `licence buy <id>` buys one (console);
   - shipyards refuse an unlicensed purchase (`kessler.licences.enforced`).
 - **Gas market saturation:**
   - each station tracks the moles of each gas it has bought (`StationGasMarketComponent`, saved), decaying with a 24-hour half-life in real time;
