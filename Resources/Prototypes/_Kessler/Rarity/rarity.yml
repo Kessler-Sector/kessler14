@@ -1,0 +1,34 @@
+# Rarity tiers from docs/kessler/design/progression.md. Common and Standard items show nothing; only tiers worth
+# noticing are labelled. Listing a prototype covers its children (stacks, spawner variants).
+# Target sources: Superior from Hazardous content and research behind licences (~10-20 h), Rare ~60 participant-hours
+# per drop, Exotic ~300. Rare and above never come from mail, map fills, ship blueprints or unlimited recipes.
+
+- type: rarity
+  id: Superior
+  name: kessler-rarity-superior
+  color: "#4fb04f"
+  order: 3
+  entities:
+  - SuperCapacitorStockPart
+  - PicoManipulatorStockPart
+  - SuperMatterBinStockPart
+
+- type: rarity
+  id: Rare
+  name: kessler-rarity-rare
+  color: "#3d8bff"
+  order: 4
+  entities:
+  - QuadraticCapacitorStockPart
+  - FemtoManipulatorStockPart
+  - BluespaceMatterBinStockPart
+  - MaterialBluespace
+  - BluespaceOre
+
+- type: rarity
+  id: Exotic
+  name: kessler-rarity-exotic
+  color: "#b75cff"
+  order: 5
+  entities:
+  - PowerCellAntiqueProto
