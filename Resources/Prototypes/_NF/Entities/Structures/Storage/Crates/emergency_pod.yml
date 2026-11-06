@@ -60,6 +60,7 @@
     whitelist: # Frontier - whitelist
       components:
       - MedicalBounty
+      - KesslerPatient # Kessler: living NPC patients
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic
@@ -95,6 +96,7 @@
     price: 50 # Frontier: 75<50 - TODO: material value rework
   - type: RequireProjectileTarget
   - type: AntiRottingContainer
+  - type: PatientStasis # Kessler: patients inside don't get worse or need air
   - type: Construction
     graph: MedicalPod
     node: medicalpod

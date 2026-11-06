@@ -1,0 +1,39 @@
+# Toxins that NPC patients are poisoned with (conditions.yml, PatientPoisoning). They do no harm by themselves (the
+# condition deals the damage) and are never metabolised, so a blood sample in a chemical analyser names them for as
+# long as the patient is sick. Each has one antidote, listed in the guidebook.
+
+- type: reagent
+  id: PatientToxinCyanide
+  name: reagent-name-patient-cyanide
+  group: Toxins
+  desc: reagent-desc-patient-cyanide
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: bitter
+  color: "#d8d8e0"
+
+- type: reagent
+  id: PatientToxinThallium
+  name: reagent-name-patient-thallium
+  group: Toxins
+  desc: reagent-desc-patient-thallium
+  physicalDesc: reagent-physical-desc-metallic
+  flavor: metallic
+  color: "#8a8f99"
+
+- type: reagent
+  id: PatientToxinAllergen
+  name: reagent-name-patient-allergen
+  group: Toxins
+  desc: reagent-desc-patient-allergen
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#c9b458"
+
+- type: reagent
+  id: PatientToxinPolonium
+  name: reagent-name-patient-polonium
+  group: Toxins
+  desc: reagent-desc-patient-polonium
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: metallic
+  color: "#9be36b"

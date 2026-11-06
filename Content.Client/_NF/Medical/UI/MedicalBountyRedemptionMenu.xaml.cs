@@ -48,6 +48,13 @@ public sealed partial class MedicalBountyRedemptionMenu : FancyWindow
                 RedeemLabel.Text = Loc.GetString("medical-bounty-redemption-redeem-label-not-alive");
                 SellButton.Disabled = true;
                 break;
+            // Kessler: living patients
+            case MedicalBountyRedemptionStatus.NotCured:
+                BodyLabel.Text = Loc.GetString("medical-bounty-redemption-body-label-valid-bounty");
+                RedeemLabel.Text = Loc.GetString("kessler-patient-redeem-label-not-cured");
+                SellButton.Disabled = true;
+                break;
+            // End Kessler
             case MedicalBountyRedemptionStatus.Valid:
                 BodyLabel.Text = Loc.GetString("medical-bounty-redemption-body-label-valid-bounty");
                 if (message.PaidToStation)

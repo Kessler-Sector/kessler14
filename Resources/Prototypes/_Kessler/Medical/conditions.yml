@@ -1,0 +1,106 @@
+# Conditions for generated NPC patients (docs/kessler/design/medical-science.md, M2).
+# Pay is minutes x rate; Medical reputation is one point per minute. Stage durations only run while the patient is out
+# of stasis (an emergency medical pod) and alive; a stasis bed slows them to a tenth.
+
+- type: medicalCondition
+  id: PatientPoisoning
+  name: kessler-condition-poisoning
+  kind: Poison
+  weight: 1
+  minutes: 15
+  rate: 200
+  antidoteAmount: 5
+  poisons:
+  - toxin: PatientToxinCyanide
+    antidote: DexalinPlus
+  - toxin: PatientToxinThallium
+    antidote: Charcoal
+  - toxin: PatientToxinAllergen
+    antidote: Diphenhydramine
+  - toxin: PatientToxinPolonium
+    antidote: Arithrazine
+  stages:
+  - duration: 600
+    toxinLevel: 5
+    damagePerMinute:
+      types:
+        Poison: 1
+    examine: kessler-condition-poisoning-examine-1
+    symptoms:
+    - kessler-condition-poisoning-symptom-nausea
+    - kessler-condition-poisoning-symptom-sweat
+  - duration: 600
+    toxinLevel: 10
+    damagePerMinute:
+      types:
+        Poison: 3
+    examine: kessler-condition-poisoning-examine-2
+    symptoms:
+    - kessler-condition-poisoning-symptom-nausea
+    - kessler-condition-poisoning-symptom-shake
+  - toxinLevel: 15
+    damagePerMinute:
+      types:
+        Poison: 6
+    examine: kessler-condition-poisoning-examine-3
+    symptoms:
+    - kessler-condition-poisoning-symptom-shake
+    - kessler-condition-poisoning-symptom-collapse
+
+- type: medicalCondition
+  id: PatientInternalBleeding
+  name: kessler-condition-internal-bleeding
+  kind: InternalBleeding
+  weight: 1
+  minutes: 25
+  rate: 300
+  stages:
+  - duration: 600
+    bloodLossPerMinute: 3
+    examine: kessler-condition-internal-bleeding-examine-1
+    symptoms:
+    - kessler-condition-internal-bleeding-symptom-belly
+    - kessler-condition-internal-bleeding-symptom-dizzy
+  - duration: 600
+    bloodLossPerMinute: 6
+    examine: kessler-condition-internal-bleeding-examine-2
+    symptoms:
+    - kessler-condition-internal-bleeding-symptom-belly
+    - kessler-condition-internal-bleeding-symptom-dizzy
+  - bloodLossPerMinute: 10
+    examine: kessler-condition-internal-bleeding-examine-3
+    symptoms:
+    - kessler-condition-internal-bleeding-symptom-collapse
+
+- type: medicalCondition
+  id: PatientLiverFailure
+  name: kessler-condition-liver-failure
+  kind: OrganFailure
+  organ: Liver
+  weight: 0.6
+  minutes: 40
+  rate: 400
+  stages:
+  - duration: 900
+    damagePerMinute:
+      types:
+        Poison: 1
+    examine: kessler-condition-liver-failure-examine-1
+    symptoms:
+    - kessler-condition-liver-failure-symptom-tired
+    - kessler-condition-liver-failure-symptom-itch
+  - duration: 900
+    damagePerMinute:
+      types:
+        Poison: 2
+    examine: kessler-condition-liver-failure-examine-2
+    symptoms:
+    - kessler-condition-liver-failure-symptom-itch
+    - kessler-condition-liver-failure-symptom-confused
+  - damagePerMinute:
+      types:
+        Poison: 4
+    examine: kessler-condition-liver-failure-examine-3
+    symptoms:
+    - kessler-condition-liver-failure-symptom-confused
+    - kessler-condition-liver-failure-symptom-collapse
