@@ -55,12 +55,6 @@ public sealed partial class TradeCrateComponent : Component
     [DataField(serverOnly: true)]
     public EntityUid? DestinationStation;
 
-    /// <summary>
-    /// Kessler: whether the destination and express deadline have been set. Component init also runs when a saved
-    /// crate is loaded, and must not roll them again.
-    /// </summary>
-    [DataField(serverOnly: true)]
-    public bool Initialized;
 
     /// <summary>
     /// Cancellation token used to disable the express marker on the crate.

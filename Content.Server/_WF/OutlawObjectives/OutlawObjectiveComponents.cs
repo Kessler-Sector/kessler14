@@ -123,14 +123,16 @@ public sealed partial class OutlawShipDamageComponent : Component
 [RegisterComponent]
 public sealed partial class ForgedDeedComponent : Component
 {
-    [DataField] // Kessler: saved
-    public EntityUid Forger;
+    // Kessler: saved. Nullable, because the forged deed prototype carries this component unset, and an unset entity
+    // can't be written to a save.
+    [DataField]
+    public EntityUid? Forger;
 
     [DataField]
-    public EntityUid Target;
+    public EntityUid? Target;
 
     [DataField]
-    public ProtoId<OutlawObjectivePrototype> Objective;
+    public ProtoId<OutlawObjectivePrototype>? Objective;
 }
 
 [RegisterComponent]
