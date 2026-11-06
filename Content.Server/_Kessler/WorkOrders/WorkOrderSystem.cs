@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server._Kessler.Reputation;
 using Content.Server._NF.Bank;
 using Content.Server.Fluids.EntitySystems;
+using Content.Server.Pinpointer;
 using Content.Server.Popups;
 using Content.Shared._Kessler.CCVar;
 using Content.Shared._Kessler.WorkOrders;
@@ -41,6 +42,7 @@ public sealed class WorkOrderSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
+    [Dependency] private readonly NavMapSystem _navMap = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedPoweredLightSystem _lights = default!;
     [Dependency] private readonly PuddleSystem _puddle = default!;
@@ -86,23 +88,27 @@ public sealed class WorkOrderSystem : EntitySystem
     /// </summary>
     public void UpdateBoard(Entity<WorkOrderBoardComponent> board, DateTime now)
     {
-        var changed = board.Comp.Orders.RemoveAll(o => o.Expires <= now) > 0;
+        board.Comp.Orders.RemoveAll(o => o.Expires <= now);
 
         var target = Math.Min(board.Comp.MaxOpen,
             board.Comp.BaseOpen + _players.PlayerCount / Math.Max(1, board.Comp.PlayersPerExtraOrder));
 
-        if (board.Comp.Orders.Count < board.Comp.BaseOpen
-            || board.Comp.Orders.Count < target && now >= board.Comp.NextGenerate)
+        // Fill up to the base number at once (a new or empty board shouldn't trickle in one order per update);
+        // above that, one more per interval. A failed post (no working lights to break, say) is retried.
+        for (var attempt = 0; attempt < 10; attempt++)
         {
-            if (TryPost(board, now))
+            if (board.Comp.Orders.Count >= board.Comp.BaseOpen
+                && (board.Comp.Orders.Count >= target || now < board.Comp.NextGenerate))
             {
-                board.Comp.NextGenerate = now + board.Comp.Interval;
-                changed = true;
+                break;
             }
+
+            if (TryPost(board, now))
+                board.Comp.NextGenerate = now + board.Comp.Interval;
         }
 
-        if (changed)
-            UpdateUi(board);
+        // Refreshed every update while open, so the time left counts down.
+        UpdateUi(board);
     }
 
     private bool TryPost(Entity<WorkOrderBoardComponent> board, DateTime now)
@@ -411,10 +417,35 @@ public sealed class WorkOrderSystem : EntitySystem
                 MinutesLeft = Math.Max(0, (int) (order.Expires - now).TotalMinutes),
                 Remaining = order.MessesLeft,
                 Total = order.MessesTotal,
+                Spots = GetSpots(board.Owner, order.Id),
             });
         }
 
         _ui.SetUiState(board.Owner, WorkOrderBoardUiKey.Key, new WorkOrderBoardUiState(entries));
+    }
+
+    /// <summary>
+    /// Where the messes and broken lights of an order are, by the nearest station beacon ("east of Kitchen").
+    /// </summary>
+    private List<string> GetSpots(EntityUid board, int orderId)
+    {
+        var spots = new List<string>();
+        var messes = EntityQueryEnumerator<WorkOrderMessComponent>();
+        while (messes.MoveNext(out var uid, out var mess))
+        {
+            if (mess.Board == board && mess.OrderId == orderId)
+                spots.Add(_navMap.GetNearestBeaconString(_transform.GetMapCoordinates(uid)));
+        }
+
+        var lights = EntityQueryEnumerator<WorkOrderRepairComponent>();
+        while (lights.MoveNext(out var uid, out var repair))
+        {
+            if (repair.Board == board && repair.OrderId == orderId)
+                spots.Add(_navMap.GetNearestBeaconString(_transform.GetMapCoordinates(uid)));
+        }
+
+        spots.Sort(string.CompareOrdinal);
+        return spots;
     }
 
     private string TargetName(WorkOrder order)

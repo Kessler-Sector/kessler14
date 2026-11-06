@@ -7,7 +7,7 @@ kessler-licence-pilot-3-desc = Lets you buy large ships.
 kessler-licence-pilot-capital = Capital Ship Licence
 kessler-licence-pilot-capital-desc = Lets you buy ships worth 300,000 or more.
 
-kessler-licence-no-character = You need to be playing a character.
+kessler-licence-no-character = You need to be playing one of your saved characters (observers and ghosts without a body have none).
 kessler-licence-loading = Checking your licences. Try again in a moment.
 kessler-licence-ship-needs = You need {$licences} to buy this ship. Type "licence" in the console to see how to get it.
 kessler-licence-needs-track = {$level} with the {$track}

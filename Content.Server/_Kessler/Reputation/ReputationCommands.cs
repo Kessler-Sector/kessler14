@@ -1,3 +1,4 @@
+using Content.Server._Kessler.Characters;
 using Content.Server.Administration;
 using Content.Shared._Kessler.Reputation;
 using Content.Shared._NF.Bank.Components;
@@ -14,21 +15,20 @@ namespace Content.Server._Kessler.Reputation;
 [AnyCommand]
 public sealed class ReputationCommand : LocalizedEntityCommands
 {
+    [Dependency] private readonly KesslerCharacterSystem _characters = default!;
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
 
     public override string Command => "reputation";
 
     public override async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (shell.Player is not { AttachedEntity: { } body } player
-            || !EntityManager.TryGetComponent<BankAccountComponent>(body, out var bank)
-            || bank.CharacterSlot < 0)
+        if (shell.Player is not { } player || !_characters.TryGetCharacter(player, out var body, out var slot))
         {
             shell.WriteError(Loc.GetString("cmd-reputation-no-character"));
             return;
         }
 
-        var points = await _reputation.GetReputationAsync(player.UserId, bank.CharacterSlot);
+        var points = await _reputation.GetReputationAsync(player.UserId, slot);
         if (points == null)
         {
             shell.WriteError(Loc.GetString("cmd-reputation-no-character"));
@@ -58,6 +58,7 @@ public sealed class ReputationCommand : LocalizedEntityCommands
 [AdminCommand(AdminFlags.Admin)]
 public sealed class ReputationAwardCommand : LocalizedEntityCommands
 {
+    [Dependency] private readonly KesslerCharacterSystem _characters = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
@@ -72,7 +73,7 @@ public sealed class ReputationAwardCommand : LocalizedEntityCommands
             return;
         }
 
-        if (!_players.TryGetSessionByUsername(args[0], out var session) || session.AttachedEntity is not { } body)
+        if (!_players.TryGetSessionByUsername(args[0], out var session) || !_characters.TryGetCharacter(session, out var body, out _))
         {
             shell.WriteError(Loc.GetString("cmd-reputationaward-no-player"));
             return;

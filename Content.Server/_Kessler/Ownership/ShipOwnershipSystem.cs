@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Server._Kessler.Characters;
 using Content.Server.Database;
 using Content.Server.Preferences.Managers;
 using Content.Shared._Kessler.CCVar;
@@ -18,6 +19,7 @@ public sealed class ShipOwnershipSystem : EntitySystem
     [Dependency] private readonly IServerPreferencesManager _prefs = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly KesslerCharacterSystem _characters = default!;
 
     public override void Initialize()
     {
@@ -91,8 +93,8 @@ public sealed class ShipOwnershipSystem : EntitySystem
     private int GetCharacterSlot(EntityUid buyer, NetUserId userId)
     {
         // The bank account knows which character this body is, even after a cryo swap or a restart.
-        if (TryComp<BankAccountComponent>(buyer, out var bank) && bank.CharacterSlot >= 0)
-            return bank.CharacterSlot;
+        if (_characters.TryGetSlot(buyer, out _, out var slot))
+            return slot;
 
         return _prefs.TryGetCachedPreferences(userId, out var prefs) ? prefs.SelectedCharacterIndex : -1;
     }
