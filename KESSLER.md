@@ -129,6 +129,15 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - bluespace ore about a sixth as common (1 wall per cave expedition instead of 10);
   - T4 parts out of mail, 400 merchant tokens instead of 100, a fifth as common in dungeon loot;
   - mail carriers get 30% of a parcel's value (`kessler.mail.carrier_share`).
+- **Reputation (phase 1, started):**
+  - stored per character and track in the `kessler_reputation` table, so it counts while the character is offline, in cryo or stored;
+  - levels at 120, 600, 1,800, 4,800 and 12,000 points;
+  - no daily cap;
+  - eight tracks (`Resources/Prototypes/_Kessler/Reputation/tracks.yml`);
+  - awarded through `KesslerReputationSystem.TryAward`, at about 1 point per minute of useful work;
+  - earned so far from delivering mail (Station, 5), medical bounties (Medical, 20) and completed expeditions (Expedition, 20, for everyone on the expedition);
+  - `reputation` shows your own standing, and `reputationaward` lets admins give it;
+  - licences come next.
 - **Not yet:**
   - expedition T4 blueprints are still permanent (limited-run blueprints come in phase 3);
   - the loaner is given on every spawn under 10 hours of playtime, not once per account;

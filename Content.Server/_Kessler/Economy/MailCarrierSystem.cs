@@ -1,3 +1,4 @@
+using Content.Server._Kessler.Reputation;
 using Content.Server._NF.Bank;
 using Content.Server._DV.Mail.Components;
 using Content.Server.Popups;
@@ -17,6 +18,7 @@ public sealed class MailCarrierSystem : EntitySystem
     [Dependency] private readonly BankSystem _bank = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly KesslerReputationSystem _reputation = default!;
 
     public override void Initialize()
     {
@@ -64,6 +66,7 @@ public sealed class MailCarrierSystem : EntitySystem
                 ("recipient", Name(opener))),
             carrier,
             carrier);
+        _reputation.TryAward(carrier, "Station", 5, Loc.GetString("kessler-reputation-reason-mail"));
         return share;
     }
 }

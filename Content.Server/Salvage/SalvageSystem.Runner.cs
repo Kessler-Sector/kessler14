@@ -387,6 +387,7 @@ public sealed partial class SalvageSystem
             {
                 comp.Completed = true;
                 Announce(uid, Loc.GetString("salvage-expedition-completed"));
+                _reputation.AwardEveryoneOnMap(uid, "Expedition", 20, Loc.GetString("kessler-reputation-reason-expedition")); // Kessler
             }
         }
 
@@ -417,6 +418,7 @@ public sealed partial class SalvageSystem
             {
                 comp.Completed = true;
                 Announce(uid, Loc.GetString("salvage-expedition-completed"));
+                _reputation.AwardEveryoneOnMap(uid, "Expedition", 20, Loc.GetString("kessler-reputation-reason-expedition")); // Kessler
             }
         }
         // End Frontier: mission-specific logic

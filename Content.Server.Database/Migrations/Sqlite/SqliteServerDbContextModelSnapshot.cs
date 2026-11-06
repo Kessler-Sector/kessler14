@@ -716,6 +716,66 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("job", (string)null);
                 });
 
+            modelBuilder.Entity("Content.Server.Database.JobAlternateTitle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("job_alternate_title_id");
+
+                    b.Property<string>("AlternateTitle")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("alternate_title");
+
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("job_name");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("profile_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_job_alternate_title");
+
+                    b.HasIndex("ProfileId", "JobName")
+                        .IsUnique();
+
+                    b.ToTable("job_alternate_title", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.KesslerReputation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("points");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("Track")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("track");
+
+                    b.HasKey("Id")
+                        .HasName("PK_kessler_reputation");
+
+                    b.HasIndex("ProfileId", "Track")
+                        .IsUnique();
+
+                    b.ToTable("kessler_reputation", (string)null);
+                });
+
             modelBuilder.Entity("Content.Server.Database.NFLibraryBook", b =>
                 {
                     b.Property<int>("Id")
@@ -780,36 +840,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasDatabaseName("IX_nf_library_book_server_id");
 
                     b.ToTable("nf_library_book", (string)null);
-                });
-
-            modelBuilder.Entity("Content.Server.Database.JobAlternateTitle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("job_alternate_title_id");
-
-                    b.Property<string>("AlternateTitle")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("alternate_title");
-
-                    b.Property<string>("JobName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("job_name");
-
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("profile_id");
-
-                    b.HasKey("Id")
-                        .HasName("PK_job_alternate_title");
-
-                    b.HasIndex("ProfileId", "JobName")
-                        .IsUnique();
-
-                    b.ToTable("job_alternate_title", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.PlayTime", b =>
@@ -2334,6 +2364,30 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.JobAlternateTitle", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithMany("JobAlternateTitles")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_job_alternate_title_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.KesslerReputation", b =>
+                {
+                    b.HasOne("Content.Server.Database.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_kessler_reputation_profile_profile_id");
+
+                    b.Navigation("Profile");
+                });
+
             modelBuilder.Entity("Content.Server.Database.NFLibraryBook", b =>
                 {
                     b.HasOne("Content.Server.Database.Round", "Round")
@@ -2353,18 +2407,6 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Round");
 
                     b.Navigation("Server");
-                });
-
-            modelBuilder.Entity("Content.Server.Database.JobAlternateTitle", b =>
-                {
-                    b.HasOne("Content.Server.Database.Profile", "Profile")
-                        .WithMany("JobAlternateTitles")
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_job_alternate_title_profile_profile_id");
-
-                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("Content.Server.Database.Player", b =>
