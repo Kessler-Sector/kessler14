@@ -77,22 +77,29 @@ public struct BountyContractRequest
     public string Description;
 }
 
-[NetSerializable, Serializable]
-public sealed class BountyContract
+// Kessler: a data definition, so posted contracts are saved with the sector. It held readonly fields that couldn't be
+// written to a save at all.
+[NetSerializable, Serializable, DataDefinition]
+public sealed partial class BountyContract
 {
-    public readonly uint ContractId;
-    public readonly BountyContractCategory Category;
-    public readonly string Name;
-    public readonly int Reward;
-    public readonly NetEntity AuthorUid;
-    public readonly string? DNA;
-    public readonly string? Vessel;
-    public readonly string? Description;
-    public readonly string? Title;
-    public readonly string? Contact;
-    public readonly string? Author;
-    public readonly DateTime Created;
-    public bool AuthorIsActive = false;
+    [DataField] public uint ContractId;
+    [DataField] public BountyContractCategory Category;
+    [DataField] public string Name = string.Empty;
+    [DataField] public int Reward;
+    [DataField] public NetEntity AuthorUid;
+    [DataField] public string? DNA;
+    [DataField] public string? Vessel;
+    [DataField] public string? Description;
+    [DataField] public string? Title;
+    [DataField] public string? Contact;
+    [DataField] public string? Author;
+    [DataField] public DateTime Created;
+    public bool AuthorIsActive = false; // Worked out each time the list is sent.
+
+    // Kessler: for loading.
+    public BountyContract()
+    {
+    }
 
     public BountyContract(uint contractId, BountyContractCategory category, string name,
         int reward, NetEntity authorUid, string? dna, string? vessel, string? description, string? author, string? title, string? contact, DateTime created)

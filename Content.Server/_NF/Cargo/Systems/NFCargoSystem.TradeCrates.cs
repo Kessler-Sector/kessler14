@@ -31,8 +31,8 @@ public sealed partial class NFCargoSystem
     private void OnTradeCrateGetPriceEvent(Entity<TradeCrateComponent> ent, ref PriceCalculationEvent ev)
     {
         var owningStation = _station.GetOwningStation(ent);
-        var atDestination = ent.Comp.DestinationStation != EntityUid.Invalid
-                           && owningStation == ent.Comp.DestinationStation
+        var atDestination = ent.Comp.DestinationStation is { } destination // Kessler: nullable
+                           && owningStation == destination
                            || HasComp<TradeCrateWildcardDestinationComponent>(owningStation);
         ev.Price = atDestination ? ent.Comp.ValueAtDestination : ent.Comp.ValueElsewhere;
         if (ent.Comp.ExpressDeliveryTime != null)
@@ -47,6 +47,15 @@ public sealed partial class NFCargoSystem
 
     private void OnTradeCrateInit(Entity<TradeCrateComponent> ent, ref ComponentInit ev)
     {
+        // Kessler: a loaded crate keeps its destination and deadline; only its looks and timer need restoring.
+        if (ent.Comp.Initialized)
+        {
+            RestoreTradeCrate(ent);
+            return;
+        }
+
+        ent.Comp.Initialized = true;
+
         // If there are no available destinations, tough luck.
         if (_destinations.Count > 0)
         {
@@ -68,12 +77,41 @@ public sealed partial class NFCargoSystem
         {
             ent.Comp.ExpressDeliveryTime = _timing.CurTime + ent.Comp.ExpressDeliveryDuration;
             _appearance.SetData(ent, TradeCrateVisuals.IsPriority, true);
-
-            ent.Comp.ExpressCancelToken = new CancellationTokenSource();
-            Timer.Spawn((int)ent.Comp.ExpressDeliveryDuration.TotalMilliseconds,
-                () => DisableTradeCratePriority(ent),
-                ent.Comp.ExpressCancelToken.Token);
+            ScheduleTradeCratePriorityEnd(ent); // Kessler: shared with loading
         }
+    }
+
+    // Kessler: appearance data and timers aren't saved, so set them again for a loaded crate.
+    private void RestoreTradeCrate(Entity<TradeCrateComponent> ent)
+    {
+        if (TryComp<TradeCrateDestinationComponent>(ent.Comp.DestinationStation, out var destComp))
+            _appearance.SetData(ent, TradeCrateVisuals.DestinationIcon, destComp.DestinationProto.Id);
+
+        if (ent.Comp.ExpressDeliveryTime == null)
+            return;
+
+        _appearance.SetData(ent, TradeCrateVisuals.IsPriority, true);
+        ScheduleTradeCratePriorityEnd(ent);
+    }
+
+    // Kessler: marks the crate's priority as expired when its deadline passes.
+    private void ScheduleTradeCratePriorityEnd(Entity<TradeCrateComponent> ent)
+    {
+        if (ent.Comp.ExpressDeliveryTime is not { } deadline)
+            return;
+
+        var remaining = deadline - _timing.CurTime;
+        if (remaining <= TimeSpan.Zero)
+        {
+            DisableTradeCratePriority(ent);
+            return;
+        }
+
+        ent.Comp.ExpressCancelToken?.Cancel();
+        ent.Comp.ExpressCancelToken = new CancellationTokenSource();
+        Timer.Spawn((int)remaining.TotalMilliseconds,
+            () => DisableTradeCratePriority(ent),
+            ent.Comp.ExpressCancelToken.Token);
     }
 
     private void OnTradeCrateRemove(Entity<TradeCrateComponent> ent, ref ComponentRemove ev)

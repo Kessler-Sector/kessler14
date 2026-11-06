@@ -4,19 +4,21 @@ using Content.Shared.Stacks;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom; // Kessler
 
 namespace Content.Server._WF.OutlawObjectives;
 
 [RegisterComponent]
 public sealed partial class OutlawObjectiveComponent : Component
 {
-    [ViewVariables]
+    // Kessler: objective state is saved; it was runtime only, so a restart dropped every objective.
+    [DataField]
     public HashSet<ProtoId<OutlawObjectivePrototype>> Pending = new();
 
-    [ViewVariables]
+    [DataField]
     public HashSet<ProtoId<OutlawObjectivePrototype>> Active = new();
 
-    [ViewVariables]
+    [DataField]
     public Dictionary<ProtoId<OutlawObjectivePrototype>, EntityUid> Items = new();
 
     [ViewVariables]
@@ -28,24 +30,24 @@ public sealed partial class OutlawObjectiveComponent : Component
 [RegisterComponent]
 public sealed partial class OutlawObjectivePendingComponent : Component
 {
-    [ViewVariables]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))] // Kessler: saved as time remaining
     public TimeSpan NextActivation;
 }
 
 [RegisterComponent]
 public sealed partial class OutlawObjectiveItemComponent : Component
 {
-    [ViewVariables]
+    [DataField] // Kessler: saved
     public EntityUid OwningCharacter;
 
-    [ViewVariables]
+    [DataField]
     public string OwnerName = string.Empty;
 
-    [ViewVariables]
+    [DataField]
     public ProtoId<OutlawObjectivePrototype> Objective;
 
     // The drive is handed out at spawn, before its objective activates, so it has its own flag.
-    [ViewVariables]
+    [DataField]
     public bool Active;
 }
 
@@ -96,23 +98,24 @@ public sealed partial class OutlawObjectiveSettingsComponent : Component
 [RegisterComponent]
 public sealed partial class OutlawShipDamageComponent : Component
 {
-    [ViewVariables]
+    // Kessler: saved, so damage credited before a restart still counts.
+    [DataField]
     public EntityUid Target;
 
-    [ViewVariables]
+    [DataField]
     public ProtoId<OutlawObjectivePrototype> Objective;
 
     // Anchored things with health when tracking started.
-    [ViewVariables]
+    [DataField]
     public int Total;
 
-    [ViewVariables]
+    [DataField]
     public int Needed;
 
-    [ViewVariables]
+    [DataField]
     public Dictionary<EntityUid, int> Credit = new();
 
-    // The outlaw each attacking ship's guns are credited to.
+    // The outlaw each attacking ship's guns are credited to. A cache, rebuilt as guns fire.
     [ViewVariables]
     public Dictionary<EntityUid, EntityUid> GunOwners = new();
 }
@@ -120,13 +123,13 @@ public sealed partial class OutlawShipDamageComponent : Component
 [RegisterComponent]
 public sealed partial class ForgedDeedComponent : Component
 {
-    [ViewVariables]
+    [DataField] // Kessler: saved
     public EntityUid Forger;
 
-    [ViewVariables]
+    [DataField]
     public EntityUid Target;
 
-    [ViewVariables]
+    [DataField]
     public ProtoId<OutlawObjectivePrototype> Objective;
 }
 

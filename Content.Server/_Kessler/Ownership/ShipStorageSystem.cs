@@ -18,6 +18,7 @@ using Content.Shared._Kessler.CCVar;
 using Content.Shared._NF.Bank.Components;
 using Content.Shared._NF.Shipyard.Components;
 using Content.Server._NF.CryoSleep;
+using Content.Server._WF.OutlawObjectives;
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Components;
@@ -257,6 +258,10 @@ public sealed class ShipStorageSystem : EntitySystem
 
         // Ghosts aren't saved and would drag their player's mind into the ship's file; leave them where they are.
         MoveGhostsOff(ship);
+
+        // Outlaw damage tracking points at players elsewhere. A stored ship can't be damaged anyway, and tracking starts
+        // again when it is recalled while the objective is still active.
+        RemComp<OutlawShipDamageComponent>(ship);
 
         try
         {

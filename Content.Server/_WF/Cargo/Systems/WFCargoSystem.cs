@@ -21,8 +21,8 @@ public sealed class WFCargoSystem : EntitySystem
     {
         var owningStation = _station.GetOwningStation(uid);
 
-        return (comp.DestinationStation != EntityUid.Invalid &&
-                owningStation == comp.DestinationStation)
+        return (comp.DestinationStation is { } destination && // Kessler: nullable
+                owningStation == destination)
                || HasComp<TradeCrateWildcardDestinationComponent>(owningStation);
     }
 }

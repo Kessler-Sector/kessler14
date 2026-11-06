@@ -1,4 +1,5 @@
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom; // Kessler
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Robust.Shared.Utility;
 
@@ -20,7 +21,7 @@ public sealed partial class DeadDropComponent : Component
     /// <summary>
     ///     When the next drop will occur. Used internally.
     /// </summary>
-    [DataField, ViewVariables(VVAccess.ReadOnly)]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), ViewVariables(VVAccess.ReadOnly)] // Kessler: saved as time remaining; game time restarts on load
     public TimeSpan? NextDrop;
 
     /// <summary>
