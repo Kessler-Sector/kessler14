@@ -1,0 +1,17 @@
+- type: entity
+  parent: NFBasePDACartridge
+  id: MarketBoardCartridge
+  name: market board cartridge
+  description: A program listing what each station pays for ore, materials, produce, food and drink right now.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/cartridge.rsi
+    state: cart-y
+  - type: UIFragment
+    ui: !type:MarketBoardUi
+  - type: Cartridge
+    programName: kessler-market-board-program-name
+    icon:
+      sprite: Objects/Economy/cash.rsi
+      state: cash_1000
+  - type: MarketBoardCartridge

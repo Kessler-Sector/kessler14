@@ -165,6 +165,7 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - each station's demand per category drifts between 70% and 130% in small steps every six real hours, so the same goods pay more elsewhere;
   - goods in a crate are priced as those goods; a sale point outside any station uses its grid's market;
   - examining a pallet console shows what that station pays now; `kessler.market.cargo_enabled` turns it off.
+  - the **Market board** PDA program (preinstalled on every PDA, `MarketBoardCartridge`) lists every station with a pallet console and its current rates; PDAs saved before it existed don't get it automatically.
 - **Not yet:**
   - expedition T4 blueprints are still permanent (limited-run blueprints come in phase 3);
   - the loaner is given on every spawn under 10 hours of playtime, not once per account;
