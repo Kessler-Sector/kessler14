@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Server._NF.Atmos.Components;
+using Content.Server._Kessler.Economy; // Kessler
 using Content.Server.Administration.Logs;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Atmos.Piping.Components;
@@ -38,6 +39,7 @@ public sealed class GasDepositSystem : SharedGasDepositSystem
     [Dependency] private readonly AmbientSoundSystem _ambientSound = default!;
     [Dependency] private readonly AppearanceSystem _appearance = default!;
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
+    [Dependency] private readonly GasMarketSystem _gasMarket = default!; // Kessler
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IAdminLogManager _adminLog = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -268,7 +270,7 @@ public sealed class GasDepositSystem : SharedGasDepositSystem
         var amount = 0.0;
         foreach (var salePoint in GetNearbySalePoints(ent, gridUid))
         {
-            amount += _atmosphere.GetPrice(salePoint.Comp.GasStorage); // Kessler: pay by purity, so separating gases matters
+            amount += _gasMarket.Price(ent, salePoint.Comp.GasStorage, commit: true); // Kessler: pay by purity, and less at a station flooded with that gas
             salePoint.Comp.GasStorage.Clear();
         }
 
@@ -312,7 +314,7 @@ public sealed class GasDepositSystem : SharedGasDepositSystem
         foreach (var salePoint in GetNearbySalePoints(consoleUid, gridUid))
         {
             _atmosphere.Merge(mixture, salePoint.Comp.GasStorage);
-            value += _atmosphere.GetPrice(salePoint.Comp.GasStorage); // Kessler: pay by purity
+            value += _gasMarket.Price(consoleUid, salePoint.Comp.GasStorage, commit: false); // Kessler: pay by purity and market saturation
         }
     }
 
