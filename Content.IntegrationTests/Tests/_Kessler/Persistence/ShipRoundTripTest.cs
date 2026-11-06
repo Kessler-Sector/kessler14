@@ -1,3 +1,6 @@
+using Robust.Shared.IoC;
+using Robust.Shared.Configuration;
+using Content.Shared._Kessler.CCVar;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server._Kessler.Persistence;
@@ -109,8 +112,13 @@ public sealed class ShipRoundTripTest
                 bought.Add(vessel);
 
                 Assert.That(itemSlots.TryInsert(console, consoleComp.TargetIdSlot, id, player));
+                // These tests are about saving ships, not pilot licences.
+                var cfg = IoCManager.Resolve<IConfigurationManager>();
+                var enforced = cfg.GetCVar(KesslerCVars.LicencesEnforced);
+                cfg.SetCVar(KesslerCVars.LicencesEnforced, false);
                 entMan.EventBus.RaiseLocalEvent(console,
                     new ShipyardConsolePurchaseMessage(vessel) { Actor = player, UiKey = ShipyardConsoleUiKey.Shipyard });
+                cfg.SetCVar(KesslerCVars.LicencesEnforced, enforced);
                 Assert.That(itemSlots.TryEject(console, consoleComp.TargetIdSlot, player, out _));
 
                 Assert.That(entMan.TryGetComponent(id, out ShuttleDeedComponent deed) && deed.ShuttleUid != null,

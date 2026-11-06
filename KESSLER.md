@@ -145,6 +145,15 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - pay is expected minutes × `kessler.workorders.rate` (150), straight to the worker, plus Station reputation;
   - orders expire after an hour in real time and are saved with the sector;
   - the board isn't placed on Dusk's map yet.
+- **Pilot licences (phase 1):**
+  - stored per character in the `kessler_licence` table, never expiring;
+  - Pilot I (any track level 1, fee 2,000) allows Small ships;
+  - Pilot II (level 2, Pilot I held 3 days, 15,000) allows Medium;
+  - Pilot III (level 3, Pilot II held 7 days, 50,000) allows Large;
+  - Capital (level 4, Pilot III held 14 days, 200,000) is needed for ships of 300,000 and more;
+  - Micro ships need none; vouchers and the CGP, staff, Centcomm, Syndicate and custom shipyards are exempt;
+  - `licence` lists them with what's missing, and `licence buy <id>` buys one;
+  - shipyards refuse an unlicensed purchase (`kessler.licences.enforced`).
 - **Gas market saturation:**
   - each station tracks the moles of each gas it has bought (`StationGasMarketComponent`, saved), decaying with a 24-hour half-life in real time;
   - the next mole sells for price / (1 + saturation / 50,000), so a whole very large plasma deposit sold at once pays about 70%, and a second one the same day pays less;

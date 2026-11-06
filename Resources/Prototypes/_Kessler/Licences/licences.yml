@@ -1,0 +1,51 @@
+# Pilot licences from docs/kessler/design/progression.md (4.3). Micro ships need none; vouchers and the CGP and staff
+# shipyards are exempt. Levels: 1 = 120 reputation, 2 = 600, 3 = 1800, 4 = 4800.
+
+- type: licence
+  id: PilotI
+  name: kessler-licence-pilot-1
+  description: kessler-licence-pilot-1-desc
+  order: 0
+  fee: 2000
+  reputation:
+  - level: 1
+  shipSizes:
+  - Small
+
+- type: licence
+  id: PilotII
+  name: kessler-licence-pilot-2
+  description: kessler-licence-pilot-2-desc
+  order: 1
+  fee: 15000
+  reputation:
+  - level: 2
+  previous: PilotI
+  previousDays: 3
+  shipSizes:
+  - Medium
+
+- type: licence
+  id: PilotIII
+  name: kessler-licence-pilot-3
+  description: kessler-licence-pilot-3-desc
+  order: 2
+  fee: 50000
+  reputation:
+  - level: 3
+  previous: PilotII
+  previousDays: 7
+  shipSizes:
+  - Large
+
+- type: licence
+  id: PilotCapital
+  name: kessler-licence-pilot-capital
+  description: kessler-licence-pilot-capital-desc
+  order: 3
+  fee: 200000
+  reputation:
+  - level: 4
+  previous: PilotIII
+  previousDays: 14
+  minShipPrice: 300000
