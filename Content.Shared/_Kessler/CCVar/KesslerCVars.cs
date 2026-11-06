@@ -109,6 +109,12 @@ public sealed class KesslerCVars
         CVarDef.Create("kessler.mail.carrier_share", 0.3f, CVar.SERVERONLY);
 
     /// <summary>
+    /// Spesos per expected minute of work paid for station work orders (the S0 band in the progression plan).
+    /// </summary>
+    public static readonly CVarDef<int> WorkOrderRate =
+        CVarDef.Create("kessler.workorders.rate", 150, CVar.SERVERONLY);
+
+    /// <summary>
     /// Whether shipyards require pilot licences by ship size. Vouchers and job shipyards are exempt either way.
     /// </summary>
     public static readonly CVarDef<bool> LicencesEnforced =

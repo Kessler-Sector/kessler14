@@ -1,0 +1,57 @@
+# Station work orders (docs/kessler/design/progression.md, 4.6). Pay is minutes x kessler.workorders.rate;
+# reputation is one point per minute.
+
+- type: workOrder
+  id: CleanStation
+  title: kessler-work-order-clean-title
+  description: kessler-work-order-clean-desc
+  kind: Clean
+  minutes: 8
+  weight: 2
+  messReagents:
+  - Vomit
+  - Blood
+  - Oil
+  messMin: 3
+  messMax: 6
+
+- type: workOrder
+  id: KitchenMeal
+  title: kessler-work-order-deliver-title
+  description: kessler-work-order-meal-desc
+  kind: Deliver
+  minutes: 10
+  weight: 1.5
+  items:
+  - FoodBurgerCheese
+  - FoodBurgerChicken
+  - FoodPizzaMargherita
+  - FoodSoupTomato
+  - FoodPieApple
+  - FoodMealFries
+  - FoodSaladHerb
+  - FoodMealPotatoLoaded
+  - FoodBakedMuffin
+  - FoodRiceBoiled
+
+- type: workOrder
+  id: BarDrink
+  title: kessler-work-order-deliver-title
+  description: kessler-work-order-drink-desc
+  kind: Deliver
+  minutes: 5
+  weight: 1.5
+  reagentAmount: 10
+  reagents:
+  - Beer
+  - Wine
+  - Whiskey
+  - Coffee
+  - Tea
+  - GinTonic
+  - Martini
+  - ScrewdriverCocktail
+  - IrishCoffee
+  - Mojito
+  - BloodyMary
+  - WhiskeyCola
