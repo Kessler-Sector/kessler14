@@ -143,7 +143,7 @@ public sealed partial class NFCargoSystem
 
     private bool SellPallets(Entity<NFCargoPalletConsoleComponent> consoleUid, EntityUid gridUid, out double amount, out double noMultiplierAmount, out Dictionary<string, double> additionalCurrency) // Frontier: first arg to Entity, add noMultiplierAmount
     {
-        GetPalletGoods(consoleUid, gridUid, out var toSell, out amount, out noMultiplierAmount, out additionalCurrency);
+        GetPalletGoods(consoleUid, gridUid, out var toSell, out amount, out noMultiplierAmount, out additionalCurrency, commitMarket: true); // Kessler: record the sale in the market ledger
 
         Log.Debug($"Cargo sold {toSell.Count} entities for {amount} (plus {noMultiplierAmount} without mods)");
 
@@ -159,8 +159,9 @@ public sealed partial class NFCargoSystem
         return true;
     }
 
-    private void GetPalletGoods(Entity<NFCargoPalletConsoleComponent> consoleUid, EntityUid gridUid, out HashSet<EntityUid> toSell, out double amount, out double noMultiplierAmount, out Dictionary<string, double> additionalCurrency) // Frontier: first arg to Entity, add noMultiplierAmount
+    private void GetPalletGoods(Entity<NFCargoPalletConsoleComponent> consoleUid, EntityUid gridUid, out HashSet<EntityUid> toSell, out double amount, out double noMultiplierAmount, out Dictionary<string, double> additionalCurrency, bool commitMarket = false) // Frontier: first arg to Entity, add noMultiplierAmount; Kessler: commitMarket
     {
+        var marketQuote = _marketLedger.BeginQuote(consoleUid); // Kessler: prices fall as a station is flooded with one kind of goods
         amount = 0;
         noMultiplierAmount = 0;
         toSell = new HashSet<EntityUid>();
@@ -202,7 +203,7 @@ public sealed partial class NFCargoSystem
                 if (HasComp<IgnoreMarketModifierComponent>(ent))
                     noMultiplierAmount += price;
                 else
-                    amount += price;
+                    amount += _marketLedger.Price(marketQuote, ent); // Kessler: market ledger
 
                 // Check for any additional currency payouts
                 if (TryComp(ent, out AdditionalPalletCurrencyComponent? currencyComponent))
@@ -228,6 +229,9 @@ public sealed partial class NFCargoSystem
                 }
             }
         }
+
+        if (commitMarket) // Kessler
+            _marketLedger.Commit(marketQuote);
     }
 
     private bool CanSell(EntityUid uid, TransformComponent xform)

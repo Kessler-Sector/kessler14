@@ -159,6 +159,12 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - the next mole sells for price / (1 + saturation / 50,000), so a whole very large plasma deposit sold at once pays about 70%, and a second one the same day pays less;
   - other stations pay full price, so hauling gas elsewhere pays;
   - cvars `kessler.market.gas_enabled`, `kessler.market.gas_depth` and `kessler.market.gas_half_life_hours`.
+- **Cargo market ledger:**
+  - pallet sales are priced per category of goods (`Resources/Prototypes/_Kessler/Market/categories.yml`: ore, refined materials, produce, food and drink); anything else sells at its normal price;
+  - each station's price for a category falls the same way as gas (halving after the category's `depth` in base spesos) and recovers with a half-life of `kessler.market.cargo_half_life_hours` (24);
+  - each station's demand per category drifts between 70% and 130% in small steps every six real hours, so the same goods pay more elsewhere;
+  - goods in a crate are priced as those goods; a sale point outside any station uses its grid's market;
+  - examining a pallet console shows what that station pays now; `kessler.market.cargo_enabled` turns it off.
 - **Not yet:**
   - expedition T4 blueprints are still permanent (limited-run blueprints come in phase 3);
   - the loaner is given on every spawn under 10 hours of playtime, not once per account;
