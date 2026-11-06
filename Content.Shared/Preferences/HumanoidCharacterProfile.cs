@@ -30,7 +30,7 @@ namespace Content.Shared.Preferences
         private static readonly Regex RestrictedNameRegex = new(@"[^A-Za-z0-9 '\-]");
         private static readonly Regex ICNameCaseRegex = new(@"^(?<word>\w)|\b(?<word>\w)(?=\w*$)");
 
-        public const int DefaultBalance = 30000; // Frontier
+        public const int DefaultBalance = 10000; // Frontier, Kessler: 30000<10000, every character starts the same
 
         /// <summary>
         /// Job preferences for initial spawn.

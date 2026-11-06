@@ -123,7 +123,7 @@
       entityMask:
       - WallRock
       entity: NFWallRockBluespace
-      count: 10
+      count: 1 # Kessler: 10<1, bluespace is Rare
       minGroupSize: 1
       maxGroupSize: 1
     # Mobs

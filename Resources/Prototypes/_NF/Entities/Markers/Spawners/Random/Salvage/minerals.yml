@@ -29,7 +29,7 @@
     - id: WallRockDiamond
       weight: 0.002
     - id: NFWallRockBluespace
-      weight: 0.003
+      weight: 0.0005 # Kessler: 0.003<0.0005, bluespace is Rare
     - id: NFRockElementalSpawner
       weight: 0.06
 
@@ -79,7 +79,7 @@
     - id: NFWallCobblebrickArtifactFragment
       weight: 0.001
     - id: NFWallCobblebrickBluespace
-      weight: 0.0003
+      weight: 0.00005 # Kessler: 0.0003<0.00005, bluespace is Rare
     - id: NFCobblebrickElementalSpawner
       weight: 0.006
 
@@ -110,7 +110,7 @@
     - id: NFWallCobblebrickArtifactFragment
       weight: 0.1
     - id: NFWallCobblebrickBluespace
-      weight: 0.3
+      weight: 0.02 # Kessler: 0.3<0.02, bluespace is Rare
     - id: NFWallCobblebrickDiamond
       weight: 0.3
 
@@ -165,7 +165,7 @@
     - id: WallRockSnowDiamond
       weight: 0.002
     - id: NFWallRockSnowBluespace
-      weight: 0.01
+      weight: 0.00167 # Kessler: 0.01<0.00167, bluespace is Rare
     - id: NFSnowElementalSpawner
       weight: 0.07
 
@@ -217,7 +217,7 @@
     # - id: NFWallIceDiamond
     #   weight: 0.0002
     - id: NFWallIceBluespace
-      weight: 0.001
+      weight: 0.00017 # Kessler: 0.001<0.00017, bluespace is Rare
     - id: NFIceElementalSpawner
       weight: 0.007
 
@@ -248,7 +248,7 @@
     - id: NFWallIceArtifactFragment
       weight: 0.5
     - id: NFWallIceBluespace
-      weight: 0.1
+      weight: 0.02 # Kessler: 0.1<0.02, bluespace is Rare
     - id: NFWallIceDiamond
       weight: 0.1
 
@@ -303,7 +303,7 @@
     - id: WallRockAndesiteDiamond
       weight: 0.008
     - id: NFWallRockAndesiteBluespace
-      weight: 0.002
+      weight: 0.00033 # Kessler: 0.002<0.00033, bluespace is Rare
     - id: NFAndesiteElementalSpawner
       weight: 0.08
 
@@ -355,7 +355,7 @@
     # - id: NFWallAndesiteCobblebrickDiamond
     #   weight: 0.0012
     - id: NFWallAndesiteCobblebrickBluespace
-      weight: 0.0002
+      weight: 0.00003 # Kessler: 0.0002<0.00003, bluespace is Rare
     - id: NFAndesiteNFCobblebrickElementalSpawner
       weight: 0.008
 
@@ -386,7 +386,7 @@
     - id: NFWallAndesiteCobblebrickArtifactFragment
       weight: 0.1
     - id: NFWallAndesiteCobblebrickBluespace
-      weight: 0.1
+      weight: 0.02 # Kessler: 0.1<0.02, bluespace is Rare
     - id: NFWallAndesiteCobblebrickDiamond
       weight: 0.5
 
@@ -441,7 +441,7 @@
     - id: WallRockBasaltDiamond
       weight: 0.005
     - id: NFWallRockBasaltBluespace
-      weight: 0.005
+      weight: 0.00083 # Kessler: 0.005<0.00083, bluespace is Rare
     - id: NFBasaltElementalSpawner
       weight: 0.05
 
@@ -493,7 +493,7 @@
     # - id: NFWallBasaltCobblebrickDiamond
     #   weight: 0.0005
     - id: NFWallBasaltCobblebrickBluespace
-      weight: 0.0005
+      weight: 0.00008 # Kessler: 0.0005<0.00008, bluespace is Rare
     - id: NFBasaltNFCobblebrickElementalSpawner
       weight: 0.005
 
@@ -524,7 +524,7 @@
     - id: NFWallBasaltCobblebrickArtifactFragment
       weight: 0.25
     - id: NFWallBasaltCobblebrickBluespace
-      weight: 0.25
+      weight: 0.02 # Kessler: 0.25<0.02, bluespace is Rare
     - id: NFWallBasaltCobblebrickDiamond
       weight: 0.2
 
@@ -579,7 +579,7 @@
     - id: WallRockSandDiamond
       weight: 0.002
     - id: NFWallRockSandBluespace
-      weight: 0.002
+      weight: 0.00033 # Kessler: 0.002<0.00033, bluespace is Rare
     - id: NFSandElementalSpawner
       weight: 0.05
 
@@ -631,7 +631,7 @@
     # - id: NFWallSandstoneDiamond
     #   weight: 0.0002
     - id: NFWallSandstoneBluespace
-      weight: 0.0002
+      weight: 0.00003 # Kessler: 0.0002<0.00003, bluespace is Rare
     - id: NFSandstoneNFCobblebrickElementalSpawner
       weight: 0.008
 
@@ -662,7 +662,7 @@
     - id: NFWallBasaltCobblebrickArtifactFragment
       weight: 0.3
     - id: NFWallBasaltCobblebrickBluespace
-      weight: 0.1
+      weight: 0.02 # Kessler: 0.1<0.02, bluespace is Rare
     - id: NFWallBasaltCobblebrickDiamond
       weight: 0.3
 
@@ -717,7 +717,7 @@
     - id: WallRockChromiteDiamond
       weight: 0.005
     - id: NFWallRockChromiteBluespace
-      weight: 0.0025
+      weight: 0.00042 # Kessler: 0.0025<0.00042, bluespace is Rare
     - id: NFChromiteElementalSpawner
       weight: 0.05
 
@@ -769,7 +769,7 @@
     # - id: NFWallChromiteCobblebrickDiamond
     #   weight: 0.0005
     - id: NFWallChromiteCobblebrickBluespace
-      weight: 0.00025
+      weight: 0.00004 # Kessler: 0.00025<0.00004, bluespace is Rare
     - id: NFChromiteNFCobblebrickElementalSpawner
       weight: 0.005
 
@@ -800,7 +800,7 @@
     - id: NFWallBasaltCobblebrickArtifactFragment
       weight: 0.25
     - id: NFWallBasaltCobblebrickBluespace
-      weight: 0.25
+      weight: 0.02 # Kessler: 0.25<0.02, bluespace is Rare
     - id: NFWallBasaltCobblebrickDiamond
       weight: 0.2
 
@@ -853,7 +853,7 @@
     - id: AsteroidRockArtifactFragment
       weight: 0.01
     - id: NFAsteroidRockBluespace
-      weight: 0.002
+      weight: 0.00033 # Kessler: 0.002<0.00033, bluespace is Rare
     - id: AsteroidRockDiamond
       weight: 0.01
     - id: NFAsteroidRockElementalSpawner
@@ -905,7 +905,7 @@
     - id: NFWallNecropolisArtifactFragment
       weight: 0.001
     - id: NFWallNecropolisBluespace
-      weight: 0.0002
+      weight: 0.00003 # Kessler: 0.0002<0.00003, bluespace is Rare
     # - id: NFWallNecropolisDiamond
     #   weight: 0.001
     - id: NFNecropolisElementalSpawner
@@ -938,7 +938,7 @@
     - id: NFWallNecropolisArtifactFragment
       weight: 0.2
     - id: NFWallNecropolisBluespace
-      weight: 0.25
+      weight: 0.02 # Kessler: 0.25<0.02, bluespace is Rare
     - id: NFWallNecropolisDiamond
       weight: 0.25
 
@@ -993,7 +993,7 @@
     - id: NFWallRockScrapPileDiamond
       weight: 0.002
     - id: NFWallRockScrapPileBluespace
-      weight: 0.003
+      weight: 0.0005 # Kessler: 0.003<0.0005, bluespace is Rare
     - id: NFAsteroidScrapBotWallSpawner
       weight: 0.05
 

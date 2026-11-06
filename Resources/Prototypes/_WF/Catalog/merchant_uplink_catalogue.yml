@@ -641,7 +641,7 @@
   productEntity: BoxT4ComponentsAssorted
   icon: { sprite: Objects/Misc/stock_parts.rsi, state: femto_mani }
   cost:
-    WayfarerMerchantToken: 100
+    WayfarerMerchantToken: 400 # Kessler: 100<400, T4 parts are Rare
   categories:
   - UplinkMerchantsTool
   conditions:
