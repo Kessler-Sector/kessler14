@@ -82,6 +82,8 @@
         # Medical
         - id: MedicalPodFilled # Medical bounties
           prob: 0.03
+        - id: MedicalPodPatient # Kessler: living NPC patients
+          prob: 0.01
         # Mobs
         - id: NFSalvageMobSpawner
           prob: 0.1

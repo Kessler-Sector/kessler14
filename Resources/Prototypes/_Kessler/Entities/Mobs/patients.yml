@@ -1,0 +1,111 @@
+# Living NPC patients (docs/kessler/design/medical-science.md, M1). They turn up in emergency medical pods on wrecks,
+# like bounty corpses, and stay in stasis until the pod is opened. Discharged at a medical bounty redemption machine
+# once their condition is treated.
+
+- type: randomHumanoidSettings
+  id: KesslerPatient
+  speciesBlacklist:
+  - IPC
+  - AurelianVox
+  components:
+  - type: KesslerPatient
+  - type: Carriable
+  - type: RandomHumanoidAppearance
+    randomizeName: true
+  - type: NpcFactionMember
+    factions:
+    - NanoTrasen
+  - type: DisableSuitSensors
+    removeRegistration: true
+
+- type: randomHumanoidSettings
+  parent: [KesslerPatient, NFRandomLoadoutService]
+  id: KesslerPatientService
+
+- type: randomHumanoidSettings
+  parent: [KesslerPatient, NFRandomLoadoutCargo]
+  id: KesslerPatientCargo
+
+- type: randomHumanoidSettings
+  parent: [KesslerPatient, NFRandomLoadoutEngineering]
+  id: KesslerPatientEngineering
+
+- type: randomHumanoidSettings
+  parent: [KesslerPatient, NFRandomLoadoutScience]
+  id: KesslerPatientScience
+
+- type: entity
+  id: SpawnRandomHumanoidPatient
+  name: NPC patient
+  suffix: Service
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green
+    - sprite: Mobs/Species/Human/parts.rsi
+      state: full
+  - type: RandomHumanoidSpawner
+    settings: KesslerPatientService
+
+- type: entity
+  parent: SpawnRandomHumanoidPatient
+  id: SpawnRandomHumanoidPatientCargo
+  suffix: Cargo
+  components:
+  - type: RandomHumanoidSpawner
+    settings: KesslerPatientCargo
+
+- type: entity
+  parent: SpawnRandomHumanoidPatient
+  id: SpawnRandomHumanoidPatientEngineering
+  suffix: Engineering
+  components:
+  - type: RandomHumanoidSpawner
+    settings: KesslerPatientEngineering
+
+- type: entity
+  parent: SpawnRandomHumanoidPatient
+  id: SpawnRandomHumanoidPatientScience
+  suffix: Science
+  components:
+  - type: RandomHumanoidSpawner
+    settings: KesslerPatientScience
+
+- type: entity
+  parent: MedicalPodFilled
+  id: MedicalPodPatient
+  suffix: Living patient, Random
+  description: A pod used to keep the injured in stasis until help arrives. Someone inside is still alive.
+  components:
+  - type: StorageFill
+    contents:
+    - id: SpawnRandomHumanoidPatient
+      orGroup: body
+      prob: 0.4
+    - id: SpawnRandomHumanoidPatientCargo
+      orGroup: body
+      prob: 0.25
+    - id: SpawnRandomHumanoidPatientEngineering
+      orGroup: body
+      prob: 0.2
+    - id: SpawnRandomHumanoidPatientScience
+      orGroup: body
+      prob: 0.15
+  - type: EntityStorage
+    openSound: /Audio/Mecha/mechmove03.ogg
+    closeSound: /Audio/Mecha/mechmove03.ogg
+    capacity: 1
+    airtight: true
+    air:
+      # Breathable air at room temperature, though patients in stasis don't need it.
+      volume: 200
+      temperature: 293.15
+      moles:
+      - 1.7 # oxygen
+      - 6.4 # nitrogen
+    whitelist:
+      components:
+      - MedicalBounty
+      - KesslerPatient

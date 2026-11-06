@@ -9,6 +9,7 @@
   - Cloning
   - Cryogenics # Note: Frontier changes inside
   - MedicalBounties # Frontier
+  - KesslerPatients # Kessler
 
 - type: guideEntry
   id: MedicalDoctor

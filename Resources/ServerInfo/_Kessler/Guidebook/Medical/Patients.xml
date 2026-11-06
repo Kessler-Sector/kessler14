@@ -1,0 +1,28 @@
+<Document>
+# Living Patients
+Some emergency medical pods on wrecks hold someone still alive. The pod keeps them in stasis: their condition doesn't get worse and they don't need air while it stays shut. Once the pod is opened, the clock starts.
+
+Every patient has one condition. It gets worse in stages, and only its specific treatment cures it; healing the damage only buys time. Examine the patient to see how they look, and watch what they do. When the cause is treated, the patient lets out a long breath and looks like they're on the mend.
+
+A stasis bed slows a condition to a tenth of its speed while the patient is buckled in.
+
+Discharge a cured patient at a medical bounty redemption machine. The pay depends on the case and goes down if the patient still has damage, so patch them up first. Each discharge also earns Medical reputation.
+<Box>
+<GuideEntityEmbed Entity="MedicalPod" Caption="emergency medical pod"/>
+<GuideEntityEmbed Entity="MachineMedicalBountyRedemption" Caption="redemption machine"/>
+<GuideEntityEmbed Entity="StasisBed"/>
+</Box>
+
+## Poisoning
+The patient is sick and getting sicker, and ordinary toxin medicine only treats the damage. Draw blood with a syringe and look at it in a chemical analyser or ChemMaster: one of these poisons will be there. Give at least 5u of its antidote.
+- [color=#a4885c]Cyanide salts[/color]: Dexalin Plus
+- [color=#a4885c]Thallium sulfate[/color]: charcoal
+- [color=#a4885c]Spore allergen[/color]: diphenhydramine
+- [color=#a4885c]Polonium dust[/color]: arithrazine
+
+## Internal bleeding
+The patient loses blood with no wound to show for it, so bandages don't help. Keep their blood up with transfusions or saline, then operate: open the torso and its ribcage, then [color=#a4885c]Repair Internal Bleeding[/color] by clamping the internal bleeders with a hemostat. Close up afterwards.
+
+## Liver failure
+The patient's liver has given out, so their skin turns yellow and toxins build up with nothing in the blood to show for it. Only a new liver cures it: remove the failing one and transplant a working liver: a BioSynth liver from a medical biofabricator, or one from a donor body.
+</Document>

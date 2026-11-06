@@ -167,4 +167,10 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<float> CargoMarketHalfLifeHours =
         CVarDef.Create("kessler.market.cargo_half_life_hours", 24f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Multiplier on what discharging a cured NPC patient pays.
+    /// </summary>
+    public static readonly CVarDef<float> PatientPayMultiplier =
+        CVarDef.Create("kessler.patients.pay_multiplier", 1f, CVar.SERVERONLY);
 }

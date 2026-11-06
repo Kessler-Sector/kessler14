@@ -183,6 +183,13 @@ Surgery comes from **Monolith's Shitmed** (`_Shitmed` folders), ported onto our 
   - cvars `kessler.medbounty.limb_chance`, `kessler.medbounty.max_limbs` and `kessler.medbounty.limb_bonus`;
   - base rewards are halved from Coyote's tripled values;
   - redeeming a bounty gives 20 Medical reputation.
+- **Living NPC patients (first slice of M1 and M2):**
+  - some wreck emergency medical pods (`MedicalPodPatient`) hold a living patient with a condition: poisoning, internal bleeding or liver failure (`Resources/Prototypes/_Kessler/Medical/conditions.yml`);
+  - the pod is a stasis container (`PatientStasis`): nothing progresses and the patient doesn't need air until it's opened; a stasis bed slows conditions to a tenth;
+  - each condition has stages that only run down while the server runs, stored as time left in the stage (no game time);
+  - cures: poisoning needs the toxin's specific antidote (the toxins are inert marker reagents, so a blood sample names them); internal bleeding needs the new `Repair Internal Bleeding` surgery (clamp internal bleeders); liver failure needs a new liver (biofabricator BioSynth or a donor);
+  - a cured patient is discharged at the medical bounty redemption machine for minutes x rate (less for damage left), plus one Medical reputation per minute;
+  - admins can test with `spawnpatient [condition]`; guidebook page under Medical, "Living Patients".
 - **Energy surgical tools** (energy scalpel, searing tool, mechanical pinches, `SMSurgery` pack): should be locked behind science. Wire them up during the science rework.
 
 Port notes:
