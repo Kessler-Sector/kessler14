@@ -54,6 +54,7 @@ namespace Content.Server.Database
         public DbSet<WayfarerSafetyDepositBoxItem> WayfarerSafetyDepositBoxItem { get; set; } = null!;
         public DbSet<WayfarerRoleplayLevel> WayfarerRoleplayLevels { get; set; } = null!;
         public DbSet<KesslerReputation> KesslerReputation { get; set; } = null!; // Kessler
+        public DbSet<KesslerLicence> KesslerLicence { get; set; } = null!; // Kessler
         public DbSet<WayfarerRoleplayCommend> WayfarerRoleplayCommends { get; set; } = null!;
         public DbSet<WayfarerCommunityGoal> WayfarerCommunityGoals { get; set; } = null!;
         public DbSet<WayfarerCommunityGoalRequirement> WayfarerCommunityGoalRequirements { get; set; } = null!;
@@ -434,6 +435,17 @@ namespace Content.Server.Database
 
             modelBuilder.Entity<KesslerReputation>()
                 .HasIndex(r => new { r.ProfileId, r.Track })
+                .IsUnique();
+
+            // Kessler: licences per character
+            modelBuilder.Entity<KesslerLicence>()
+                .HasOne(l => l.Profile)
+                .WithMany()
+                .HasForeignKey(l => l.ProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<KesslerLicence>()
+                .HasIndex(l => new { l.ProfileId, l.Licence })
                 .IsUnique();
 
             // Wayfarer Roleplay Levels configuration
@@ -1692,6 +1704,25 @@ namespace Content.Server.Database
 
         [Column("points")]
         public int Points { get; set; }
+    }
+
+    // Kessler: a licence a character holds (docs/kessler/design/progression.md, 4.3). Licences never expire.
+    [Table("kessler_licence")]
+    public class KesslerLicence
+    {
+        [Key, Column("id")]
+        public int Id { get; set; }
+
+        [Column("profile_id")]
+        public int ProfileId { get; set; }
+
+        public Profile Profile { get; set; } = null!;
+
+        [Required, Column("licence"), MaxLength(64)]
+        public string Licence { get; set; } = null!;
+
+        [Column("granted_at")]
+        public DateTime GrantedAt { get; set; }
     }
 
     // Wayfarer Roleplay Leveling System Tables

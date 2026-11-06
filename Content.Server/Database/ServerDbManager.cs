@@ -56,6 +56,8 @@ namespace Content.Server.Database
         Task<int?> TryWithdrawBankBalanceAsync(int profileId, int amount); // Kessler: upkeep billing for offline owners
         Task<Dictionary<string, int>> GetReputationAsync(int profileId); // Kessler
         Task<int?> AddReputationAsync(int profileId, string track, int points); // Kessler
+        Task<Dictionary<string, DateTime>> GetLicencesAsync(int profileId); // Kessler
+        Task<bool> AddLicenceAsync(int profileId, string licence, DateTime grantedAt); // Kessler
 
         #endregion
 
@@ -757,6 +759,18 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.AddReputationAsync(profileId, track, points));
+        }
+
+        public Task<Dictionary<string, DateTime>> GetLicencesAsync(int profileId)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetLicencesAsync(profileId));
+        }
+
+        public Task<bool> AddLicenceAsync(int profileId, string licence, DateTime grantedAt)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.AddLicenceAsync(profileId, licence, grantedAt));
         }
         // End Kessler
 

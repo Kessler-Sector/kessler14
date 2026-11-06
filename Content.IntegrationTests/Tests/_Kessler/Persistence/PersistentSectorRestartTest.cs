@@ -1,3 +1,5 @@
+using Robust.Shared.IoC;
+using Robust.Shared.Configuration;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -261,8 +263,13 @@ public sealed class PersistentSectorRestartTest
         var vessel = shipyard.GetAvailableShuttles(console, ShipyardConsoleUiKey.Shipyard, targetId: id).available.First();
 
         Assert.That(itemSlots.TryInsert(console, consoleComp.TargetIdSlot, id, player));
+        // These tests are about saving ships, not pilot licences.
+        var cfg = IoCManager.Resolve<IConfigurationManager>();
+        var enforced = cfg.GetCVar(KesslerCVars.LicencesEnforced);
+        cfg.SetCVar(KesslerCVars.LicencesEnforced, false);
         entMan.EventBus.RaiseLocalEvent(console,
             new ShipyardConsolePurchaseMessage(vessel) { Actor = player, UiKey = ShipyardConsoleUiKey.Shipyard });
+        cfg.SetCVar(KesslerCVars.LicencesEnforced, enforced);
         Assert.That(itemSlots.TryEject(console, consoleComp.TargetIdSlot, player, out _));
 
         var deed = entMan.GetComponent<ShuttleDeedComponent>(id);

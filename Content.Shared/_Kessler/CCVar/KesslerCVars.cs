@@ -107,4 +107,10 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<float> MailCarrierShare =
         CVarDef.Create("kessler.mail.carrier_share", 0.3f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Whether shipyards require pilot licences by ship size. Vouchers and job shipyards are exempt either way.
+    /// </summary>
+    public static readonly CVarDef<bool> LicencesEnforced =
+        CVarDef.Create("kessler.licences.enforced", true, CVar.SERVERONLY);
 }

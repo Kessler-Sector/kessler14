@@ -145,6 +145,14 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
             return;
         }
 
+        // Kessler: buying a ship with money needs the pilot licence for its size; vouchers are exempt.
+        if (voucher is null && !_kesslerLicences.CanBuyShip(player, vessel, out var licenceReason))
+        {
+            ConsolePopup(player, licenceReason);
+            PlayDenySound(player, shipyardConsoleUid, component);
+            return;
+        }
+
         // Keep track of whether or not a voucher was used.
         // TODO: voucher purchase should be done in a separate function.
         bool voucherUsed = false;
