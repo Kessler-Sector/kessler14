@@ -136,6 +136,10 @@ public sealed class PatientSystem : EntitySystem
         ent.Comp.Toxin = null;
         ent.Comp.Antidote = null;
         ent.Comp.FailingOrgan = null;
+
+        // The old condition's foreign object goes with it, or it would block the cavity.
+        if (ent.Comp.ForeignBody is { } oldForeign && !TerminatingOrDeleted(oldForeign))
+            Del(oldForeign);
         ent.Comp.ForeignBody = null;
         Setup(ent, condition);
     }

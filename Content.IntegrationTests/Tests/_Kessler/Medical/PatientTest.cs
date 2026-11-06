@@ -202,6 +202,28 @@ public sealed class PatientTest
     }
 
     [Test]
+    public async Task ChangingConditionRemovesTheOldForeignBody()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var patients = entMan.System<PatientSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            // A patient whose first, random condition was a foreign body can still be given another one.
+            var patient = SpawnPatient(entMan, patients, testMap.GridCoords, "PatientForeignBody");
+            var first = patient.Comp.ForeignBody!.Value;
+            patients.SetCondition(patient, "PatientForeignBody");
+            Assert.That(entMan.Deleted(first) || entMan.IsQueuedForDeletion(first), "the old object is gone");
+            Assert.That(patient.Comp.ForeignBody, Is.Not.Null, "and the new one is lodged");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task CuredPatientIsDischargedForPay()
     {
         await using var pair = await PoolManager.GetServerClient();
