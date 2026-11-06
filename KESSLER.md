@@ -190,6 +190,7 @@ Surgery comes from **Monolith's Shitmed** (`_Shitmed` folders), ported onto our 
   - cures: poisoning needs the toxin's specific antidote (the toxins are inert marker reagents, so a blood sample names them); internal bleeding needs the new `Repair Internal Bleeding` surgery (clamp internal bleeders); liver failure needs a new liver (biofabricator BioSynth or a donor);
   - a cured patient is discharged at the medical bounty redemption machine for minutes x rate (less for damage left), plus one Medical reputation per minute;
   - admins can test with `spawnpatient [condition]`; guidebook page under Medical, "Living Patients".
+  - **distress beacons** (station event `PatientDistressBeacon`, every 45 minutes at most, 1+ player): a scrap of wreck 800 to 2,500 tiles out with a patient's stasis pod, shown on radar in orange; medical radio gets its coordinates; the patient pays a 3,000 rescue bonus on discharge; the wreck is deleted after 90 real minutes unless someone is aboard.
 - **Energy surgical tools** (energy scalpel, searing tool, mechanical pinches, `SMSurgery` pack): should be locked behind science. Wire them up during the science rework.
 
 Port notes:

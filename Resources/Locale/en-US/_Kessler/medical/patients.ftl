@@ -55,3 +55,8 @@ reagent-desc-patient-allergen = Fungal spores that set off a severe allergic rea
 reagent-name-patient-polonium = polonium dust
 reagent-desc-patient-polonium = A radioactive poison that wrecks the body from inside. Treated with arithrazine.
 guide-entry-kessler-patients = Living Patients
+
+## Distress beacons
+
+kessler-distress-beacon-name = Distress beacon {$code}
+kessler-distress-announcement = Distress call received from {$name} at ({$x}, {$y}). One survivor in a stasis pod. A rescue bonus is paid on discharge.
