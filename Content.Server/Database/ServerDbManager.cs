@@ -54,6 +54,8 @@ namespace Content.Server.Database
         Task<PlayerPreferences?> GetPlayerPreferencesAsync(NetUserId userId, CancellationToken cancel);
         Task<int?> GetProfileIdAsync(NetUserId userId, int slot); // Wayfarer (NEW) - Get database profile ID
         Task<int?> TryWithdrawBankBalanceAsync(int profileId, int amount); // Kessler: upkeep billing for offline owners
+        Task<Dictionary<string, int>> GetReputationAsync(int profileId); // Kessler
+        Task<int?> AddReputationAsync(int profileId, string track, int points); // Kessler
 
         #endregion
 
@@ -743,6 +745,18 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.TryWithdrawBankBalanceAsync(profileId, amount));
+        }
+
+        public Task<Dictionary<string, int>> GetReputationAsync(int profileId)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetReputationAsync(profileId));
+        }
+
+        public Task<int?> AddReputationAsync(int profileId, string track, int points)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.AddReputationAsync(profileId, track, points));
         }
         // End Kessler
 

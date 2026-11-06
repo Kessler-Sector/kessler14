@@ -20,12 +20,14 @@ using Content.Shared.Labels.EntitySystems;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Shared.Salvage.Expeditions; // Frontier
 using Content.Server.Salvage.Expeditions; // Frontier
+using Content.Server._Kessler.Reputation; // Kessler
 
 namespace Content.Server.Salvage
 {
     public sealed partial class SalvageSystem : SharedSalvageSystem
     {
         [Dependency] private readonly IChatManager _chat = default!;
+        [Dependency] private readonly KesslerReputationSystem _reputation = default!; // Kessler
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly ILogManager _logManager = default!;
         [Dependency] private readonly IMapManager _mapManager = default!;

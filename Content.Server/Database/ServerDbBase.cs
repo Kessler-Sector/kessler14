@@ -231,6 +231,38 @@ namespace Content.Server.Database
             await db.DbContext.SaveChangesAsync();
             return profile.BankBalance;
         }
+
+        // Kessler: a character's reputation points per track.
+        public async Task<Dictionary<string, int>> GetReputationAsync(int profileId)
+        {
+            await using var db = await GetDb();
+
+            return await db.DbContext.KesslerReputation
+                .Where(r => r.ProfileId == profileId)
+                .ToDictionaryAsync(r => r.Track, r => r.Points);
+        }
+
+        // Kessler: adds reputation points to a character's track and returns the new total, or null if the profile
+        // doesn't exist.
+        public async Task<int?> AddReputationAsync(int profileId, string track, int points)
+        {
+            await using var db = await GetDb();
+
+            var row = await db.DbContext.KesslerReputation
+                .SingleOrDefaultAsync(r => r.ProfileId == profileId && r.Track == track);
+            if (row == null)
+            {
+                if (!await db.DbContext.Profile.AnyAsync(p => p.Id == profileId))
+                    return null;
+
+                row = new KesslerReputation { ProfileId = profileId, Track = track };
+                db.DbContext.KesslerReputation.Add(row);
+            }
+
+            row.Points = Math.Max(0, row.Points + points);
+            await db.DbContext.SaveChangesAsync();
+            return row.Points;
+        }
         // End Kessler
 
         private static async Task SetSelectedCharacterSlotAsync(NetUserId userId, int newSlot, ServerDbContext db)

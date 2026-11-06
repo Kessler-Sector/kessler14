@@ -1,0 +1,48 @@
+# Reputation tracks from docs/kessler/design/progression.md. Awards are about 1 point per minute of useful work.
+- type: reputationTrack
+  id: Station
+  name: kessler-reputation-track-station
+  description: kessler-reputation-track-station-desc
+  order: 0
+
+- type: reputationTrack
+  id: Freight
+  name: kessler-reputation-track-freight
+  description: kessler-reputation-track-freight-desc
+  order: 1
+
+- type: reputationTrack
+  id: Expedition
+  name: kessler-reputation-track-expedition
+  description: kessler-reputation-track-expedition-desc
+  order: 2
+
+- type: reputationTrack
+  id: Engineering
+  name: kessler-reputation-track-engineering
+  description: kessler-reputation-track-engineering-desc
+  order: 3
+
+- type: reputationTrack
+  id: Medical
+  name: kessler-reputation-track-medical
+  description: kessler-reputation-track-medical-desc
+  order: 4
+
+- type: reputationTrack
+  id: Science
+  name: kessler-reputation-track-science
+  description: kessler-reputation-track-science-desc
+  order: 5
+
+- type: reputationTrack
+  id: Security
+  name: kessler-reputation-track-security
+  description: kessler-reputation-track-security-desc
+  order: 6
+
+- type: reputationTrack
+  id: Outlaw
+  name: kessler-reputation-track-outlaw
+  description: kessler-reputation-track-outlaw-desc
+  order: 7

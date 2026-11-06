@@ -53,6 +53,7 @@ namespace Content.Server.Database
         public DbSet<WayfarerSafetyDepositBox> WayfarerSafetyDepositBox { get; set; } = null!;
         public DbSet<WayfarerSafetyDepositBoxItem> WayfarerSafetyDepositBoxItem { get; set; } = null!;
         public DbSet<WayfarerRoleplayLevel> WayfarerRoleplayLevels { get; set; } = null!;
+        public DbSet<KesslerReputation> KesslerReputation { get; set; } = null!; // Kessler
         public DbSet<WayfarerRoleplayCommend> WayfarerRoleplayCommends { get; set; } = null!;
         public DbSet<WayfarerCommunityGoal> WayfarerCommunityGoals { get; set; } = null!;
         public DbSet<WayfarerCommunityGoalRequirement> WayfarerCommunityGoalRequirements { get; set; } = null!;
@@ -423,6 +424,17 @@ namespace Content.Server.Database
                 .WithMany(b => b.Items)
                 .HasForeignKey(i => i.BoxId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Kessler: reputation per character and track
+            modelBuilder.Entity<KesslerReputation>()
+                .HasOne(r => r.Profile)
+                .WithMany()
+                .HasForeignKey(r => r.ProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<KesslerReputation>()
+                .HasIndex(r => new { r.ProfileId, r.Track })
+                .IsUnique();
 
             // Wayfarer Roleplay Levels configuration
             modelBuilder.Entity<WayfarerRoleplayLevel>()
@@ -1660,6 +1672,26 @@ namespace Content.Server.Database
         /// When this item was deposited
         /// </summary>
         public DateTime DepositDate { get; set; }
+    }
+
+    // Kessler: a character's reputation on one track (docs/kessler/design/progression.md). Per character, so it is
+    // keyed by profile and goes when the character is deleted.
+    [Table("kessler_reputation")]
+    public class KesslerReputation
+    {
+        [Key, Column("id")]
+        public int Id { get; set; }
+
+        [Column("profile_id")]
+        public int ProfileId { get; set; }
+
+        public Profile Profile { get; set; } = null!;
+
+        [Required, Column("track"), MaxLength(64)]
+        public string Track { get; set; } = null!;
+
+        [Column("points")]
+        public int Points { get; set; }
     }
 
     // Wayfarer Roleplay Leveling System Tables

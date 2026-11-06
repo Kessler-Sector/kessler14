@@ -27,6 +27,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Server._NF.Traits.Assorted;
 using Content.Server.Hands.Systems;
+using Content.Server._Kessler.Reputation; // Kessler
 
 namespace Content.Server._NF.Medical;
 
@@ -37,6 +38,7 @@ public sealed partial class MedicalBountySystem : EntitySystem
     [Dependency] IPrototypeManager _proto = default!;
     [Dependency] AudioSystem _audio = default!;
     [Dependency] BankSystem _bank = default!;
+    [Dependency] KesslerReputationSystem _reputation = default!; // Kessler
     [Dependency] BloodstreamSystem _bloodstream = default!;
     [Dependency] DamageableSystem _damageable = default!;
     [Dependency] HandsSystem _hands = default!;
@@ -206,6 +208,7 @@ public sealed partial class MedicalBountySystem : EntitySystem
             _bank.TrySectorDeposit(account, (int)(bountyPayout * taxCoeff), LedgerEntryType.MedicalBountyTax);
         }
 
+        _reputation.TryAward(ev.Actor, "Medical", 20, Loc.GetString("kessler-reputation-reason-medical-bounty")); // Kessler
         QueueDel(bountyUid);
 
         _popup.PopupEntity(Loc.GetString(successString), uid);
