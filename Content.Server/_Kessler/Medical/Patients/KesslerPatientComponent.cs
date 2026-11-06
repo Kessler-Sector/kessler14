@@ -52,6 +52,12 @@ public sealed partial class KesslerPatientComponent : Component
     public bool GrantedBreathingImmunity;
 
     /// <summary>
+    /// Extra pay on discharge, such as for answering a distress beacon.
+    /// </summary>
+    [DataField]
+    public int RescueBonus;
+
+    /// <summary>
     /// Seconds until the next symptom popup.
     /// </summary>
     [ViewVariables]

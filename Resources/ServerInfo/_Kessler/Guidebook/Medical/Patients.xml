@@ -2,6 +2,8 @@
 # Living Patients
 Some emergency medical pods on wrecks hold someone still alive. The pod keeps them in stasis: their condition doesn't get worse and they don't need air while it stays shut. Once the pod is opened, the clock starts.
 
+Now and then a distress call comes in on the medical radio with the coordinates of a beacon: a scrap of wreck in open space with a patient's pod on it, marked in orange on radar. Answer it before it's gone (about an hour and a half); a rescued patient pays a bonus on discharge.
+
 Every patient has one condition. It gets worse in stages, and only its specific treatment cures it; healing the damage only buys time. Examine the patient to see how they look, and watch what they do. When the cause is treated, the patient lets out a long breath and looks like they're on the mend.
 
 A stasis bed slows a condition to a tenth of its speed while the patient is buckled in.

@@ -410,7 +410,15 @@ public sealed class PatientSystem : EntitySystem
 
         var damage = TryComp<DamageableComponent>(ent, out var damageable) ? damageable.TotalDamage.Float() : 0f;
         var outcome = Math.Clamp(1f - damage / (DamageForHalfPay * 2), 0.5f, 1f);
-        return (int) (proto.Minutes * proto.Rate * outcome * _cfg.GetCVar(KesslerCVars.PatientPayMultiplier));
+        return (int) (proto.Minutes * proto.Rate * outcome * _cfg.GetCVar(KesslerCVars.PatientPayMultiplier)) + ent.Comp.RescueBonus;
+    }
+
+    /// <summary>
+    /// Adds to what discharging the patient pays, such as for a rescue.
+    /// </summary>
+    public void AddRescueBonus(Entity<KesslerPatientComponent> ent, int amount)
+    {
+        ent.Comp.RescueBonus += amount;
     }
 
     /// <summary>

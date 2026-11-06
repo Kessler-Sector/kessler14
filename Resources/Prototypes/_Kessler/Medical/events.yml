@@ -1,0 +1,20 @@
+# Distress beacons (docs/kessler/design/medical-science.md, M7): a living patient in a stasis pod on a scrap of wreck
+# in open space. Medical hears the coordinates on the radio; the patient pays a rescue bonus on discharge. The beacon
+# is gone after 90 real minutes if nobody answers.
+
+- type: entity
+  id: PatientDistressBeacon
+  parent: BaseStationEventShortDelay
+  name: Search and Rescue Coordination # Shows as the radio sender.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StationEvent
+    weight: 6
+    duration: 1
+    maxDuration: 1
+    reoccurrenceDelay: 45
+    minimumPlayers: 1
+  - type: ActiveRadio
+    channels:
+    - Medical
+  - type: PatientDistressRule
