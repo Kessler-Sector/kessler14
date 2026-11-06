@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 10/18/2026 11:43:04
-  entityCount: 20504
+  entityCount: 20506
 maps:
 - 1
 grids:
@@ -62597,6 +62597,20 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 10.5,-4.5
+      parent: 2
+- proto: ComputerLicenceOffice
+  entities:
+  - uid: 900001
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 41.5,-55.5
+      parent: 2
+  - uid: 900002
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -32.5,-55.5
       parent: 2
 - proto: ComputerMarketConsoleNFNormal
   entities:

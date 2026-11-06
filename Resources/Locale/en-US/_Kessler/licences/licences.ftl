@@ -9,7 +9,7 @@ kessler-licence-pilot-capital-desc = Lets you buy ships worth 300,000 or more.
 
 kessler-licence-no-character = You need to be playing one of your saved characters (observers and ghosts without a body have none).
 kessler-licence-loading = Checking your licences. Try again in a moment.
-kessler-licence-ship-needs = You need {$licences} to buy this ship. Type "licence" in the console to see how to get it.
+kessler-licence-ship-needs = You need {$licences} to buy this ship. The licensing terminal in the station representative's office at Dusk Station shows what it takes.
 kessler-licence-needs-track = {$level} with the {$track}
 kessler-licence-needs-any = {$level} with any one group
 kessler-licence-needs-previous = {$licence}, held for {$days} days
@@ -24,3 +24,16 @@ cmd-licence-bought = You bought the {$licence} for {$fee} spesos.
 cmd-licence-held = {$licence}: held since {$date}.
 cmd-licence-available = {$licence}: available. Buy it with "licence buy {$id}" for {$fee} spesos.
 cmd-licence-locked = {$licence} ({$fee} spesos): needs {$needs}.
+
+kessler-licence-office-title = Licensing office
+kessler-licence-office-loading = Looking up your records...
+kessler-licence-office-character = Records for {$name}
+kessler-licence-office-hint = Licences are yours for good, for this character. Reputation is earned by working for the sector's groups: station jobs, freight, expeditions, engineering, medical work and more. Each licence needs some reputation, and the higher ones need the previous licence held for a while.
+kessler-licence-office-licences = Licences
+kessler-licence-office-reputation = Your standing
+kessler-licence-office-held = Held since {$date}
+kessler-licence-office-buy = Buy for {$fee}
+kessler-licence-office-ready = You meet the requirements.
+kessler-licence-office-needs = Still needed:
+kessler-licence-office-track-progress = {$level} · {$points} / {$next}
+kessler-licence-office-track-max = {$level} · {$points}

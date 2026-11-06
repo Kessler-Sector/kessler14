@@ -1,0 +1,34 @@
+# Kessler: the licensing office terminal. Shows the character using it their reputation and licences, and sells
+# licences. Placed in Dusk's station representative office.
+- type: entity
+  parent: BaseComputer
+  id: ComputerLicenceOffice
+  name: licensing terminal
+  description: Pilot licences and your standing with the sector's groups. Use it to see what you hold, what you can buy, and what you still need.
+  components:
+  - type: Sprite
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: id
+    - map: ["computerLayerKeys"]
+      state: id_key
+    - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+      state: generic_panel_open
+  - type: LicenceOffice
+  - type: ActivatableUI
+    key: enum.LicenceOfficeUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.LicenceOfficeUiKey.Key:
+        type: LicenceOfficeBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: Computer
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#3c5eb5"
