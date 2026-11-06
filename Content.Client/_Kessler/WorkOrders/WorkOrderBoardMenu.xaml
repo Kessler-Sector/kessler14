@@ -1,0 +1,14 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      SetSize="460 520"
+                      MinSize="360 300"
+                      Title="{Loc 'kessler-work-order-board-title'}">
+    <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+        <Label Text="{Loc 'kessler-work-order-board-hint'}" Margin="8 6" StyleClasses="LabelSubText" />
+        <PanelContainer StyleClasses="LowDivider" />
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False" Margin="4">
+            <BoxContainer Name="OrdersList" Orientation="Vertical" HorizontalExpand="True" />
+        </ScrollContainer>
+        <Label Name="EmptyLabel" Text="{Loc 'kessler-work-order-board-empty'}" Margin="8" Visible="False" />
+    </BoxContainer>
+</controls:FancyWindow>

@@ -1,0 +1,33 @@
+# Kessler: the station work-order board. Lists generated jobs; dishes and drinks are handed in by using them on it.
+- type: entity
+  parent: BaseComputerAiAccess
+  id: ComputerWorkOrderBoard
+  name: work order board
+  description: Lists paid jobs around the station. Hand in ordered dishes and drinks by using them on it.
+  components:
+  - type: Sprite
+    layers:
+    - map: ["computerLayerBody"]
+      state: computer
+    - map: ["computerLayerKeyboard"]
+      state: generic_keyboard
+    - map: ["computerLayerScreen"]
+      state: bounty
+    - map: ["computerLayerKeys"]
+      state: tech_key
+    - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+      state: generic_panel_open
+  - type: WorkOrderBoard
+  - type: ActivatableUI
+    key: enum.WorkOrderBoardUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.WorkOrderBoardUiKey.Key:
+        type: WorkOrderBoardBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: Computer
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#b89f25"

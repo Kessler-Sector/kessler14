@@ -138,6 +138,13 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - earned so far from delivering mail (Station, 5), medical bounties (Medical, 20) and completed expeditions (Expedition, 20, for everyone on the expedition);
   - `reputation` shows your own standing, and `reputationaward` lets admins give it;
   - licences come next.
+- **Work-order board (phase 1):**
+  - `ComputerWorkOrderBoard` keeps 3 or more generated jobs open (one more per 5 players online, up to 8);
+  - cleaning jobs spill vomit, blood or oil around the station, and whoever is standing at a mess when it's cleaned is paid their share on the spot;
+  - kitchen and bar jobs ask for a dish or drink, handed in by using it on the board;
+  - pay is expected minutes × `kessler.workorders.rate` (150), straight to the worker, plus Station reputation;
+  - orders expire after an hour in real time and are saved with the sector;
+  - the board isn't placed on Dusk's map yet.
 - **Not yet:**
   - expedition T4 blueprints are still permanent (limited-run blueprints come in phase 3);
   - the loaner is given on every spawn under 10 hours of playtime, not once per account;
