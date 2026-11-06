@@ -1,0 +1,4 @@
+- type: guideEntry
+  id: KesslerPatients
+  name: guide-entry-kessler-patients
+  text: "/ServerInfo/_Kessler/Guidebook/Medical/Patients.xml"

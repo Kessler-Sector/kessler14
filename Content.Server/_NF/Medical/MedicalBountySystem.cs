@@ -29,6 +29,7 @@ using Content.Server._NF.Traits.Assorted;
 using Content.Server.Hands.Systems;
 using Content.Server._Kessler.Reputation; // Kessler
 using Content.Server._Kessler.Medical; // Kessler
+using Content.Server._Kessler.Medical.Patients; // Kessler
 
 namespace Content.Server._NF.Medical;
 
@@ -157,6 +158,14 @@ public sealed partial class MedicalBountySystem : EntitySystem
         // Assumption: only one object can be in the MedicalBountyRedemption
         EntityUid bountyUid = container.ContainedEntities[0];
 
+        // Kessler: living NPC patients are discharged instead
+        if (TryComp<KesslerPatientComponent>(bountyUid, out var patient))
+        {
+            RedeemPatient(uid, component, ev, (bountyUid, patient));
+            return;
+        }
+        // End Kessler
+
         if (!TryComp<MedicalBountyComponent>(bountyUid, out var medicalBounty) ||
             medicalBounty.Bounty == null ||
             !_proto.TryIndex(medicalBounty.Bounty.Value, out var bounty) || // Kessler
@@ -281,6 +290,9 @@ public sealed partial class MedicalBountySystem : EntitySystem
 
         // Assumption: only one object can be stored in the MedicalBountyRedemption entity
         EntityUid bountyUid = container.ContainedEntities[0];
+
+        if (TryComp<KesslerPatientComponent>(bountyUid, out var patient)) // Kessler
+            return GetPatientState((bountyUid, patient), paidToStation);
 
         // We either have no value or no way to accurately calculate the value of the bounty.
         if (!TryComp<MedicalBountyComponent>(bountyUid, out var medicalBounty) ||

@@ -155,4 +155,10 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<int> MedicalBountyLimbBonus =
         CVarDef.Create("kessler.medbounty.limb_bonus", 6000, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Multiplier on what discharging a cured NPC patient pays.
+    /// </summary>
+    public static readonly CVarDef<float> PatientPayMultiplier =
+        CVarDef.Create("kessler.patients.pay_multiplier", 1f, CVar.SERVERONLY);
 }

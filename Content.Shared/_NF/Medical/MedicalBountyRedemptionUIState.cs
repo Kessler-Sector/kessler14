@@ -16,6 +16,7 @@ public enum MedicalBountyRedemptionStatus : byte
     TooDamaged,
     NotAlive,
     Valid,
+    NotCured, // Kessler: a living patient whose condition isn't treated yet
 }
 
 [Serializable, NetSerializable]

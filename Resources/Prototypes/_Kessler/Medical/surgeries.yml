@@ -1,0 +1,15 @@
+# Surgery for NPC patients with internal bleeding (conditions.yml, PatientInternalBleeding): open the ribcage, clamp
+# the internal bleeders, then close up as usual.
+
+- type: entity
+  parent: SurgeryBase
+  id: SurgeryRepairInternalBleeding
+  name: Repair Internal Bleeding
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Surgery
+    requirement: SurgeryOpenRibcage
+    steps:
+    - SurgeryStepClampInternalBleeders
+  - type: SurgeryPartCondition
+    part: Torso
