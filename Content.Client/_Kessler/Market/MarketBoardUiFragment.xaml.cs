@@ -47,6 +47,22 @@ public sealed partial class MarketBoardUiFragment : BoxContainer
                 });
                 StationList.AddChild(row);
             }
+
+            if (station.Needs.Count == 0)
+                continue;
+
+            StationList.AddChild(new Label { Text = Loc.GetString("kessler-market-board-stocks"), FontColorOverride = Color.Gray, Margin = new Thickness(8, 2, 0, 0) });
+            foreach (var need in station.Needs)
+            {
+                var row = new BoxContainer { Orientation = LayoutOrientation.Horizontal, HorizontalExpand = true };
+                row.AddChild(new Label { Text = need.Category, HorizontalExpand = true, Margin = new Thickness(16, 0, 0, 0) });
+                row.AddChild(new Label
+                {
+                    Text = $"{need.Percent}%",
+                    FontColorOverride = need.Percent >= 50 ? Color.LightGreen : need.Percent >= 25 ? Color.Yellow : Color.IndianRed,
+                });
+                StationList.AddChild(row);
+            }
         }
     }
 }

@@ -12,3 +12,4 @@ kessler-market-board-refresh = Refresh
 kessler-market-board-hint = What each station pays now, as a share of normal value.
 kessler-market-board-empty = No station markets found.
 kessler-market-board-here = {$station} (here)
+kessler-market-board-stocks = Station stocks:

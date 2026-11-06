@@ -173,6 +173,11 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - deliver by selling the goods on a pallet at the issuing station (goods inside crates count); the pallet pays as usual, and the last delivery pays minutes x `kessler.contracts.rate` (150) into the holder's bank plus a point of reputation a minute on the contract's track;
   - abandoning or running out of time drops the contract with no penalty; contracts are saved on the station with real UTC times;
   - `kessler.contracts.enabled` turns posting off. Not yet: issuer budgets, per-character daily limits, licence gating, other contract types.
+- **Station needs (first slice of 5.3):**
+  - every station with a pallet console keeps four stocks (`Resources/Prototypes/_Kessler/Economy/station_needs.yml`): construction materials, medical supplies, fresh produce, engineering supplies; each drains over real hours and new stations start 30-90% full;
+  - goods sold on the station's pallets refill the matching stock, whoever sells them;
+  - below half, the station posts a contract for that stock at once (if it has none out for it) and pays up to 50% more for the stock's market category, the emptier the more;
+  - the market board shows each station's stock levels; saved on the station (`StationNeedsComponent`) with real UTC times, drain applied when read.
 - **Not yet:**
   - expedition T4 blueprints are still permanent (limited-run blueprints come in phase 3);
   - the loaner is given on every spawn under 10 hours of playtime, not once per account;

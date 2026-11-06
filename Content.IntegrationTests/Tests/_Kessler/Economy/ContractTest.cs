@@ -63,9 +63,10 @@ public sealed class ContractTest
 
             contracts.Refresh(now);
             var board = entMan.GetComponent<StationContractsComponent>(station);
-            Assert.That(board.Contracts, Has.Count.EqualTo(1), "the station posts a contract");
+            var posted = board.Contracts.Count;
+            Assert.That(posted, Is.GreaterThanOrEqualTo(1), "the station posts a contract (more if its stocks are low)");
             contracts.Refresh(now);
-            Assert.That(board.Contracts, Has.Count.EqualTo(1), "and waits before posting another");
+            Assert.That(board.Contracts, Has.Count.EqualTo(posted), "and waits before posting another");
 
             board.Contracts.Clear();
             var steel = contracts.Post((station, board), now, "ContractSteel")!;

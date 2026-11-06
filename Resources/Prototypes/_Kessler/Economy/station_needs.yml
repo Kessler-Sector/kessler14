@@ -1,0 +1,42 @@
+# Station needs (docs/kessler/design/departments.md, 5.3). Every station with a pallet console keeps these stocks.
+# They drain over real time; goods sold on the station's pallets refill them (whoever sells). Below half, the station
+# posts a contract for the stock and pays up to 50% more for its market category, the emptier the more.
+
+- type: stationNeed
+  id: NeedMaterials
+  name: kessler-need-materials
+  contracts:
+  - ContractSteel
+  - ContractGlass
+  - ContractPlastic
+  capacity: 600
+  drainPerHour: 40
+  category: Materials
+
+- type: stationNeed
+  id: NeedMedical
+  name: kessler-need-medical
+  contracts:
+  - ContractBrutepack
+  - ContractOintment
+  capacity: 120
+  drainPerHour: 8
+
+- type: stationNeed
+  id: NeedFood
+  name: kessler-need-food
+  contracts:
+  - ContractProduce
+  capacity: 200
+  drainPerHour: 15
+  category: Produce
+
+- type: stationNeed
+  id: NeedEngineering
+  name: kessler-need-engineering
+  contracts:
+  - ContractCableHV
+  - ContractPlasteel
+  - ContractUranium
+  capacity: 300
+  drainPerHour: 15
