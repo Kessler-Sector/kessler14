@@ -28,6 +28,7 @@ using Robust.Shared.Random;
 using Content.Server._NF.Traits.Assorted;
 using Content.Server.Hands.Systems;
 using Content.Server._Kessler.Reputation; // Kessler
+using Content.Server._Kessler.Medical; // Kessler
 
 namespace Content.Server._NF.Medical;
 
@@ -39,6 +40,7 @@ public sealed partial class MedicalBountySystem : EntitySystem
     [Dependency] AudioSystem _audio = default!;
     [Dependency] BankSystem _bank = default!;
     [Dependency] KesslerReputationSystem _reputation = default!; // Kessler
+    [Dependency] BountySurgerySystem _bountySurgery = default!; // Kessler
     [Dependency] BloodstreamSystem _bloodstream = default!;
     [Dependency] DamageableSystem _damageable = default!;
     [Dependency] HandsSystem _hands = default!;
@@ -134,6 +136,8 @@ public sealed partial class MedicalBountySystem : EntitySystem
                 bountyValueAccum += reagentQuantity * reagentValue.ValuePerPoint;
         }
 
+        bountyValueAccum += _bountySurgery.ApplyMissingLimbs(entity); // Kessler: some arrive needing limbs attached
+
         // Bounty calculation completed, set output state.
         component.MaxBountyValue = bountyValueAccum;
         component.BountyInitialized = true;
@@ -185,6 +189,8 @@ public sealed partial class MedicalBountySystem : EntitySystem
                 bountyPayout -= (int)(bounty.PenaltyPerOtherPoint * damageVal);
             }
         }
+
+        bountyPayout -= _bountySurgery.MissingLimbPenalty(bountyUid); // Kessler: limbs not attached again lose their bonus
 
         string successString = "medical-bounty-redemption-success";
         if (TryComp<MedicalBountyBankPaymentComponent>(ev.Actor, out var bankPayment))

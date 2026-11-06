@@ -137,4 +137,22 @@ public sealed class KesslerCVars
     /// </summary>
     public static readonly CVarDef<float> GasMarketHalfLifeHours =
         CVarDef.Create("kessler.market.gas_half_life_hours", 24f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Chance that a medical bounty corpse arrives with limbs detached, to be attached again by surgery.
+    /// </summary>
+    public static readonly CVarDef<float> MedicalBountyLimbChance =
+        CVarDef.Create("kessler.medbounty.limb_chance", 0.5f, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Most limbs detached from one bounty corpse.
+    /// </summary>
+    public static readonly CVarDef<int> MedicalBountyMaxLimbs =
+        CVarDef.Create("kessler.medbounty.max_limbs", 2, CVar.SERVERONLY);
+
+    /// <summary>
+    /// Spesos added to a bounty for each detached limb, lost again for each one not attached at redemption.
+    /// </summary>
+    public static readonly CVarDef<int> MedicalBountyLimbBonus =
+        CVarDef.Create("kessler.medbounty.limb_bonus", 6000, CVar.SERVERONLY);
 }
