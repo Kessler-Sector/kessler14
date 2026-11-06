@@ -28,7 +28,7 @@ public sealed partial class ContractsUiFragment : BoxContainer
         ContractList.RemoveAllChildren();
 
         if (state.Problem != null)
-            ContractList.AddChild(new Label { Text = Loc.GetString(state.Problem), FontColorOverride = Color.IndianRed });
+            ContractList.AddChild(Wrapped(Loc.GetString(state.Problem), Color.IndianRed));
 
         AddHeader(Loc.GetString("kessler-contracts-held-header", ("count", state.Held.Count), ("max", state.MaxHeld)));
         if (state.Held.Count == 0)
@@ -67,25 +67,41 @@ public sealed partial class ContractsUiFragment : BoxContainer
 
     private void AddNote(string text)
     {
-        ContractList.AddChild(new Label { Text = text, FontColorOverride = Color.Gray, Margin = new Thickness(8, 0, 0, 0) });
+        var note = Wrapped(text, Color.Gray);
+        note.Margin = new Thickness(8, 0, 0, 0);
+        ContractList.AddChild(note);
     }
 
     private void AddEntry(ContractEntry entry, string title, string time, string buttonText, Action onPressed, bool disabled)
     {
         var row = new BoxContainer { Orientation = LayoutOrientation.Horizontal, HorizontalExpand = true, Margin = new Thickness(8, 2, 0, 4) };
         var text = new BoxContainer { Orientation = LayoutOrientation.Vertical, HorizontalExpand = true };
-        text.AddChild(new Label { Text = title });
-        text.AddChild(new Label
-        {
-            Text = Loc.GetString("kessler-contracts-reward", ("reward", entry.Reward), ("rep", entry.Reputation), ("track", entry.Track)),
-            FontColorOverride = Color.LightGreen,
-        });
-        text.AddChild(new Label { Text = time, FontColorOverride = Color.Gray });
+        text.AddChild(Wrapped(title, null));
+        text.AddChild(Wrapped(Loc.GetString("kessler-contracts-reward", ("reward", entry.Reward), ("rep", entry.Reputation), ("track", entry.Track)),
+            Color.LightGreen));
+        text.AddChild(Wrapped(time, Color.Gray));
         row.AddChild(text);
 
         var button = new Button { Text = buttonText, Disabled = disabled, VerticalAlignment = VAlignment.Center };
         button.OnPressed += _ => onPressed();
         row.AddChild(button);
         ContractList.AddChild(row);
+    }
+
+    /// <summary>
+    /// Plain text that wraps to the PDA's width instead of running off the edge.
+    /// </summary>
+    private static RichTextLabel Wrapped(string text, Color? color)
+    {
+        var message = new FormattedMessage();
+        if (color is { } c)
+            message.PushColor(c);
+        message.AddText(text);
+        if (color != null)
+            message.Pop();
+
+        var label = new RichTextLabel { HorizontalExpand = true };
+        label.SetMessage(message);
+        return label;
     }
 }

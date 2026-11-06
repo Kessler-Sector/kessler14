@@ -1,5 +1,6 @@
 #pragma warning disable RA0002 // Tests set component state directly.
 using System.Collections.Generic;
+using Content.Server._Kessler.Characters;
 using Content.Server._Kessler.Reputation;
 using Content.Server.Database;
 using Content.Server.Preferences.Managers;
@@ -90,6 +91,63 @@ public sealed class ReputationTest
         });
 
         await server.WaitPost(() => entMan.DeleteEntity(body));
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// A body whose spawn didn't record its character slot still counts as the selected character (as it does for the
+    /// bank), and a player who is ghosted is still playing the body their mind owns.
+    /// </summary>
+    [Test]
+    public async Task CharacterFoundWithoutRecordedSlotAndWhileGhosted()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var prefsManager = server.ResolveDependency<IServerPreferencesManager>();
+        var characters = entMan.System<KesslerCharacterSystem>();
+        var mind = entMan.System<SharedMindSystem>();
+        var testMap = await pair.CreateTestMap();
+        var session = pair.Player!;
+
+        EntityUid body = default;
+        EntityUid ghost = default;
+        EntityUid mindId = default;
+        await server.WaitPost(() =>
+        {
+            body = entMan.SpawnEntity("MobHuman", testMap.GridCoords);
+            entMan.AddComponent<BankAccountComponent>(body); // CharacterSlot left at -1, as a spawn can leave it.
+            mindId = mind.CreateMind(session.UserId, "Unrecorded");
+            mind.TransferTo(mindId, body);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(prefsManager.TryGetCachedPreferences(session.UserId, out var prefs));
+            var selected = prefs!.SelectedCharacterIndex;
+
+            Assert.That(characters.TryGetSlot(body, out var user, out var slot), "the selected character is used");
+            Assert.That(user, Is.EqualTo(session.UserId));
+            Assert.That(slot, Is.EqualTo(selected));
+            Assert.That(entMan.GetComponent<BankAccountComponent>(body).CharacterSlot, Is.EqualTo(selected),
+                "and recorded on the body");
+
+            ghost = entMan.SpawnEntity("AdminObserver", testMap.GridCoords);
+            mind.Visit(mindId, ghost);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(session.AttachedEntity, Is.EqualTo(ghost));
+            Assert.That(characters.TryGetCharacter(session, out var found, out _), "a ghosted player still has their character");
+            Assert.That(found, Is.EqualTo(body));
+
+            mind.UnVisit(session);
+            entMan.DeleteEntity(body);
+        });
+
         await pair.CleanReturnAsync();
     }
 

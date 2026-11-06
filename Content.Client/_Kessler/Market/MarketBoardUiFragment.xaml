@@ -6,7 +6,7 @@
             <Label Text="{Loc 'kessler-market-board-title'}" StyleClasses="LabelBig" HorizontalExpand="True"/>
             <Button Name="RefreshButton" Text="{Loc 'kessler-market-board-refresh'}"/>
         </BoxContainer>
-        <Label Text="{Loc 'kessler-market-board-hint'}" FontColorOverride="#a0a0a0" Margin="8 0 8 4"/>
+        <RichTextLabel Name="Hint" Margin="8 0 8 4"/>
         <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
             <BoxContainer Name="StationList" Orientation="Vertical" HorizontalExpand="True" Margin="8 0"/>
         </ScrollContainer>

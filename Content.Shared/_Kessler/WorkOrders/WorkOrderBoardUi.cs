@@ -23,6 +23,11 @@ public sealed class WorkOrderBoardEntry
     /// </summary>
     public int Remaining;
     public int Total;
+
+    /// <summary>
+    /// Where each mess or broken light still waiting is, as markup naming the nearest station beacon.
+    /// </summary>
+    public List<string> Spots = new();
 }
 
 [Serializable, NetSerializable]

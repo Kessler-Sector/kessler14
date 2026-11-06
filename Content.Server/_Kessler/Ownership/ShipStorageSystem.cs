@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using Content.Server._Kessler.Characters;
 using Content.Server._Kessler.Persistence;
 using Content.Server._NF.Bank;
 using Content.Server._NF.Shipyard.Systems;
@@ -52,6 +53,7 @@ public sealed class ShipStorageSystem : EntitySystem
     [Dependency] private readonly IResourceManager _res = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
+    [Dependency] private readonly KesslerCharacterSystem _characters = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly PersistenceSaveSystem _persistenceSave = default!;
     [Dependency] private readonly PersistenceLoadSystem _persistenceLoad = default!;
@@ -350,7 +352,8 @@ public sealed class ShipStorageSystem : EntitySystem
         if (!_player.TryGetSessionByEntity(args.User, out var session))
             return;
 
-        var slot = TryComp<BankAccountComponent>(args.User, out var bank) ? bank.CharacterSlot : -1;
+        if (!_characters.TryGetSlot(args.User, out _, out var slot))
+            return;
         var user = args.User;
         foreach (var entry in GetStoredShips())
         {

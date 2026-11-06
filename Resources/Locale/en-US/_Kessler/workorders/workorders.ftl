@@ -1,9 +1,10 @@
 kessler-work-order-board-title = Work orders
-kessler-work-order-board-hint = Paid jobs around the station. Clean up a mess and you're paid on the spot; hand in dishes and drinks by using them on this board.
+kessler-work-order-board-hint = Paid jobs around the station. Anyone can do them, no need to accept. Messes and lights pay the moment each one is done; dishes and drinks are handed in by using them on this board. Locations are given by the station's nav beacons (see the station map).
 kessler-work-order-board-empty = No open orders. Check back soon.
 kessler-work-order-entry-title = [bold]{$title}[/bold]
-kessler-work-order-entry-details = Pays {$payout} spesos, +{$reputation} {$track} reputation. Expires in {$minutes} min.
-kessler-work-order-entry-progress = {$remaining} of {$total} left.
+kessler-work-order-entry-footer = +{$reputation} {$track} reputation · expires in {$minutes} min
+kessler-work-order-entry-where = [bold]Where[/bold] ({$remaining} of {$total} left):
+kessler-work-order-entry-spot = • {$location}
 kessler-work-order-paid = You were paid {$amount} spesos.
 kessler-work-order-reason = work order
 

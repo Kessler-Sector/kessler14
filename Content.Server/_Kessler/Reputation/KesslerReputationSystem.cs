@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Content.Server._Kessler.Characters;
 using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Shared._Kessler.Reputation;
@@ -19,6 +20,7 @@ public sealed class KesslerReputationSystem : EntitySystem
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly KesslerCharacterSystem _characters = default!;
 
     /// <summary>
     /// Points needed for levels 1 to 5.
@@ -45,15 +47,14 @@ public sealed class KesslerReputationSystem : EntitySystem
     public void TryAward(EntityUid actor, ProtoId<ReputationTrackPrototype> track, int points, string reason)
     {
         if (points <= 0
-            || !TryComp<ActorComponent>(actor, out var actorComp)
-            || !TryComp<BankAccountComponent>(actor, out var bank)
-            || bank.CharacterSlot < 0
-            || !_proto.HasIndex(track))
+            || !_proto.HasIndex(track)
+            || !_characters.TryGetSession(actor, out var session)
+            || !_characters.TryGetSlot(actor, out _, out var slot))
         {
             return;
         }
 
-        _ = AwardAsync(actorComp.PlayerSession, bank.CharacterSlot, track, points, reason);
+        _ = AwardAsync(session, slot, track, points, reason);
     }
 
     private async Task AwardAsync(ICommonSession session, int slot, ProtoId<ReputationTrackPrototype> track, int points, string reason)

@@ -137,10 +137,12 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - awarded through `KesslerReputationSystem.TryAward`, at about 1 point per minute of useful work;
   - earned so far from delivering mail (Station, 5), medical bounties (Medical, 20) and completed expeditions (Expedition, 20, for everyone on the expedition);
   - `reputation` shows your own standing, and `reputationaward` lets admins give it;
+  - which character a body is (player and character slot) comes from `KesslerCharacterSystem`, used by reputation, licences, contracts and ship ownership alike: the bank's `CharacterSlot`, recorded at spawn by matching the profile by value, else the selected character (as the bank does); it follows the mind, so commands work while ghosted;
   - licences come next.
 - **Work-order board (phase 1):**
   - `ComputerWorkOrderBoard` keeps 3 or more generated jobs open (one more per 5 players online, up to 8);
   - cleaning jobs spill vomit, blood or oil around the station, and whoever is standing at a mess when it's cleaned is paid their share on the spot;
+  - each order is a card on the board with its pay, time left and, for messes and broken lights, where each one is by the nearest station nav beacon ("east of Kitchen"); an empty board fills to its base number at once;
   - kitchen and bar jobs ask for a dish or drink, handed in by using it on the board;
   - pay is expected minutes × `kessler.workorders.rate` (150), straight to the worker, plus Station reputation;
   - orders expire after an hour in real time and are saved with the sector;

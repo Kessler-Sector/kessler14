@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Content.Server._Kessler.Characters;
 using Content.Server._Kessler.Reputation;
 using Content.Server._NF.Bank;
 using Content.Server.Database;
@@ -27,6 +28,7 @@ public sealed class KesslerLicenceSystem : EntitySystem
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
+    [Dependency] private readonly KesslerCharacterSystem _characters = default!;
 
     /// <summary>
     /// Ship groups that don't need a pilot licence: job and staff shipyards keep their own access rules.
@@ -52,8 +54,8 @@ public sealed class KesslerLicenceSystem : EntitySystem
 
     private void OnPlayerSpawn(PlayerSpawnCompleteEvent args)
     {
-        if (TryComp<BankAccountComponent>(args.Mob, out var bank) && bank.CharacterSlot >= 0)
-            _ = LoadAsync(args.Player.UserId, bank.CharacterSlot);
+        if (_characters.TryGetSlot(args.Mob, out var user, out var slot))
+            _ = LoadAsync(user, slot);
     }
 
     public IEnumerable<LicencePrototype> Licences()
@@ -96,18 +98,16 @@ public sealed class KesslerLicenceSystem : EntitySystem
         if (required.Count == 0)
             return true;
 
-        if (!TryComp<ActorComponent>(buyer, out var actor)
-            || !TryComp<BankAccountComponent>(buyer, out var bank)
-            || bank.CharacterSlot < 0)
+        if (!_characters.TryGetSlot(buyer, out var user, out var slot))
         {
             reason = Loc.GetString("kessler-licence-no-character");
             return false;
         }
 
-        var key = (actor.PlayerSession.UserId.UserId, bank.CharacterSlot);
+        var key = (user.UserId, slot);
         if (!_cache.TryGetValue(key, out var held))
         {
-            _ = LoadAsync(actor.PlayerSession.UserId, bank.CharacterSlot);
+            _ = LoadAsync(user, slot);
             reason = Loc.GetString("kessler-licence-loading");
             return false;
         }
@@ -195,15 +195,9 @@ public sealed class KesslerLicenceSystem : EntitySystem
     /// </summary>
     public async Task<string?> TryBuyAsync(EntityUid buyer, LicencePrototype licence)
     {
-        if (!TryComp<ActorComponent>(buyer, out var actor)
-            || !TryComp<BankAccountComponent>(buyer, out var bank)
-            || bank.CharacterSlot < 0)
-        {
+        if (!_characters.TryGetSlot(buyer, out var user, out var slot))
             return Loc.GetString("kessler-licence-no-character");
-        }
 
-        var user = actor.PlayerSession.UserId;
-        var slot = bank.CharacterSlot;
         if (await _db.GetProfileIdAsync(user, slot) is not { } profileId
             || await LoadAsync(user, slot) is not { } held
             || await _reputation.GetReputationAsync(user, slot) is not { } reputation)

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._Kessler.Characters;
 using Content.Server._Kessler.Economy;
 using Content.Server._Kessler.Reputation;
 using Content.Server._NF.Bank;
@@ -38,6 +39,7 @@ public sealed class ContractSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
+    [Dependency] private readonly KesslerCharacterSystem _characters = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly StationNeedsSystem _needs = default!;
     [Dependency] private readonly StationSystem _station = default!;
@@ -174,14 +176,10 @@ public sealed class ContractSystem : EntitySystem
     /// </summary>
     private (string User, int Slot)? Holder(EntityUid actor)
     {
-        if (!TryComp<ActorComponent>(actor, out var actorComp)
-            || !TryComp<BankAccountComponent>(actor, out var bank)
-            || bank.CharacterSlot < 0)
-        {
+        if (!_characters.TryGetSlot(actor, out var user, out var slot))
             return null;
-        }
 
-        return (actorComp.PlayerSession.UserId.UserId.ToString(), bank.CharacterSlot);
+        return (user.UserId.ToString(), slot);
     }
 
     private static bool IsHeldBy(ProcurementContract contract, (string User, int Slot) holder)

@@ -103,6 +103,8 @@ public sealed class WorkOrderTest
             var boardUid = entMan.SpawnEntity("ComputerWorkOrderBoard", testMap.GridCoords);
             var board = entMan.GetComponent<WorkOrderBoardComponent>(boardUid);
             board.Allowed.Add("RepairLights");
+            board.BaseOpen = 1; // One order to look at; a board fills to its base number at once.
+            board.MaxOpen = 1;
             workOrders.UpdateBoard((boardUid, board), DateTime.UtcNow);
 
             var order = board.Orders.Single();
@@ -184,6 +186,8 @@ public sealed class WorkOrderTest
             var boardUid = entMan.SpawnEntity("ComputerWorkOrderBoard", testMap.GridCoords);
             var board = entMan.GetComponent<WorkOrderBoardComponent>(boardUid);
             board.Allowed.Add("CleanStation");
+            board.BaseOpen = 1; // One order to look at; a board fills to its base number at once.
+            board.MaxOpen = 1;
             workOrders.UpdateBoard((boardUid, board), DateTime.UtcNow);
             var order = board.Orders.Single();
 

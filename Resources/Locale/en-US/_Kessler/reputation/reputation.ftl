@@ -31,7 +31,7 @@ kessler-reputation-reason-expedition = completed an expedition
 
 cmd-reputation-desc = Shows your character's reputation.
 cmd-reputation-help = Usage: reputation
-cmd-reputation-no-character = You need to be playing a character.
+cmd-reputation-no-character = You need to be playing one of your saved characters (observers and ghosts without a body have none).
 cmd-reputation-header = Reputation of {$name}:
 cmd-reputation-line = {$track}: {$level} ({$points}{$next})
 cmd-reputation-next = {" "}of {$points}

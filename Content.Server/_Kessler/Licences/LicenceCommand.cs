@@ -1,3 +1,4 @@
+using Content.Server._Kessler.Characters;
 using System.Linq;
 using Content.Server._Kessler.Reputation;
 using Content.Server.Administration;
@@ -19,13 +20,13 @@ public sealed class LicenceCommand : LocalizedEntityCommands
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
+    [Dependency] private readonly KesslerCharacterSystem _characters = default!;
+
     public override string Command => "licence";
 
     public override async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (shell.Player is not { AttachedEntity: { } body } player
-            || !EntityManager.TryGetComponent<BankAccountComponent>(body, out var bank)
-            || bank.CharacterSlot < 0)
+        if (shell.Player is not { } player || !_characters.TryGetCharacter(player, out var body, out var slot))
         {
             shell.WriteError(Loc.GetString("kessler-licence-no-character"));
             return;
@@ -53,8 +54,8 @@ public sealed class LicenceCommand : LocalizedEntityCommands
             return;
         }
 
-        var held = await _licences.LoadAsync(player.UserId, bank.CharacterSlot);
-        var reputation = await _reputation.GetReputationAsync(player.UserId, bank.CharacterSlot);
+        var held = await _licences.LoadAsync(player.UserId, slot);
+        var reputation = await _reputation.GetReputationAsync(player.UserId, slot);
         if (held == null || reputation == null)
         {
             shell.WriteError(Loc.GetString("kessler-licence-no-character"));
