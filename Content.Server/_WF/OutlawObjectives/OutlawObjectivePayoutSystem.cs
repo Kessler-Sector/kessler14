@@ -100,6 +100,7 @@ public sealed class OutlawObjectivePayoutSystem : EntitySystem
         SubscribeLocalEvent<OutlawObjectiveComponent, PlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<OutlawObjectiveComponent, CryosleepEnterEvent>(OnCryosleepEnter);
         SubscribeLocalEvent<OutlawObjectiveComponent, CryosleepWakeUpEvent>(OnCryosleepWakeUp);
+        SubscribeLocalEvent<OutlawObjectiveComponent, ComponentStartup>(OnObjectivesStartup); // Kessler
         SubscribeLocalEvent<OutlawObjectiveComponent, ComponentShutdown>(OnObjectivesShutdown);
 
         SubscribeLocalEvent<OutlawObjectiveItemComponent, ContrabandSoldEvent>(OnObjectiveItemSold);
@@ -109,6 +110,24 @@ public sealed class OutlawObjectivePayoutSystem : EntitySystem
         SubscribeLocalEvent<ShuttleConsoleComponent, ForgeDeedDoAfterEvent>(OnForgeDeed);
         SubscribeLocalEvent<ShuttleDeedComponent, ComponentShutdown>(OnDeedRemoved);
         SubscribeLocalEvent<LinkedLifecycleGridParentComponent, ComponentStartup>(OnShipPurchased);
+    }
+
+    // Kessler: a loaded target already has active objectives; count them again, matching what shutdown takes off.
+    // Ship damage tracking is saved on the ships, so it isn't started again here.
+    private void OnObjectivesStartup(Entity<OutlawObjectiveComponent> ent, ref ComponentStartup args)
+    {
+        foreach (var objective in ent.Comp.Active)
+        {
+            switch (_proto.Index(objective).Trigger)
+            {
+                case OutlawObjectiveTrigger.ShipSold:
+                    _activeShipTheft++;
+                    break;
+                case OutlawObjectiveTrigger.ShipDamaged:
+                    _activeShipDamage++;
+                    break;
+            }
+        }
     }
 
     private void OnObjectivesShutdown(Entity<OutlawObjectiveComponent> ent, ref ComponentShutdown args)

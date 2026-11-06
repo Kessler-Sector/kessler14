@@ -15,6 +15,6 @@ public sealed partial class GasDepositComponent : Component
     /// <summary>
     /// The maximum number of moles for this deposit to be considered "mostly depleted".
     /// </summary>
-    [ViewVariables]
+    [DataField] // Kessler: only set at map init, so it has to be saved
     public float LowMoles;
 }

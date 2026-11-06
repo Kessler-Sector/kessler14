@@ -412,6 +412,12 @@ public sealed class DeadDropSystem : EntitySystem
         //set up the timing of the first activation
         if (component.NextDrop == null)
             component.NextDrop = _timing.CurTime + TimeSpan.FromSeconds(_random.Next(component.MinimumCoolDown, component.MaximumCoolDown));
+
+        // Kessler: never further away than the longest cooldown, e.g. from a save written before the time was stored
+        // as time remaining.
+        var latest = _timing.CurTime + TimeSpan.FromSeconds(component.MaximumCoolDown);
+        if (component.NextDrop > latest)
+            component.NextDrop = latest;
     }
 
     private void AddSearchVerb(EntityUid uid, DeadDropComponent component, GetVerbsEvent<InteractionVerb> args)

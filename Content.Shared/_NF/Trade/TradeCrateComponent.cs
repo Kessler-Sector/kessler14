@@ -1,6 +1,7 @@
 using System.Threading;
 using Content.Shared._NF.Cargo;
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom; // Kessler
 
 namespace Content.Shared._NF.Trade;
 
@@ -31,7 +32,7 @@ public sealed partial class TradeCrateComponent : Component
     /// <summary>
     /// If non-null, the package must be redeemed before this time to arrive unpenalized.
     /// </summary>
-    [ViewVariables, AutoPausedField]
+    [DataField(serverOnly: true, customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField] // Kessler: saved as time remaining
     public TimeSpan? ExpressDeliveryTime;
 
     /// <summary>
@@ -49,8 +50,17 @@ public sealed partial class TradeCrateComponent : Component
     /// <summary>
     /// This crate's destination.
     /// </summary>
-    [ViewVariables]
-    public EntityUid DestinationStation;
+    // Kessler: saved, or a restart picks a new destination. Nullable, because an invalid entity in the prototype's
+    // default would be logged as an error on every save.
+    [DataField(serverOnly: true)]
+    public EntityUid? DestinationStation;
+
+    /// <summary>
+    /// Kessler: whether the destination and express deadline have been set. Component init also runs when a saved
+    /// crate is loaded, and must not roll them again.
+    /// </summary>
+    [DataField(serverOnly: true)]
+    public bool Initialized;
 
     /// <summary>
     /// Cancellation token used to disable the express marker on the crate.

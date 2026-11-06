@@ -45,7 +45,8 @@ public sealed partial class BountyContractSystem : SharedBountyContractSystem
         Dictionary<ProtoId<BountyContractCollectionPrototype>, Dictionary<uint, BountyContract>> contracts = new();
         foreach (var proto in _proto.EnumeratePrototypes<BountyContractCollectionPrototype>())
         {
-            contracts[proto.ID] = new();
+            // Kessler: keep contracts loaded from a save; this runs on load too.
+            contracts[proto.ID] = ent.Comp.Contracts?.GetValueOrDefault(proto.ID) ?? new();
             orderedCollections[proto.Order] = proto.ID;
         }
         ent.Comp.Contracts = contracts.ToFrozenDictionary();
