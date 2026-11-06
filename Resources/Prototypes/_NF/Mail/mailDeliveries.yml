@@ -76,7 +76,7 @@
     MailNFPowerTool: 0.6
     MailNFT2ComponentBox: 0.6
     MailNFT3ComponentBox: 1.2
-    MailNFT4ComponentBox: 0.2
+    # MailNFT4ComponentBox: 0.2 # Kessler: T4 parts are Rare and never come by mail
     # Weapons
     MailNFBoxer: 0.2
     MailNFConscript: 0.2

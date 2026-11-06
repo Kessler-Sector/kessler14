@@ -94,6 +94,46 @@ Decisions made so far:
 2. **Stage B: across a real restart.** A config option makes the round rule load the save instead of generating the sector. Check power, atmos, doors, shuttles and a player's body afterwards, and measure save time, load time and tick time with a full sector.
 3. Character persistence, update infrastructure, ownership and upkeep, then the persistent-ID layer and per-grid saves.
 
+## Progression and economy
+
+The plan is in `docs/kessler/design/` (`README.md` combines the three design documents). Decisions made on 2026-11-06, numbered as in that plan:
+
+- **Starting money: 10,000 for every character** (#2). Characters can't transfer money between each other; making a new character to try a different role must not cost anything.
+- **No daily reputation cap for now** (#4). A soft cap was proposed; players dislike anything that feels like a wall.
+- Everything else as the plan recommends:
+  - no forced station work; a free Micro loaner from the scrapyard replaces the 50,000 rookie voucher;
+  - ship resale 75%;
+  - licences per character, never expiring, CGP may suspend;
+  - wear from use only;
+  - no numeric skills, no sector-wide announcement of Exotic finds;
+  - raw gas cut now, saturation per station;
+  - contracts pay the worker, with a 10–20% cut to the department;
+  - NPC raids only on crewed ships outside safe zones, never destroying them;
+  - outlaw payouts cut sharply;
+  - gas deposits don't refill, fields rotate;
+  - ship owners can take Dusk work orders at lower pay;
+  - security contracts open to licensed non-CGP players;
+  - living NPC patients; medical licences gate contracts and supplies, not actions;
+  - authored conditions instead of Woundmed;
+  - upper-tier chemistry recipes seeded per sector, never re-rolled;
+  - a tech tree of 3–5 weeks per discipline;
+  - rare, non-lethal outbreaks;
+  - combat events at about 5 players.
+- **Phase 0 as built:**
+  - starting balance 10,000 (`HumanoidCharacterProfile.DefaultBalance`);
+  - resale 0.75 (`shuttle.shipyard_base_sell_rate`);
+  - `ShipVoucherKesslerLoaner` (Zipper, Ratrod, Canister, Rusty, Construct at the scrapyard console) replaces the rookie voucher;
+  - raw gas prices cut, no 1.25 sale console bonus, gas sold by purity;
+  - outlaw spesos rewards a fifth of what they were;
+  - combat events from 5 players;
+  - bluespace ore about a sixth as common (1 wall per cave expedition instead of 10);
+  - T4 parts out of mail, 400 merchant tokens instead of 100, a fifth as common in dungeon loot;
+  - mail carriers get 30% of a parcel's value (`kessler.mail.carrier_share`).
+- **Not yet:**
+  - expedition T4 blueprints are still permanent (limited-run blueprints come in phase 3);
+  - the loaner is given on every spawn under 10 hours of playtime, not once per account;
+  - combat events at low population are the full-size ones.
+
 ## Medical
 
 Surgery comes from **Monolith's Shitmed** (`_Shitmed` folders), ported onto our older engine:

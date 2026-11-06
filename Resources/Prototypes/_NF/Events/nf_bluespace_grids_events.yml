@@ -159,7 +159,7 @@
     endAudio:
       path: /Audio/_NF/Announcements/PocketSizedAndy/andy2_bluespace_ship_leave.ogg
     earliestStart: 80
-    minimumPlayers: 15
+    minimumPlayers: 5 # Kessler: 15<5, so low population servers see combat events
     weight: 1
     duration: 900 # Wayfarer 1800 < 900
     maxDuration: 1200 # Wayfarer 2400 < 1200
@@ -198,7 +198,7 @@
     endAudio:
       path: /Audio/_NF/Announcements/PocketSizedAndy/andy2_bluespace_ship_leave.ogg
     earliestStart: 100
-    minimumPlayers: 15
+    minimumPlayers: 5 # Kessler: 15<5, so low population servers see combat events
     weight: 4 # Wayfarer 1<4
     duration: 900
     maxDuration: 1200
@@ -237,7 +237,7 @@
     endAudio:
       path: /Audio/_NF/Announcements/PocketSizedAndy/andy2_bluespace_ship_leave.ogg
     earliestStart: 80
-    minimumPlayers: 15
+    minimumPlayers: 5 # Kessler: 15<5, so low population servers see combat events
     weight: 4 # Wayfarer 1<4
     duration: 900 # Wayfarer 1800 < 900
     maxDuration: 1200 # Wayfarer 2400 < 1200

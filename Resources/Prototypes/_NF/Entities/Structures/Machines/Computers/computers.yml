@@ -498,7 +498,7 @@
   suffix: High
   components:
   - type: MarketModifier
-    mod: 1.25
+    mod: 1.0 # Kessler: 1.25<1.0, no bonus for selling at Dusk and the depots
 
 - type: entity
   parent: GasSaleConsole

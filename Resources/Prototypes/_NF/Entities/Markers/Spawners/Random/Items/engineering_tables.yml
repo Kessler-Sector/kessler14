@@ -319,7 +319,7 @@
     - id: SuperCapacitorStockPartRandomVeryLow
       weight: 0.3
     - id: QuadraticCapacitorStockPartRandomVeryLow
-      weight: 0.05
+      weight: 0.01 # Kessler: 0.05<0.01, T4 parts are Rare
 
 # region Manipulators
 - type: entityTable # Random stack size: 1 to 5
@@ -333,7 +333,7 @@
     - id: PicoManipulatorStockPartRandomVeryLow
       weight: 0.3
     - id: FemtoManipulatorStockPartRandomVeryLow
-      weight: 0.05
+      weight: 0.01 # Kessler: 0.05<0.01, T4 parts are Rare
 
 # region MatterBins
 - type: entityTable # Random stack size: 1 to 5
@@ -347,7 +347,7 @@
     - id: SuperMatterBinStockPartRandomVeryLow
       weight: 0.3
     - id: BluespaceMatterBinStockPartRandomVeryLow
-      weight: 0.05
+      weight: 0.01 # Kessler: 0.05<0.01, T4 parts are Rare
 
 # region PowerCells
 - type: entityTable
