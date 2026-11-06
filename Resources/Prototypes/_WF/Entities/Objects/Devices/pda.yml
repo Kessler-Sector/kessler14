@@ -37,6 +37,7 @@
     - NanoTaskCartridge
     - NanoChatCartridge # Wayfarer
     - NewsReaderCartridge
+    - MarketBoardCartridge # Kessler
     - BountyContractsCartridge
     - AstroNavCartridge
     - WantedListCartridge
@@ -570,6 +571,7 @@
     - NotekeeperCartridge
     - NanoTaskCartridge
     - NewsReaderCartridge
+    - MarketBoardCartridge # Kessler
     - BountyContractsCartridge
     - AstroNavCartridge
     - NanoChatCartridge
