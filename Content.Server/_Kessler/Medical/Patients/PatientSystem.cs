@@ -11,6 +11,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.Mobs.Components;
@@ -35,6 +36,7 @@ public sealed class PatientSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
     [Dependency] private readonly KesslerReputationSystem _reputation = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
@@ -114,6 +116,9 @@ public sealed class PatientSystem : EntitySystem
             case MedicalConditionKind.OrganFailure:
                 ent.Comp.FailingOrgan = FirstOrgan(ent, proto);
                 break;
+            case MedicalConditionKind.ForeignBody:
+                TryLodgeForeignBody(ent, proto);
+                break;
         }
 
         ent.Comp.Initialized = true;
@@ -128,6 +133,10 @@ public sealed class PatientSystem : EntitySystem
         ClearToxin(ent);
         ent.Comp.Initialized = false;
         ent.Comp.Condition = null;
+        ent.Comp.Toxin = null;
+        ent.Comp.Antidote = null;
+        ent.Comp.FailingOrgan = null;
+        ent.Comp.ForeignBody = null;
         Setup(ent, condition);
     }
 
@@ -250,9 +259,47 @@ public sealed class PatientSystem : EntitySystem
                 }
 
                 return organs.Count > 0 && !organs.Contains(ent.Comp.FailingOrgan.Value);
+            case MedicalConditionKind.ForeignBody:
+                if (ent.Comp.ForeignBody is not { } foreign)
+                {
+                    // The torso wasn't ready when the condition started; try again, or pick another condition for a
+                    // body with no cavity.
+                    if (!TryLodgeForeignBody(ent, proto))
+                        SwapToOtherCondition(ent, proto);
+                    return false;
+                }
+
+                // Out of the torso cavity, or destroyed: cured.
+                return TerminatingOrDeleted(foreign)
+                       || GetTorso(ent) is not { } cavityTorso
+                       || !_container.TryGetContainingContainer((foreign, null, null), out var holder)
+                       || holder.Owner != cavityTorso;
             default:
                 return false;
         }
+    }
+
+    /// <summary>
+    /// Puts one of the condition's foreign objects into the torso cavity.
+    /// </summary>
+    private bool TryLodgeForeignBody(Entity<KesslerPatientComponent> ent, MedicalConditionPrototype proto)
+    {
+        if (proto.ForeignObjects.Count == 0
+            || GetTorso(ent) is not { } torso
+            || !TryComp<BodyPartComponent>(torso, out var part))
+        {
+            return false;
+        }
+
+        var item = Spawn(_random.Pick(proto.ForeignObjects), Transform(ent).Coordinates);
+        if (!_itemSlots.TryInsert(torso, part.ContainerName, item, null))
+        {
+            Del(item);
+            return false;
+        }
+
+        ent.Comp.ForeignBody = item;
+        return true;
     }
 
     private EntityUid? FirstOrgan(EntityUid body, MedicalConditionPrototype proto)

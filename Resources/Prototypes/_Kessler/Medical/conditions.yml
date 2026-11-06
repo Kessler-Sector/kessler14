@@ -104,3 +104,39 @@
     symptoms:
     - kessler-condition-liver-failure-symptom-confused
     - kessler-condition-liver-failure-symptom-collapse
+
+- type: medicalCondition
+  id: PatientForeignBody
+  name: kessler-condition-foreign-body
+  kind: ForeignBody
+  weight: 0.8
+  minutes: 30
+  rate: 300
+  foreignObjects:
+  - ShardGlass
+  - ShardGlassReinforced
+  - ShardGlassPlasma
+  stages:
+  - duration: 900
+    damagePerMinute:
+      types:
+        Piercing: 1
+    examine: kessler-condition-foreign-body-examine-1
+    symptoms:
+    - kessler-condition-foreign-body-symptom-wince
+    - kessler-condition-foreign-body-symptom-breath
+  - duration: 900
+    damagePerMinute:
+      types:
+        Piercing: 2
+    examine: kessler-condition-foreign-body-examine-2
+    symptoms:
+    - kessler-condition-foreign-body-symptom-wince
+    - kessler-condition-foreign-body-symptom-cough
+  - damagePerMinute:
+      types:
+        Piercing: 4
+    examine: kessler-condition-foreign-body-examine-3
+    symptoms:
+    - kessler-condition-foreign-body-symptom-cough
+    - kessler-condition-foreign-body-symptom-collapse

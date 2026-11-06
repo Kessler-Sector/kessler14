@@ -46,6 +46,12 @@ public sealed partial class KesslerPatientComponent : Component
     public EntityUid? FailingOrgan;
 
     /// <summary>
+    /// ForeignBody: the object lodged in the torso cavity. Cured once it is out.
+    /// </summary>
+    [DataField]
+    public EntityUid? ForeignBody;
+
+    /// <summary>
     /// Whether breathing immunity was given for stasis, so only that is taken away again.
     /// </summary>
     [DataField]
