@@ -263,6 +263,33 @@ namespace Content.Server.Database
             await db.DbContext.SaveChangesAsync();
             return row.Points;
         }
+
+        // Kessler: the licences a character holds, with when each was granted (UTC).
+        public async Task<Dictionary<string, DateTime>> GetLicencesAsync(int profileId)
+        {
+            await using var db = await GetDb();
+
+            var rows = await db.DbContext.KesslerLicence
+                .Where(l => l.ProfileId == profileId)
+                .ToListAsync();
+            return rows.ToDictionary(l => l.Licence, l => DateTime.SpecifyKind(l.GrantedAt, DateTimeKind.Utc));
+        }
+
+        // Kessler: grants a licence. Returns false if the profile doesn't exist or already holds it.
+        public async Task<bool> AddLicenceAsync(int profileId, string licence, DateTime grantedAt)
+        {
+            await using var db = await GetDb();
+
+            if (!await db.DbContext.Profile.AnyAsync(p => p.Id == profileId)
+                || await db.DbContext.KesslerLicence.AnyAsync(l => l.ProfileId == profileId && l.Licence == licence))
+            {
+                return false;
+            }
+
+            db.DbContext.KesslerLicence.Add(new KesslerLicence { ProfileId = profileId, Licence = licence, GrantedAt = grantedAt });
+            await db.DbContext.SaveChangesAsync();
+            return true;
+        }
         // End Kessler
 
         private static async Task SetSelectedCharacterSlotAsync(NetUserId userId, int newSlot, ServerDbContext db)

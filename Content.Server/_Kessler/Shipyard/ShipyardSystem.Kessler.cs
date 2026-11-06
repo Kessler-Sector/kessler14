@@ -1,10 +1,13 @@
+using Content.Server._Kessler.Licences;
 using Content.Shared._NF.Shipyard.Components;
 
 namespace Content.Server._NF.Shipyard.Systems;
 
-// Kessler: deed handling for ship storage. Deeds can only be edited by the shipyard system.
+// Kessler: deed handling for ship storage (deeds can only be edited by the shipyard system), and pilot licences.
 public sealed partial class ShipyardSystem
 {
+    [Dependency] private readonly KesslerLicenceSystem _kesslerLicences = default!;
+
     /// <summary>
     /// Removes the deed for <paramref name="shuttle"/> from every ID card that holds one, before the ship is stored.
     /// The ship's own deed goes into storage with it.
