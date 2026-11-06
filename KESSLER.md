@@ -171,6 +171,12 @@ Surgery comes from **Monolith's Shitmed** (`_Shitmed` folders), ported onto our 
 - **Shitmed (done):** body-part targeting, limb and organ surgery, amputation and reattachment, cybernetics, the medical biofabricator, and per body part damage in the health analyzer and MedTek cartridge.
 - **Goob's injury layer ("Woundmed"): shelved for now.** Wounds, bones, traumas, pain and consciousness on top of Shitmed. It is cheapest to add before the server opens to players; afterwards every saved body would need converting. Most of its runtime state isn't saved yet, so porting it means adding `[DataField]`s, relinking after load and round-trip tests.
 - **Biofabricator board:** found as medical loot; that is intended.
+- **Medical bounties use surgery (first slice of M6):**
+  - half of bounty corpses arrive with 1–2 arms or legs detached; the limbs go into the pod with the corpse;
+  - each missing limb adds 6,000 to the bounty, lost again for every limb not attached at redemption;
+  - cvars `kessler.medbounty.limb_chance`, `kessler.medbounty.max_limbs` and `kessler.medbounty.limb_bonus`;
+  - base rewards are halved from Coyote's tripled values;
+  - redeeming a bounty gives 20 Medical reputation.
 - **Energy surgical tools** (energy scalpel, searing tool, mechanical pinches, `SMSurgery` pack): should be locked behind science. Wire them up during the science rework.
 
 Port notes:
