@@ -5,7 +5,7 @@ kessler-patient-discharged = {CAPITALIZE(THE($patient))} thanks the staff and he
 kessler-patient-examine-cured = [color=green]{CAPITALIZE(SUBJECT($patient))} {CONJUGATE-BASIC($patient, "look", "looks")} like {SUBJECT($patient)} {CONJUGATE-BE($patient)} on the mend.[/color]
 kessler-patient-discharge-not-cured = The patient's condition hasn't been treated yet.
 kessler-patient-redeem-label-not-cured = Patient not yet treated.
-kessler-reputation-reason-patient = treating a patient
+kessler-reputation-reason-patient = treated a patient
 
 cmd-spawnpatient-desc = Spawns a living NPC patient at your feet, with a random or given condition.
 cmd-spawnpatient-help = Usage: spawnpatient [condition]

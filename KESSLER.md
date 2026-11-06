@@ -166,6 +166,13 @@ The plan is in `docs/kessler/design/` (`README.md` combines the three design doc
   - goods in a crate are priced as those goods; a sale point outside any station uses its grid's market;
   - examining a pallet console shows what that station pays now; `kessler.market.cargo_enabled` turns it off.
   - the **Market board** PDA program (preinstalled on every PDA, `MarketBoardCartridge`) lists every station with a pallet console and its current rates; PDAs saved before it existed don't get it automatically.
+- **Contract board (first slice of 5.2, procurement only):**
+  - every station with a pallet console posts procurement contracts (`Resources/Prototypes/_Kessler/Contracts/procurement.yml`): steel, glass, plastic, plasteel, gold, uranium, HV cable, ore, produce, bruise packs, ointment;
+  - a station keeps 2 open, plus 1 per 5 players online (up to 5), posting at most one every 10 minutes; open contracts are withdrawn after 3 real hours;
+  - the **Contracts** PDA program (preinstalled) lists open contracts at every station and your own; a character holds at most 2, with 2 real hours to deliver;
+  - deliver by selling the goods on a pallet at the issuing station (goods inside crates count); the pallet pays as usual, and the last delivery pays minutes x `kessler.contracts.rate` (150) into the holder's bank plus a point of reputation a minute on the contract's track;
+  - abandoning or running out of time drops the contract with no penalty; contracts are saved on the station with real UTC times;
+  - `kessler.contracts.enabled` turns posting off. Not yet: issuer budgets, per-character daily limits, licence gating, other contract types.
 - **Not yet:**
   - expedition T4 blueprints are still permanent (limited-run blueprints come in phase 3);
   - the loaner is given on every spawn under 10 hours of playtime, not once per account;

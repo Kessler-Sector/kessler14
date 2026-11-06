@@ -141,7 +141,7 @@ public sealed partial class NFCargoSystem
 
     #region Station
 
-    private bool SellPallets(Entity<NFCargoPalletConsoleComponent> consoleUid, EntityUid gridUid, out double amount, out double noMultiplierAmount, out Dictionary<string, double> additionalCurrency) // Frontier: first arg to Entity, add noMultiplierAmount
+    private bool SellPallets(Entity<NFCargoPalletConsoleComponent> consoleUid, EntityUid gridUid, out double amount, out double noMultiplierAmount, out Dictionary<string, double> additionalCurrency, EntityUid? seller = null) // Frontier: first arg to Entity, add noMultiplierAmount; Kessler: seller
     {
         GetPalletGoods(consoleUid, gridUid, out var toSell, out amount, out noMultiplierAmount, out additionalCurrency, commitMarket: true); // Kessler: record the sale in the market ledger
 
@@ -150,7 +150,7 @@ public sealed partial class NFCargoSystem
         if (toSell.Count == 0)
             return false;
 
-        var ev = new NFEntitySoldEvent(toSell, gridUid);
+        var ev = new NFEntitySoldEvent(toSell, gridUid, seller); // Kessler: seller
         RaiseLocalEvent(ref ev);
 
         foreach (var ent in toSell)
@@ -274,7 +274,7 @@ public sealed partial class NFCargoSystem
             return;
         }
 
-        if (!SellPallets(ent, gridUid, out var price, out var noMultiplierPrice, out Dictionary<string, double> additionalCurrency))
+        if (!SellPallets(ent, gridUid, out var price, out var noMultiplierPrice, out Dictionary<string, double> additionalCurrency, args.Actor)) // Kessler: seller
             return;
 
         // Handle market modifiers & immune objects
@@ -311,4 +311,4 @@ public sealed partial class NFCargoSystem
 /// deleted but after the price has been calculated.
 /// </summary>
 [ByRefEvent]
-public readonly record struct NFEntitySoldEvent(HashSet<EntityUid> Sold, EntityUid Grid);
+public readonly record struct NFEntitySoldEvent(HashSet<EntityUid> Sold, EntityUid Grid, EntityUid? Seller = null); // Kessler: Seller, for contracts

@@ -1,0 +1,17 @@
+- type: entity
+  parent: NFBasePDACartridge
+  id: ContractsCartridge
+  name: contracts cartridge
+  description: A program for taking procurement contracts posted by stations around the sector.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/cartridge.rsi
+    state: cart-y
+  - type: UIFragment
+    ui: !type:ContractsUi
+  - type: Cartridge
+    programName: kessler-contracts-program-name
+    icon:
+      sprite: _NF/Interface/icons.rsi
+      state: ledger
+  - type: ContractsCartridge

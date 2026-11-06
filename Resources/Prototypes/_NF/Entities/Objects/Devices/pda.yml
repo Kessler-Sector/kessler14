@@ -20,6 +20,7 @@
       - NanoTaskCartridge
       - NewsReaderCartridge
       - MarketBoardCartridge # Kessler
+      - ContractsCartridge # Kessler
       - BountyContractsCartridge
       - AstroNavCartridge
       - WantedListCartridge
@@ -399,6 +400,7 @@
     - NanoTaskCartridge
     - NewsReaderCartridge
     - MarketBoardCartridge # Kessler
+    - ContractsCartridge # Kessler
     - BountyContractsCartridge
     - AstroNavCartridge
     - LedgerCartridge
@@ -570,6 +572,7 @@
     - NanoTaskCartridge
     - NewsReaderCartridge
     - MarketBoardCartridge # Kessler
+    - ContractsCartridge # Kessler
     - BountyContractsCartridge
     - AstroNavCartridge
     - LedgerCartridge
@@ -621,6 +624,7 @@
     - NanoTaskCartridge
     - NewsReaderCartridge
     - MarketBoardCartridge # Kessler
+    - ContractsCartridge # Kessler
     - BountyContractsCartridge
     - AstroNavCartridge
     - LedgerCartridge
