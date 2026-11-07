@@ -60,6 +60,8 @@ public sealed class PersistenceSaveSystem : EntitySystem
         "VirtualItem",
         // A cast fishing lure.
         "FishingLure",
+        // Spray and splatter in flight; saving one threw.
+        "Vapor",
     };
 
     /// <summary>

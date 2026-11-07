@@ -111,6 +111,13 @@ public sealed class PrototypeSweepTest
                 }
             }
 
+        });
+
+        // Let spawned things settle for a moment (mob states, delayed setup), as they always have before a real save.
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
             before = Collect(entMan, mapSys, save, testMap.Grid);
 
             var loadedMap = RoundTripTest.SaveAndLoad(entMan, testMap.MapUid, new ResPath("/kessler-prototype-sweep.yml"));
