@@ -15,7 +15,7 @@ public sealed class MobStateActionsSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<MobStateActionsComponent, MobStateChangedEvent>(OnMobStateChanged);
-        SubscribeLocalEvent<MobStateComponent, ComponentInit>(OnMobStateComponentInit);
+        SubscribeLocalEvent<MobStateComponent, ComponentStartup>(OnMobStateComponentInit); // Kessler: was ComponentInit
     }
 
     private void OnMobStateChanged(EntityUid uid, MobStateActionsComponent component, MobStateChangedEvent args)
@@ -23,9 +23,14 @@ public sealed class MobStateActionsSystem : EntitySystem
         ComposeActions(uid, component, args.NewMobState);
     }
 
-    private void OnMobStateComponentInit(EntityUid uid, MobStateComponent component, ComponentInit args)
+    // Kessler: on startup, not init. On a persistent load, init ran before the actions container was set up, and
+    // adding an action crashed the whole load. A mob loaded with its actions keeps them.
+    private void OnMobStateComponentInit(EntityUid uid, MobStateComponent component, ComponentStartup args)
     {
         if (!TryComp<MobStateActionsComponent>(uid, out var mobStateActionsComp))
+            return;
+
+        if (mobStateActionsComp.GrantedActions.Count > 0 && mobStateActionsComp.GrantedActions.TrueForAll(Exists))
             return;
 
         ComposeActions(uid, mobStateActionsComp, component.CurrentState);

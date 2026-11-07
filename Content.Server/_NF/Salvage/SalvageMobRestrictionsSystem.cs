@@ -8,6 +8,8 @@ using Content.Server.Popups;
 using Content.Shared.Database;
 using Content.Shared.Popups;
 using Robust.Shared.Player;
+using Robust.Shared.Map.Events; // Kessler
+using Content.Server._Kessler.Persistence; // Kessler
 
 namespace Content.Server._NF.Salvage;
 
@@ -17,6 +19,7 @@ public sealed class SalvageMobRestrictionsSystem : EntitySystem
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private readonly PersistenceSaveSystem _persistence = default!; // Kessler
 
     public override void Initialize()
     {
@@ -27,6 +30,8 @@ public sealed class SalvageMobRestrictionsSystem : EntitySystem
         SubscribeLocalEvent<SalvageMobRestrictionsGridComponent, ComponentRemove>(OnRemoveGrid);
         SubscribeLocalEvent<NFSalvageMobRestrictionsComponent, MobStateChangedEvent>(OnMobState);
         SubscribeLocalEvent<NFSalvageMobRestrictionsComponent, EntParentChangedMessage>(OnParentChanged);
+        SubscribeLocalEvent<NFSalvageMobRestrictionsComponent, EntityTerminatingEvent>(OnTerminating); // Kessler
+        SubscribeLocalEvent<BeforeSerializationEvent>(OnBeforeSerialization); // Kessler
     }
 
     private void OnInit(EntityUid uid, NFSalvageMobRestrictionsComponent component, ComponentInit args)
@@ -54,6 +59,25 @@ public sealed class SalvageMobRestrictionsSystem : EntitySystem
             rg.MobsToKill.Remove(uid);
         }
     }
+
+    // Kessler: a grid's list of mobs could keep a mob that was deleted (one deleted while it was still being set up
+    // slipped past OnRemove), and saving the grid then threw on the missing entity, so the whole grid was left out of
+    // the save. The same happened for mobs the persistent save leaves out (ones that despawn on a timer). Drop mobs
+    // from the list as they are deleted, and prune anything that won't be saved before any save.
+    private void OnTerminating(Entity<NFSalvageMobRestrictionsComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (TryComp(ent.Comp.LinkedGridEntity, out SalvageMobRestrictionsGridComponent? rg))
+            rg.MobsToKill.Remove(ent);
+    }
+
+    private void OnBeforeSerialization(BeforeSerializationEvent args)
+    {
+        var query = EntityQueryEnumerator<SalvageMobRestrictionsGridComponent>();
+        while (query.MoveNext(out _, out var rg))
+            rg.MobsToKill.RemoveAll(mob => !Exists(mob)
+                                           || MetaData(mob).EntityPrototype is { } proto && !_persistence.IsPersisted(proto));
+    }
+    // End Kessler
 
     private void OnRemoveGrid(EntityUid uid, SalvageMobRestrictionsGridComponent component, ComponentRemove args)
     {

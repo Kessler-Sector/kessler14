@@ -13,7 +13,7 @@ public sealed class VehicleHornSystem : EntitySystem
     /// <inheritdoc/>
     public override void Initialize()
     {
-        SubscribeLocalEvent<VehicleHornComponent, ComponentInit>(OnVehicleHornInit);
+        SubscribeLocalEvent<VehicleHornComponent, ComponentStartup>(OnVehicleHornInit); // Kessler: was ComponentInit, see the handler
         SubscribeLocalEvent<VehicleHornComponent, ComponentShutdown>(OnVehicleHornShutdown);
         SubscribeLocalEvent<VehicleHornComponent, HornActionEvent>(OnHornHonkAction);
     }
@@ -28,7 +28,9 @@ public sealed class VehicleHornSystem : EntitySystem
         _actions.RemoveAction(uid, component.ActionEntity);
     }
 
-    private void OnVehicleHornInit(EntityUid uid, VehicleHornComponent component, ComponentInit args)
+    // Kessler: actions are added at startup, not init. On a persistent load, init runs before the actions containers
+    // are set up and crashed the whole load; at startup EnsureAction reuses the saved action.
+    private void OnVehicleHornInit(EntityUid uid, VehicleHornComponent component, ComponentStartup args)
     {
         _actions.AddAction(uid, ref component.ActionEntity, out var _, component.Action);
     }

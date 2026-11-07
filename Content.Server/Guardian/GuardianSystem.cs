@@ -50,6 +50,7 @@ namespace Content.Server.Guardian
             SubscribeLocalEvent<GuardianComponent, PlayerDetachedEvent>(OnGuardianPlayerDetached);
 
             SubscribeLocalEvent<GuardianHostComponent, ComponentInit>(OnHostInit);
+            SubscribeLocalEvent<GuardianHostComponent, ComponentStartup>(OnHostStartup); // Kessler
             SubscribeLocalEvent<GuardianHostComponent, MoveEvent>(OnHostMove);
             SubscribeLocalEvent<GuardianHostComponent, MobStateChangedEvent>(OnHostStateChange);
             SubscribeLocalEvent<GuardianHostComponent, ComponentShutdown>(OnHostShutdown);
@@ -120,6 +121,12 @@ namespace Content.Server.Guardian
         private void OnHostInit(EntityUid uid, GuardianHostComponent component, ComponentInit args)
         {
             component.GuardianContainer = _container.EnsureContainer<ContainerSlot>(uid, "GuardianContainer");
+        }
+
+        // Kessler: actions are added at startup, not init. On a persistent load, init runs before the actions containers
+        // are set up and crashed the whole load; at startup EnsureAction reuses the saved action.
+        private void OnHostStartup(EntityUid uid, GuardianHostComponent component, ComponentStartup args)
+        {
             _actionSystem.AddAction(uid, ref component.ActionEntity, component.Action);
         }
 

@@ -21,6 +21,13 @@ public sealed partial class CluwneComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     public float GiggleRandomChance = 0.1f;
 
+    /// <summary>
+    /// Kessler: whether the transformation (outfit, popup, sound) has happened. Saved, because startup also runs when a
+    /// persistent save loads, and re-dressing a loaded cluwne replaced whatever it was wearing.
+    /// </summary>
+    [DataField]
+    public bool Transformed;
+
     [DataField("emoteId", customTypeSerializer: typeof(PrototypeIdSerializer<EmoteSoundsPrototype>))]
     public string? EmoteSoundsId = "Cluwne";
 
