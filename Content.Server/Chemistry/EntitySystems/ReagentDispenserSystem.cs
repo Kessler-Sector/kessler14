@@ -46,7 +46,7 @@ namespace Content.Server.Chemistry.EntitySystems
         {
             base.Initialize();
 
-            SubscribeLocalEvent<ReagentDispenserComponent, ComponentStartup>(SubscribeUpdateUiState);
+            SubscribeLocalEvent<ReagentDispenserComponent, ComponentStartup>(OnStartup); // Kessler: was SubscribeUpdateUiState
             SubscribeLocalEvent<ReagentDispenserComponent, SolutionContainerChangedEvent>(SubscribeUpdateUiState);
             // SubscribeLocalEvent<ReagentDispenserComponent, EntInsertedIntoContainerMessage>(SubscribeUpdateUiState, after: [typeof(SharedStorageSystem)]); // Frontier
             SubscribeLocalEvent<ReagentDispenserComponent, EntInsertedIntoContainerMessage>(OnEntInserted, after: [typeof(SharedStorageSystem)]); // Frontier: Auto label on insert
@@ -264,7 +264,21 @@ namespace Content.Server.Chemistry.EntitySystems
             // Frontier: set auto-labeller
             ent.Comp.AutoLabel = ent.Comp.CanAutoLabel; // Frontier: set auto-labeller
 
-            _itemSlotsSystem.AddItemSlot(ent.Owner, SharedReagentDispenser.OutputSlotName, ent.Comp.BeakerSlot);
+            EnsureBeakerSlot(ent); // Kessler: normally already added at startup
+        }
+
+        // Kessler: the beaker slot was only added on map init, which doesn't run when a persistent save loads, so a
+        // loaded dispenser had no beaker slot at all. Startup runs both on spawn and on load.
+        private void OnStartup(Entity<ReagentDispenserComponent> ent, ref ComponentStartup args)
+        {
+            EnsureBeakerSlot(ent);
+            UpdateUiState(ent);
+        }
+
+        private void EnsureBeakerSlot(Entity<ReagentDispenserComponent> ent)
+        {
+            if (!TryComp<ItemSlotsComponent>(ent, out var slots) || !_itemSlotsSystem.TryGetSlot(ent.Owner, SharedReagentDispenser.OutputSlotName, out _, slots))
+                _itemSlotsSystem.AddItemSlot(ent.Owner, SharedReagentDispenser.OutputSlotName, ent.Comp.BeakerSlot);
         }
     }
 }

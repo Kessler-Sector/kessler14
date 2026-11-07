@@ -4,6 +4,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
+using Content.Shared.Containers.ItemSlots; // Kessler
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Movement.Components;
@@ -36,9 +37,27 @@ public partial class SharedBodySystem
 
         // Shitmed Change Start
         SubscribeLocalEvent<BodyPartComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<BodyPartComponent, ComponentStartup>(OnPartStartup); // Kessler
         SubscribeLocalEvent<BodyPartComponent, ComponentRemove>(OnBodyPartRemove);
         SubscribeLocalEvent<BodyPartComponent, AmputateAttemptEvent>(OnAmputateAttempt);
         SubscribeLocalEvent<BodyPartComponent, BodyPartEnableChangedEvent>(OnPartEnableChanged);
+    }
+
+    // Kessler: the torso's cavity slot was only added on map init, which doesn't run when a persistent save loads, so
+    // every loaded body lost it (cavity implant surgery and lodged foreign objects need it).
+    private void OnPartStartup(Entity<BodyPartComponent> ent, ref ComponentStartup args)
+    {
+        if (ent.Comp.PartType == BodyPartType.Torso)
+            EnsureCavitySlot(ent);
+    }
+
+    private void EnsureCavitySlot(Entity<BodyPartComponent> ent)
+    {
+        if (TryComp<ItemSlotsComponent>(ent, out var slots) && _slots.TryGetSlot(ent, ent.Comp.ContainerName, out _, slots))
+            return;
+
+        _slots.AddItemSlot(ent, ent.Comp.ContainerName, ent.Comp.ItemInsertionSlot);
+        Dirty(ent, ent.Comp);
     }
 
     private void OnMapInit(Entity<BodyPartComponent> ent, ref MapInitEvent args)
@@ -48,8 +67,7 @@ public partial class SharedBodySystem
             // For whatever reason this slot is initialized properly on the server, but not on the client.
             // This seems to be an issue due to wiz-merge, on my old branch it was properly instantiating
             // ItemInsertionSlot's container on both ends. It does show up properly on ItemSlotsComponent though.
-            _slots.AddItemSlot(ent, ent.Comp.ContainerName, ent.Comp.ItemInsertionSlot);
-            Dirty(ent, ent.Comp);
+            EnsureCavitySlot(ent); // Kessler: normally already added at startup
         }
 
         if (ent.Comp.OnAdd is not null || ent.Comp.OnRemove is not null)

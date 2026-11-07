@@ -13,7 +13,7 @@ namespace Content.Server._NF.Salvage;
 public sealed partial class NFSalvageMobRestrictionsComponent : Component
 {
     [DataField, ViewVariables(VVAccess.ReadOnly)]
-    public EntityUid LinkedGridEntity = EntityUid.Invalid;
+    public EntityUid? LinkedGridEntity; // Kessler: nullable, so saving one whose prototype leaves it unset doesn't log an invalid entity reference
 
     /// <summary>
     /// If set to false, this mob will not be despawned when its linked entity is despawned.

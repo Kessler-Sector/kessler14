@@ -374,6 +374,9 @@ public sealed class PersistentSectorSystem : EntitySystem
 
         try
         {
+            // Saving a full sector takes tens of seconds and logs nothing meanwhile; say so, so nobody closes the
+            // window thinking it hung (closing it loses the save).
+            Log.Info($"Saving the persistent sector ({reason}). This takes a while; don't close the server.");
             SaveSector(sectorMap.Value, reason);
             return true;
         }
