@@ -29,6 +29,7 @@ public sealed class MimePowersSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<MimePowersComponent, ComponentInit>(OnComponentInit);
+        SubscribeLocalEvent<MimePowersComponent, ComponentStartup>(OnComponentStartup); // Kessler
         SubscribeLocalEvent<MimePowersComponent, ComponentShutdown>(OnComponentShutdown);
         SubscribeLocalEvent<MimePowersComponent, InvisibleWallActionEvent>(OnInvisibleWall);
 
@@ -68,6 +69,12 @@ public sealed class MimePowersSystem : EntitySystem
         }
 
         _alertsSystem.ShowAlert(ent, ent.Comp.VowAlert);
+    }
+
+    // Kessler: actions are added at startup, not init. On a persistent load, init runs before the actions containers
+    // are set up and crashed the whole load; at startup EnsureAction reuses the saved action.
+    private void OnComponentStartup(Entity<MimePowersComponent> ent, ref ComponentStartup args)
+    {
         _actionsSystem.AddAction(ent, ref ent.Comp.InvisibleWallActionEntity, ent.Comp.InvisibleWallAction);
     }
 

@@ -37,6 +37,12 @@ public sealed partial class ReactorPartSystem
 
         var burncomp = EnsureComp<DamageOnInteractComponent>(uid);
 
+        // Kessler: added here without its required damage, which stayed null while the part was cool; saving a null
+
+        // required field threw and the whole part was left out of the save.
+
+        burncomp.Damage ??= new DamageSpecifier();
+
         burncomp.IsDamageActive = component.Temperature > Atmospherics.T0C + _hotTemp;
 
         if (burncomp.IsDamageActive)

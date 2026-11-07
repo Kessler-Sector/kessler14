@@ -166,6 +166,13 @@ public sealed partial class XenoArtifactComponent : Component
     /// </summary>
     [DataField]
     public EntProtoId<InstantActionComponent> SelfActivateAction = "ActionArtifactActivate";
+
+    /// <summary>
+    /// Kessler: the self-activate action entity. Saved, so loading a persistent save reuses it instead of adding
+    /// another one on every load.
+    /// </summary>
+    [DataField]
+    public EntityUid? SelfActivateActionEntity;
 }
 
 /// <summary>

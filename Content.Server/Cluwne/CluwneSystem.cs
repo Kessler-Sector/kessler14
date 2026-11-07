@@ -71,6 +71,11 @@ public sealed class CluwneSystem : EntitySystem
             return;
         _prototypeManager.TryIndex(component.EmoteSoundsId, out EmoteSounds);
 
+        // Kessler: the rest is the transformation itself; once only, not again on every load.
+        if (component.Transformed)
+            return;
+        component.Transformed = true;
+
         EnsureComp<AutoEmoteComponent>(uid);
         _autoEmote.AddEmote(uid, "CluwneGiggle");
         EnsureComp<ClumsyComponent>(uid);

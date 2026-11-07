@@ -1,5 +1,6 @@
 using Content.Shared.NPC.Components;
 using System.Linq;
+using Robust.Shared.Map.Events; // Kessler
 
 namespace Content.Shared.NPC.Systems;
 
@@ -19,6 +20,23 @@ public sealed partial class NpcFactionSystem
 
         SubscribeLocalEvent<FactionExceptionComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<FactionExceptionTrackerComponent, ComponentShutdown>(OnTrackerShutdown);
+        SubscribeLocalEvent<BeforeSerializationEvent>(OnBeforeSerialization); // Kessler
+    }
+
+    // Kessler: an exception list could keep an entity that was deleted before its tracker was set up, and saving then
+    // logged a reference to a deleted entity. Drop deleted entities from the lists before any save.
+    private void OnBeforeSerialization(BeforeSerializationEvent args)
+    {
+        var exceptions = EntityQueryEnumerator<FactionExceptionComponent>();
+        while (exceptions.MoveNext(out _, out var exception))
+        {
+            exception.Ignored.RemoveWhere(uid => !Exists(uid));
+            exception.Hostiles.RemoveWhere(uid => !Exists(uid));
+        }
+
+        var trackers = EntityQueryEnumerator<FactionExceptionTrackerComponent>();
+        while (trackers.MoveNext(out _, out var tracker))
+            tracker.Entities.RemoveWhere(uid => !Exists(uid));
     }
 
     private void OnShutdown(Entity<FactionExceptionComponent> ent, ref ComponentShutdown args)

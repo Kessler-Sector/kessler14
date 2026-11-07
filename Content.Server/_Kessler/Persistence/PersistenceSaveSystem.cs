@@ -47,6 +47,24 @@ public sealed class PersistenceSaveSystem : EntitySystem
     };
 
     /// <summary>
+    /// Prototypes with any of these components are left out of persistent saves even if map files may hold them. They
+    /// are momentary and only valid while the entity that made them points at them (PrototypeSweepTest found these).
+    /// </summary>
+    private static readonly string[] MomentaryComponents =
+    {
+        // Beams and lightning in flight, and their invisible controllers.
+        "Beam",
+        // Invisible power loads that exist while someone is being shocked.
+        "Electrocution",
+        // Placeholders in hands while pulling or holding something two-handed. A saved one blocked the hand forever.
+        "VirtualItem",
+        // A cast fishing lure.
+        "FishingLure",
+        // Spray and splatter in flight; saving one threw.
+        "Vapor",
+    };
+
+    /// <summary>
     /// Prototypes that stay unsaved even in a persistent save.
     /// </summary>
     private static readonly HashSet<string> TransientPrototypes = new()
@@ -56,10 +74,6 @@ public sealed class PersistenceSaveSystem : EntitySystem
         // Polymorph forms: the original body lives on a separate paused map.
         "EtherealJaunt",
         "DesynchronizedPocket",
-        // Remote eyes and holograms owned by an AI core.
-        "ShipAiEye",
-        "ShipAiProjection",
-        "StationAiHolo",
     };
 
     /// <summary>
@@ -103,6 +117,12 @@ public sealed class PersistenceSaveSystem : EntitySystem
     /// </summary>
     public bool IsPersisted(EntityPrototype proto)
     {
+        foreach (var component in MomentaryComponents)
+        {
+            if (proto.Components.ContainsKey(component))
+                return false;
+        }
+
         return proto.MapSavable ? !UnsavedPrototypes.Contains(proto.ID) : !IsTransient(proto);
     }
 

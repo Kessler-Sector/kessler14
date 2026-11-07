@@ -74,4 +74,61 @@ public sealed class MobStateRoundTripTest
 
         await pair.CleanReturnAsync();
     }
+
+    /// <summary>
+    /// The state actions a mob has after loading match what it had when saved, for each state. The prototype sweep
+    /// found a dead shadekin coming back with the critical-state actions.
+    /// </summary>
+    [TestCase("MobHuman", MobState.Critical)]
+    [TestCase("MobHuman", MobState.Dead)]
+    [TestCase("MobShadekin", MobState.Critical)]
+    [TestCase("MobShadekin", MobState.Dead)]
+    public async Task StateActionsMatchAfterLoad(string prototype, MobState mobState)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entManager = server.EntMan;
+        var snapshots = entManager.System<SectorSnapshotSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        EntityUid mob = default;
+        await server.WaitPost(() =>
+        {
+            mob = entManager.SpawnEntity(prototype, testMap.GridCoords);
+            Assert.That(entManager.System<MobThresholdSystem>().TryGetThresholdForState(mob, mobState, out var threshold));
+            var blunt = server.ProtoMan.Index<DamageTypePrototype>(Blunt);
+            entManager.System<DamageableSystem>().TryChangeDamage(mob, new DamageSpecifier(blunt, threshold!.Value), true);
+        });
+        await pair.RunTicksSync(5);
+
+        EntityUid loaded = default;
+        string[] before = null;
+        await server.WaitPost(() =>
+        {
+            Assert.That(entManager.GetComponent<MobStateComponent>(mob).CurrentState, Is.EqualTo(mobState));
+            before = StateActions(entManager, mob);
+
+            var loadedMap = RoundTripTest.SaveAndLoad(entManager, testMap.MapUid,
+                new ResPath($"/kessler-roundtrip-test-{prototype}-{mobState}.yml"));
+            loaded = snapshots.CollectTree([loadedMap])
+                .Single(uid => entManager.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == prototype);
+        });
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entManager.GetComponent<MobStateComponent>(loaded).CurrentState, Is.EqualTo(mobState));
+            Assert.That(StateActions(entManager, loaded), Is.EquivalentTo(before), $"state actions of a {mobState} {prototype}");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static string[] StateActions(IEntityManager entManager, EntityUid mob)
+    {
+        return entManager.GetComponent<MobStateActionsComponent>(mob).GrantedActions
+            .Select(a => entManager.GetComponent<MetaDataComponent>(a).EntityPrototype?.ID ?? "?")
+            .OrderBy(id => id)
+            .ToArray();
+    }
 }
