@@ -17,7 +17,7 @@ public sealed partial class MiningScannerViewerComponent : Component
     public TimeSpan PingDelay = TimeSpan.FromSeconds(5);
 
     [DataField, AutoNetworkedField, AutoPausedField]
-    public TimeSpan NextPingTime = TimeSpan.MaxValue;
+    public TimeSpan NextPingTime = TimeSpan.FromDays(365_000); // Kessler: was TimeSpan.MaxValue, which overflowed when unpaused (auto-paused field)
 
     [DataField]
     public EntityCoordinates? LastPingLocation;

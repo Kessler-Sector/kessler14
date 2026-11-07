@@ -111,7 +111,9 @@ public sealed partial class TriggerSystem
             if (curTime >= trigger.NextVisualUpdate)
             {
                 // Update the visual state once the animation is done.
-                trigger.NextVisualUpdate = TimeSpan.MaxValue;
+                // Kessler: a far-off time rather than TimeSpan.MaxValue. The field is auto-paused, and adding the paused
+                // time to MaxValue overflowed and threw when a paused map holding the trigger was unpaused or deleted.
+                trigger.NextVisualUpdate = TimeSpan.FromDays(365_000);
                 Dirty(uid, trigger);
                 SetProximityAppearance((uid, trigger));
             }
