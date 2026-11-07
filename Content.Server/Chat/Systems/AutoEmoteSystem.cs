@@ -67,11 +67,16 @@ public sealed class AutoEmoteSystem : EntitySystem
 
     private void OnUnpaused(EntityUid uid, AutoEmoteComponent autoEmote, ref EntityUnpausedEvent args)
     {
+        // Kessler: "never" is TimeSpan.MaxValue, and adding the paused time to it overflowed and threw whenever a mob
+        // with no emote due was unpaused (a loaded or deleted paused map).
         foreach (var key in autoEmote.EmoteTimers.Keys)
         {
-            autoEmote.EmoteTimers[key] += args.PausedTime;
+            if (autoEmote.EmoteTimers[key] != TimeSpan.MaxValue)
+                autoEmote.EmoteTimers[key] += args.PausedTime;
         }
-        autoEmote.NextEmoteTime += args.PausedTime;
+
+        if (autoEmote.NextEmoteTime != TimeSpan.MaxValue)
+            autoEmote.NextEmoteTime += args.PausedTime;
     }
 
     /// <summary>
