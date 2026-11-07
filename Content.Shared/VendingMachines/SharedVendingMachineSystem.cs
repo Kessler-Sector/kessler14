@@ -44,6 +44,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<VendingMachineComponent, ComponentGetState>(OnVendingGetState);
         SubscribeLocalEvent<VendingMachineComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<VendingMachineComponent, ComponentStartup>(OnVendingStartup); // Kessler
         SubscribeLocalEvent<VendingMachineComponent, GotEmaggedEvent>(OnEmagged);
         SubscribeLocalEvent<VendingMachineComponent, GotUnEmaggedEvent>(OnUnemagged); // Frontier
         SubscribeLocalEvent<VendingMachineComponent, EntInsertedIntoContainerMessage>(OnEntityInserted); // Frontier
@@ -152,9 +153,21 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         RestockInventoryFromPrototype(uid, component, component.InitialStockQuality);
 
         // Frontier: create the cash slot if this entity has one
-        if (component.CashSlot != null && component.CashSlotName != null)
-            ItemSlots.AddItemSlot(uid, component.CashSlotName, component.CashSlot);
+        EnsureCashSlot(uid, component); // Kessler: normally already added at startup
         // End Frontier
+    }
+
+    // Kessler: map init doesn't run when a persistent save loads, so the cash slot was missing on loaded machines.
+    private void OnVendingStartup(EntityUid uid, VendingMachineComponent component, ComponentStartup args)
+    {
+        EnsureCashSlot(uid, component);
+    }
+
+    private void EnsureCashSlot(EntityUid uid, VendingMachineComponent component)
+    {
+        if (component.CashSlot != null && component.CashSlotName != null
+            && (!TryComp<ItemSlotsComponent>(uid, out var slots) || !ItemSlots.TryGetSlot(uid, component.CashSlotName, out _, slots)))
+            ItemSlots.AddItemSlot(uid, component.CashSlotName, component.CashSlot);
     }
 
     protected virtual void EjectItem(EntityUid uid, VendingMachineComponent? vendComponent = null, bool forceEject = false) { }

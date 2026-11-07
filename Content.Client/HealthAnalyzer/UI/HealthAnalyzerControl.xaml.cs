@@ -259,15 +259,17 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
             var integrity = state.Body.TryGetValue(bodyPart, out var value) ? value : TargetIntegrity.Severed;
             button.Disabled = !PartSelectionEnabled || integrity == TargetIntegrity.Severed;
             button.Pressed = selected == bodyPart;
-            button.ModulateSelfOverride = IntegrityColor(integrity);
+            // Colour the text, not the button: buttons are drawn from a white texture tinted by the style, so
+            // overriding the tint turns them into blank white boxes with unreadable white text.
+            button.Label.FontColorOverride = IntegrityColor(integrity);
         }
     }
 
-    private static Color IntegrityColor(TargetIntegrity integrity)
+    private static Color? IntegrityColor(TargetIntegrity integrity)
     {
         return integrity switch
         {
-            TargetIntegrity.Healthy => Color.White,
+            TargetIntegrity.Healthy => null,
             TargetIntegrity.LightlyWounded => Color.FromHex("#D0F0A0"),
             TargetIntegrity.SomewhatWounded => Color.FromHex("#F0F080"),
             TargetIntegrity.ModeratelyWounded => Color.FromHex("#F0C060"),

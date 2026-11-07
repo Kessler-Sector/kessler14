@@ -57,12 +57,13 @@ public sealed class DebrisFeaturePlacerSystem : BaseWorldSystem
     /// </summary>
     private void OnDebrisMove(EntityUid uid, OwnedDebrisComponent component, ref MoveEvent args)
     {
-        if (!HasComp<WorldChunkComponent>(component.OwningController))
+        if (component.OwningController is not { } controller // Kessler: nullable
+            || !HasComp<WorldChunkComponent>(controller))
             return; // Redundant logic, prolly needs it's own handler for your custom system.
 
-        var placer = Comp<DebrisFeaturePlacerControllerComponent>(component.OwningController);
+        var placer = Comp<DebrisFeaturePlacerControllerComponent>(controller);
         var xform = args.Component;
-        var ownerXform = Transform(component.OwningController);
+        var ownerXform = Transform(controller);
         if (xform.MapUid is null || ownerXform.MapUid is null)
             return; // not our problem
 

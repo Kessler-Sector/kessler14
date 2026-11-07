@@ -4,6 +4,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
+using Content.Shared.Containers.ItemSlots; // Kessler
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Movement.Components;
@@ -41,6 +42,21 @@ public partial class SharedBodySystem
         SubscribeLocalEvent<BodyPartComponent, BodyPartEnableChangedEvent>(OnPartEnableChanged);
     }
 
+    // Kessler: the torso's cavity slot is only added on map init, which doesn't run when a persistent save loads, so
+    // every loaded body lost it (cavity implant surgery and lodged foreign objects need it). The persistence loader
+    // calls this for loaded torsos. Not done at startup: an entity that isn't map-initialized must not gain components.
+    public void EnsureCavitySlot(Entity<BodyPartComponent> ent)
+    {
+        if (ent.Comp.PartType != BodyPartType.Torso)
+            return;
+
+        if (TryComp<ItemSlotsComponent>(ent, out var slots) && _slots.TryGetSlot(ent, ent.Comp.ContainerName, out _, slots))
+            return;
+
+        _slots.AddItemSlot(ent, ent.Comp.ContainerName, ent.Comp.ItemInsertionSlot);
+        Dirty(ent, ent.Comp);
+    }
+
     private void OnMapInit(Entity<BodyPartComponent> ent, ref MapInitEvent args)
     {
         if (ent.Comp.PartType == BodyPartType.Torso)
@@ -48,8 +64,7 @@ public partial class SharedBodySystem
             // For whatever reason this slot is initialized properly on the server, but not on the client.
             // This seems to be an issue due to wiz-merge, on my old branch it was properly instantiating
             // ItemInsertionSlot's container on both ends. It does show up properly on ItemSlotsComponent though.
-            _slots.AddItemSlot(ent, ent.Comp.ContainerName, ent.Comp.ItemInsertionSlot);
-            Dirty(ent, ent.Comp);
+            EnsureCavitySlot(ent); // Kessler: shared with the persistence loader
         }
 
         if (ent.Comp.OnAdd is not null || ent.Comp.OnRemove is not null)

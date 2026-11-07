@@ -713,6 +713,10 @@ public abstract partial class SharedSurgerySystem
         if (!CanPerformStep(user, body, part, step, true, out _, out _, out var validTools))
             return;
 
+        // Kessler: range is checked against the patient, see the do-after below.
+        if (!_interaction.InRangeAndAccessible(user, body))
+            return;
+
         var speed = 1f;
         var usedEv = new SurgeryToolUsedEvent(user, body);
         // We need to check for nullability because of surgeries that dont require a tool, like Cavity Implants
@@ -761,6 +765,10 @@ public abstract partial class SharedSurgerySystem
             DuplicateCondition = DuplicateConditions.SameEvent,
             NeedHand = true,
             BreakOnHandChange = true,
+            // Kessler: the target is the body part, which is inside the patient, and the do-after's own range check
+            // treats anything inside someone else as out of reach: surgery on anyone but yourself cancelled at once.
+            // Range is checked against the patient before starting; moving still breaks it.
+            DistanceThreshold = null,
         };
 
         if (_doAfter.TryStartDoAfter(doAfter))

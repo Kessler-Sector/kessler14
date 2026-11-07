@@ -47,6 +47,7 @@ public abstract partial class SharedSurgerySystem : EntitySystem
     [Dependency] private RotateToFaceSystem _rotateToFace = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!; // Kessler
 
     private readonly Dictionary<EntProtoId, EntityUid> _surgeries = new();
 

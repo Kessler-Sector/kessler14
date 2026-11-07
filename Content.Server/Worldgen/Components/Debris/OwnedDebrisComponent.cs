@@ -19,6 +19,6 @@ public sealed partial class OwnedDebrisComponent : Component
     /// <summary>
     ///     The DebrisFeaturePlacerController-having entity that owns this.
     /// </summary>
-    [DataField("owningController")] public EntityUid OwningController;
+    [DataField("owningController")] public EntityUid? OwningController; // Kessler: nullable, so saving one whose prototype leaves it unset doesn't log an invalid entity reference
 }
 

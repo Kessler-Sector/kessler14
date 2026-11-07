@@ -44,6 +44,7 @@ public sealed class GeneratorSystem : SharedGeneratorSystem
         SubscribeLocalEvent<FuelGeneratorComponent, PortableGeneratorSetTargetPowerMessage>(OnTargetPowerSet);
         SubscribeLocalEvent<FuelGeneratorComponent, PortableGeneratorEjectFuelMessage>(OnEjectFuel);
         SubscribeLocalEvent<FuelGeneratorComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);
+        SubscribeLocalEvent<FuelGeneratorComponent, ComponentStartup>(OnStartup); // Kessler
         SubscribeLocalEvent<SolidFuelGeneratorAdapterComponent, GeneratorGetFuelEvent>(SolidGetFuel);
         SubscribeLocalEvent<SolidFuelGeneratorAdapterComponent, GeneratorUseFuel>(SolidUseFuel);
         SubscribeLocalEvent<SolidFuelGeneratorAdapterComponent, GeneratorEmpty>(SolidEmpty);
@@ -57,10 +58,22 @@ public sealed class GeneratorSystem : SharedGeneratorSystem
     {
         // Turn off generator if unanchored while running.
 
-        if (!component.On)
+        // Kessler: only on unanchoring. Loading a save anchors everything, which used to switch every running
+        // generator off.
+        if (!component.On || args.Anchored)
             return;
 
         SetFuelGeneratorOn(uid, false, component);
+    }
+
+    // Kessler: appearance and ambience aren't saved, so a generator loaded running looked and sounded off.
+    private void OnStartup(EntityUid uid, FuelGeneratorComponent component, ComponentStartup args)
+    {
+        if (!component.On)
+            return;
+
+        TryUpdateGeneratorRadiation(uid, true, component);
+        UpdateState(uid, component);
     }
 
     private void OnEjectFuel(EntityUid uid, FuelGeneratorComponent component, PortableGeneratorEjectFuelMessage args)

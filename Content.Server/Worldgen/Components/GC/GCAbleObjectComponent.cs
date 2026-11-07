@@ -20,6 +20,6 @@ public sealed partial class GCAbleObjectComponent : Component
 
     [ViewVariables(VVAccess.ReadOnly)]
     [DataField("linkedGridEntity")]
-    public EntityUid LinkedGridEntity = EntityUid.Invalid;
+    public EntityUid? LinkedGridEntity; // Kessler: nullable, so saving one whose prototype leaves it unset doesn't log an invalid entity reference
 }
 
