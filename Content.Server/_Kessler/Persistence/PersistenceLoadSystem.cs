@@ -6,6 +6,8 @@ using Content.Server.Holiday;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.Maps;
+using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.Mind;
 using Content.Shared.Players;
 using Robust.Server.Player;
@@ -39,6 +41,7 @@ public sealed class PersistenceLoadSystem : EntitySystem
     [Dependency] private readonly PublicTransitSystem _publicTransit = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly SharedBodySystem _body = default!;
 
     private bool _loadingSave;
 
@@ -130,6 +133,7 @@ public sealed class PersistenceLoadSystem : EntitySystem
         _publicTransit.RegisterLoadedStops(result);
         RestoreNpcOwners(result);
         RestorePlayerMindLinks(result);
+        RestoreCavitySlots(result);
         return true;
     }
 
@@ -192,6 +196,18 @@ public sealed class PersistenceLoadSystem : EntitySystem
     /// NPC blackboards are not saved (their serializer can only read), and the blackboard's owner is set at map-init,
     /// which does not run on load. Without it, every loaded NPC fails to plan.
     /// </summary>
+    /// <summary>
+    /// Torsos get their cavity item slot on map init, which doesn't run on load.
+    /// </summary>
+    private void RestoreCavitySlots(LoadResult result)
+    {
+        foreach (var uid in result.Entities)
+        {
+            if (TryComp<BodyPartComponent>(uid, out var part))
+                _body.EnsureCavitySlot((uid, part));
+        }
+    }
+
     private void RestoreNpcOwners(LoadResult result)
     {
         var query = EntityQueryEnumerator<HTNComponent>();

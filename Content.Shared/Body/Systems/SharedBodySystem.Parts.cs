@@ -37,22 +37,19 @@ public partial class SharedBodySystem
 
         // Shitmed Change Start
         SubscribeLocalEvent<BodyPartComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<BodyPartComponent, ComponentStartup>(OnPartStartup); // Kessler
         SubscribeLocalEvent<BodyPartComponent, ComponentRemove>(OnBodyPartRemove);
         SubscribeLocalEvent<BodyPartComponent, AmputateAttemptEvent>(OnAmputateAttempt);
         SubscribeLocalEvent<BodyPartComponent, BodyPartEnableChangedEvent>(OnPartEnableChanged);
     }
 
-    // Kessler: the torso's cavity slot was only added on map init, which doesn't run when a persistent save loads, so
-    // every loaded body lost it (cavity implant surgery and lodged foreign objects need it).
-    private void OnPartStartup(Entity<BodyPartComponent> ent, ref ComponentStartup args)
+    // Kessler: the torso's cavity slot is only added on map init, which doesn't run when a persistent save loads, so
+    // every loaded body lost it (cavity implant surgery and lodged foreign objects need it). The persistence loader
+    // calls this for loaded torsos. Not done at startup: an entity that isn't map-initialized must not gain components.
+    public void EnsureCavitySlot(Entity<BodyPartComponent> ent)
     {
-        if (ent.Comp.PartType == BodyPartType.Torso)
-            EnsureCavitySlot(ent);
-    }
+        if (ent.Comp.PartType != BodyPartType.Torso)
+            return;
 
-    private void EnsureCavitySlot(Entity<BodyPartComponent> ent)
-    {
         if (TryComp<ItemSlotsComponent>(ent, out var slots) && _slots.TryGetSlot(ent, ent.Comp.ContainerName, out _, slots))
             return;
 
@@ -67,7 +64,7 @@ public partial class SharedBodySystem
             // For whatever reason this slot is initialized properly on the server, but not on the client.
             // This seems to be an issue due to wiz-merge, on my old branch it was properly instantiating
             // ItemInsertionSlot's container on both ends. It does show up properly on ItemSlotsComponent though.
-            EnsureCavitySlot(ent); // Kessler: normally already added at startup
+            EnsureCavitySlot(ent); // Kessler: shared with the persistence loader
         }
 
         if (ent.Comp.OnAdd is not null || ent.Comp.OnRemove is not null)
