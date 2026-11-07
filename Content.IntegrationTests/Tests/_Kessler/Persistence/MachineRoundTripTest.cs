@@ -1,6 +1,10 @@
 #pragma warning disable RA0002 // Tests read component state directly.
 using System.Linq;
 using Content.Server._Kessler.Persistence;
+using Content.Server.Atmos.EntitySystems;
+using Content.Shared._FarHorizons.Power.Generation.FissionGenerator;
+using Content.Shared.Atmos;
+using Content.Shared.Damage.Components;
 using Content.Server._NF.Salvage;
 using Content.Server.Worldgen.Components.Debris;
 using Content.Server.Worldgen.Components.GC;
@@ -115,6 +119,35 @@ public sealed class MachineRoundTripTest
 
             // Any error logged while saving fails the test.
             RoundTripTest.SaveAndLoad(entMan, testMap.MapUid, new ResPath("/kessler-roundtrip-test-debris.yml"));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// A reactor fuel rod gets DamageOnInteract at runtime when its temperature changes. While cool, its damage used to
+    /// stay null, and saving it threw, which left the rod out of the save.
+    /// </summary>
+    [Test]
+    public async Task CoolReactorRodSavesWithoutErrors()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var rod = entMan.SpawnEntity("UraniumReactorFuelRod", testMap.GridCoords);
+            entMan.GetComponent<ReactorPartComponent>(rod).Temperature = Atmospherics.T0C + 30; // Warm, not burning.
+            var xform = entMan.GetComponent<TransformComponent>(rod);
+            var air = new GasMixture(Atmospherics.CellVolume) { Temperature = Atmospherics.T20C };
+            var ev = new AtmosExposedUpdateEvent(xform.Coordinates, air, xform);
+            entMan.EventBus.RaiseLocalEvent(rod, ref ev);
+            Assert.That(entMan.HasComponent<DamageOnInteractComponent>(rod), "the rod got its burn component");
+
+            // Any error logged while saving fails the test.
+            RoundTripTest.SaveAndLoad(entMan, testMap.MapUid, new ResPath("/kessler-roundtrip-test-reactor-rod.yml"));
         });
 
         await pair.CleanReturnAsync();
