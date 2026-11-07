@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Server._Kessler.Persistence;
 using Content.Server.Atmos.EntitySystems;
 using Content.Shared._FarHorizons.Power.Generation.FissionGenerator;
+using Content.Shared.Animals.Components;
 using Content.Shared.Atmos;
 using Content.Shared.Damage.Components;
 using Content.Server._NF.Salvage;
@@ -148,6 +149,32 @@ public sealed class MachineRoundTripTest
 
             // Any error logged while saving fails the test.
             RoundTripTest.SaveAndLoad(entMan, testMap.MapUid, new ResPath("/kessler-roundtrip-test-reactor-rod.yml"));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// A parrot that has learned a phrase used to throw when saved (its memories weren't serializable) and was left out.
+    /// </summary>
+    [Test]
+    public async Task ParrotKeepsWhatItLearned()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var snapshots = entMan.System<SectorSnapshotSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var parrot = entMan.SpawnEntity("MobParrot", testMap.GridCoords);
+            entMan.GetComponent<ParrotMemoryComponent>(parrot).SpeechMemories.Add(new SpeechMemory(null, "polly wants a cracker"));
+
+            var loadedMap = RoundTripTest.SaveAndLoad(entMan, testMap.MapUid, new ResPath("/kessler-roundtrip-test-parrot.yml"));
+            var loaded = snapshots.CollectTree([loadedMap]).Single(entMan.HasComponent<ParrotMemoryComponent>);
+            var memories = entMan.GetComponent<ParrotMemoryComponent>(loaded).SpeechMemories;
+            Assert.That(memories.Select(m => m.Message), Is.EquivalentTo(new[] { "polly wants a cracker" }));
         });
 
         await pair.CleanReturnAsync();

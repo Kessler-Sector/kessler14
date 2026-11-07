@@ -58,4 +58,20 @@ public sealed partial class ParrotMemoryComponent : Component
 }
 
 [Serializable, NetSerializable]
-public record struct SpeechMemory(NetUserId? NetUserId, string Message);
+// Kessler: a data definition, so a parrot that has learned something can be saved. A plain record struct threw on save
+// and the parrot was left out of the persistent save.
+[DataDefinition]
+public partial record struct SpeechMemory
+{
+    [DataField]
+    public NetUserId? NetUserId;
+
+    [DataField]
+    public string Message = string.Empty;
+
+    public SpeechMemory(NetUserId? netUserId, string message)
+    {
+        NetUserId = netUserId;
+        Message = message;
+    }
+}
